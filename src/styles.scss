@@ -1,0 +1,79 @@
+:root {
+  --bg: #171310;
+  --bg-gradient: radial-gradient(ellipse at top, #241d14 0%, #14100c 60%);
+  --panel: #221b12;
+  --panel-alt: #2b2216;
+  --panel-raised: #322818;
+  --border: #4d3c22;
+  --border-bright: #7a5f30;
+  --gold: #c8a962;
+  --gold-bright: #f0cf7a;
+  --text: #ece3cd;
+  --text-dim: #b3a488;
+  --text-faint: #7d735d;
+  --red: #e0685f;
+  --green: #7cc576;
+  --blue: #6fa8dc;
+  --radius: 6px;
+  --font-heading: 'Cinzel', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-gradient) fixed, var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  color: var(--gold-bright);
+  margin: 0;
+}
+
+a {
+  color: var(--gold);
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--gold);
+  color: #1a1408;
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--panel-alt), var(--panel));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.scrollbar {
+  &::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--panel);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-bright);
+    border-radius: 4px;
+  }
+}

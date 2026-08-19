@@ -1,0 +1,22 @@
+<div class="home">
+  <div class="home__hero">
+    <span class="home__crest" aria-hidden="true">⚔️</span>
+    <h1>OSRS Stat Lookup</h1>
+    <p class="home__subtitle">
+      Search any Old School RuneScape username for hiscores levels, boss kill counts,
+      minigame scores, and recent XP gains — powered by Wise Old Man.
+    </p>
+    <app-search-bar placeholder="e.g. Zezima" />
+  </div>
+
+  @if (recent().length > 0) {
+    <div class="home__recent">
+      <h2>Recent lookups</h2>
+      <div class="home__recent-list">
+        @for (name of recent(); track name) {
+          <button type="button" class="recent-chip" (click)="goTo(name)">{{ name }}</button>
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,52 @@
+<header class="player-header panel">
+  <div class="player-header__identity">
+    <div class="player-header__combat" title="Combat level">
+      <span class="player-header__combat-value">{{ player().combatLevel }}</span>
+      <span class="player-header__combat-label">Combat</span>
+    </div>
+
+    <div class="player-header__name-block">
+      <h1>{{ player().displayName }}</h1>
+      <div class="player-header__badges">
+        <span class="badge badge--type">{{ typeLabel() }}</span>
+        @if (player().build && player().build !== 'main') {
+          <span class="badge">{{ buildLabel() }}</span>
+        }
+        @if (player().country) {
+          <span class="badge">{{ player().country }}</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="player-header__stats">
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(player().exp) }}</span>
+      <span class="stat__label">Total XP</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">#{{ formatNumber(overallRank()) }}</span>
+      <span class="stat__label">Overall Rank</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(player().ehp) }}</span>
+      <span class="stat__label">EHP</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(player().ehb) }}</span>
+      <span class="stat__label">EHB</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(player().ttm) }}</span>
+      <span class="stat__label">Time to Max (h)</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ formatDate(player().registeredAt) }}</span>
+      <span class="stat__label">Tracked Since</span>
+    </div>
+  </div>
+
+  <p class="player-header__updated">
+    Updated {{ formatRelativeTime(player().updatedAt) }}
+  </p>
+</header>

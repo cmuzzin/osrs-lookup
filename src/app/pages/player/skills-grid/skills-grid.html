@@ -1,0 +1,15 @@
+<section class="skills-grid">
+  @for (tile of tiles(); track tile.key) {
+    <article class="skill-tile panel" [class.skill-tile--overall]="tile.key === 'overall'">
+      <span class="skill-tile__icon" aria-hidden="true">{{ tile.icon }}</span>
+      <div class="skill-tile__body">
+        <span class="skill-tile__label">{{ tile.label }}</span>
+        <span class="skill-tile__level">{{ tile.level }}</span>
+      </div>
+      <div class="skill-tile__meta">
+        <span>{{ formatNumber(tile.experience) }} xp</span>
+        <span>{{ formatRank(tile.rank) }}</span>
+      </div>
+    </article>
+  }
+</section>

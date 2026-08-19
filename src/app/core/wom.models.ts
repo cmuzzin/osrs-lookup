@@ -1,0 +1,139 @@
+// Data shapes for the Wise Old Man public API (v2).
+// Docs: https://docs.wiseoldman.net/
+
+export type PlayerType = 'unknown' | 'regular' | 'ironman' | 'hardcore' | 'ultimate';
+
+export type PlayerBuild =
+  | 'main'
+  | 'f2p'
+  | 'lvl3'
+  | 'zerker'
+  | 'def1'
+  | 'hp10'
+  | '1def'
+  | '10hp'
+  | 'f2p_lvl3';
+
+export interface SkillValue {
+  metric: string;
+  experience: number;
+  rank: number;
+  level: number;
+  ehp?: number;
+}
+
+export interface BossValue {
+  metric: string;
+  kills: number;
+  rank: number;
+  ehb?: number;
+}
+
+export interface ActivityValue {
+  metric: string;
+  score: number;
+  rank: number;
+}
+
+export interface ComputedValue {
+  metric: string;
+  value: number;
+  rank: number;
+}
+
+export interface SnapshotData {
+  skills: Record<string, SkillValue>;
+  bosses: Record<string, BossValue>;
+  activities: Record<string, ActivityValue>;
+  computed: Record<string, ComputedValue>;
+}
+
+export interface Snapshot {
+  id: number;
+  playerId: number;
+  createdAt: string;
+  importedAt: string | null;
+  data: SnapshotData;
+}
+
+export interface Player {
+  id: number;
+  username: string;
+  displayName: string;
+  type: PlayerType;
+  build: PlayerBuild | string;
+  country: string | null;
+  status: string;
+  patron: boolean;
+  exp: number;
+  ehp: number;
+  ehb: number;
+  ttm: number;
+  tt200m: number;
+  combatLevel: number;
+  registeredAt: string;
+  updatedAt: string | null;
+  lastChangedAt: string | null;
+  lastImportedAt: string | null;
+  latestSnapshot: Snapshot | null;
+}
+
+// --- Gains endpoint ---
+
+export interface GainedMeasure {
+  start: number;
+  end: number;
+  gained: number;
+}
+
+export interface SkillGains {
+  metric: string;
+  experience: GainedMeasure;
+  rank: GainedMeasure;
+  level: GainedMeasure;
+  ehp?: GainedMeasure;
+}
+
+export interface BossGains {
+  metric: string;
+  kills: GainedMeasure;
+  rank: GainedMeasure;
+  ehb?: GainedMeasure;
+}
+
+export interface ActivityGains {
+  metric: string;
+  score: GainedMeasure;
+  rank: GainedMeasure;
+}
+
+export interface ComputedGains {
+  metric: string;
+  value: GainedMeasure;
+  rank: GainedMeasure;
+}
+
+export interface PlayerGains {
+  startsAt: string;
+  endsAt: string;
+  data: {
+    skills: Record<string, SkillGains>;
+    bosses: Record<string, BossGains>;
+    activities: Record<string, ActivityGains>;
+    computed: Record<string, ComputedGains>;
+  };
+}
+
+export type GainsPeriod = 'day' | 'week' | 'month' | 'year';
+
+// --- Snapshot timeline endpoint (single metric, newest first) ---
+
+export interface TimelineDataPoint {
+  value: number;
+  rank: number;
+  date: string;
+}
+
+export interface WomApiError {
+  message: string;
+}

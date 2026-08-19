@@ -1,0 +1,105 @@
+.metric-table {
+  padding: 1rem 1.1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.metric-table__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+.metric-table__count {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.metric-table__empty {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.metric-table__scroll {
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  text-align: left;
+  color: var(--text-faint);
+  font-weight: 500;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.4rem;
+}
+
+tbody tr {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  &.is-unranked {
+    opacity: 0.45;
+  }
+}
+
+td {
+  padding: 0.4rem;
+  white-space: nowrap;
+}
+
+.col-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.metric-table__icon {
+  font-size: 0.9rem;
+}
+
+.col-value,
+.col-rank {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+}
+
+.col-value {
+  color: var(--gold-bright);
+}
+
+.metric-table__toggle {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0.2rem 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

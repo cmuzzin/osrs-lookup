@@ -1,0 +1,40 @@
+<div class="player-page">
+  <div class="player-page__topbar">
+    <a class="player-page__brand" routerLink="/">⚔️ OSRS Stat Lookup</a>
+    <app-search-bar [initialValue]="username()" placeholder="Look up another player…" />
+  </div>
+
+  @if (loading()) {
+    <div class="player-page__status panel">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Fetching stats for <strong>{{ username() }}</strong>…</p>
+    </div>
+  } @else if (error()) {
+    <div class="player-page__status player-page__status--error panel">
+      <p>{{ error() }}</p>
+      <button type="button" class="retry-btn" (click)="retry()">Try again</button>
+    </div>
+  } @else if (player(); as p) {
+    <app-player-header [player]="p" />
+
+    @if (p.latestSnapshot) {
+      <section class="player-page__section">
+        <h2>Skills</h2>
+        <app-skills-grid [skills]="p.latestSnapshot.data.skills" />
+      </section>
+
+      <section class="player-page__section">
+        <app-xp-chart [username]="p.username" [skills]="p.latestSnapshot.data.skills" />
+      </section>
+
+      <section class="player-page__section">
+        <app-gains-panel [username]="p.username" />
+      </section>
+
+      <section class="player-page__section player-page__tables">
+        <app-metric-table title="Boss Kill Counts" valueHeader="KC" [rows]="bossRows()" emptyMessage="No boss data." />
+        <app-metric-table title="Activities & Minigames" valueHeader="Score" [rows]="activityRows()" emptyMessage="No activity data." />
+      </section>
+    }
+  }
+</div>

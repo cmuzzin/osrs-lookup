@@ -1,0 +1,15 @@
+<form class="search-bar" (ngSubmit)="submit()">
+  <span class="search-bar__icon" aria-hidden="true">🔍</span>
+  <input
+    class="search-bar__input"
+    type="text"
+    name="username"
+    maxlength="12"
+    autocomplete="off"
+    spellcheck="false"
+    [placeholder]="placeholder()"
+    [(ngModel)]="query"
+    aria-label="OSRS username"
+  />
+  <button class="search-bar__submit" type="submit" [disabled]="!query.trim()">Search</button>
+</form>

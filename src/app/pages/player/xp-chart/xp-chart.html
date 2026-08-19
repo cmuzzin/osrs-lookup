@@ -1,0 +1,92 @@
+<section class="panel xp-chart">
+  <header class="xp-chart__header">
+    <h3>XP Progress</h3>
+    <div class="xp-chart__controls">
+      <select
+        class="xp-chart__metric"
+        aria-label="Skill"
+        [value]="metric()"
+        (change)="setMetric($any($event.target).value)"
+      >
+        @for (opt of skillOptions(); track opt.key) {
+          <option [value]="opt.key">{{ opt.icon }} {{ opt.label }}</option>
+        }
+      </select>
+      <div class="xp-chart__periods">
+        @for (p of periods; track p.value) {
+          <button
+            type="button"
+            class="period-btn"
+            [class.is-active]="period() === p.value"
+            (click)="setPeriod(p.value)"
+          >
+            {{ p.label }}
+          </button>
+        }
+      </div>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="xp-chart__status">Loading chart…</p>
+  } @else if (error()) {
+    <p class="xp-chart__status xp-chart__status--error">{{ error() }}</p>
+  } @else if (chartPoints().length < 2) {
+    <p class="xp-chart__status">Not enough history yet for this period.</p>
+  } @else {
+    <div class="xp-chart__summary">
+      <span class="xp-chart__gained" [class.is-positive]="gained() > 0">
+        {{ gained() > 0 ? '+' : '' }}{{ formatNumber(gained()) }} xp
+      </span>
+      <span class="xp-chart__range">{{ formatNumber(minValue()) }} – {{ formatNumber(maxValue()) }} xp</span>
+    </div>
+
+    <div class="xp-chart__plot">
+      <svg
+        class="xp-chart__svg"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        (mousemove)="onHover($event)"
+        (mouseleave)="clearHover()"
+      >
+        <defs>
+          <linearGradient id="xpFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="var(--gold)" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <path [attr.d]="areaD()" fill="url(#xpFill)" stroke="none" />
+        <path
+          [attr.d]="pathD()"
+          fill="none"
+          stroke="var(--gold-bright)"
+          stroke-width="1.5"
+          vector-effect="non-scaling-stroke"
+        />
+        @if (hoverPoint(); as hp) {
+          <line
+            [attr.x1]="hp.xPct"
+            [attr.x2]="hp.xPct"
+            y1="0"
+            y2="100"
+            class="xp-chart__guide"
+            vector-effect="non-scaling-stroke"
+          />
+          <circle [attr.cx]="hp.xPct" [attr.cy]="hp.yPct" r="1.8" class="xp-chart__dot" vector-effect="non-scaling-stroke" />
+        }
+      </svg>
+
+      @if (hoverPoint(); as hp) {
+        <div class="xp-chart__tooltip" [style.left.%]="hp.xPct" [style.top.%]="hp.yPct">
+          <strong>{{ formatNumber(hp.value) }} xp</strong>
+          <span>{{ formatDateTime(hp.date) }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="xp-chart__axis">
+      <span>{{ formatDate(startDate()) }}</span>
+      <span>{{ formatDate(endDate()) }}</span>
+    </div>
+  }
+</section>

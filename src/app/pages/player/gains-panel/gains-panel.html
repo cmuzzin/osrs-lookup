@@ -1,0 +1,67 @@
+<section class="panel gains-panel">
+  <header class="gains-panel__header">
+    <h3>Recent Gains</h3>
+    <div class="gains-panel__periods">
+      @for (p of periods; track p.value) {
+        <button
+          type="button"
+          class="period-btn"
+          [class.is-active]="period() === p.value"
+          (click)="setPeriod(p.value)"
+        >
+          {{ p.label }}
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="gains-panel__status">Loading gains…</p>
+  } @else if (error()) {
+    <p class="gains-panel__status gains-panel__status--error">{{ error() }}</p>
+  } @else {
+    <div class="gains-panel__summary">
+      <div class="gain-stat">
+        <span class="gain-stat__value">{{ formatSignedNumber(overallXpGained()) }}</span>
+        <span class="gain-stat__label">XP Gained</span>
+      </div>
+      <div class="gain-stat">
+        <span class="gain-stat__value">{{ formatSignedNumber(ehpGained()) }}</span>
+        <span class="gain-stat__label">EHP Gained</span>
+      </div>
+      <div class="gain-stat">
+        <span class="gain-stat__value">{{ formatSignedNumber(ehbGained()) }}</span>
+        <span class="gain-stat__label">EHB Gained</span>
+      </div>
+      <div class="gain-stat">
+        <span class="gain-stat__value">{{ formatSignedNumber(bossKillsGained()) }}</span>
+        <span class="gain-stat__label">Boss KC Gained</span>
+      </div>
+    </div>
+
+    @if (skillRows().length === 0) {
+      <p class="gains-panel__status">No skill XP gained in this period.</p>
+    } @else {
+      <div class="gains-panel__scroll scrollbar">
+        <table>
+          <thead>
+            <tr>
+              <th>Skill</th>
+              <th class="col-right">XP Gained</th>
+              <th class="col-right">Levels</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of skillRows(); track row.key) {
+              <tr>
+                <td><span aria-hidden="true">{{ row.icon }}</span> {{ row.label }}</td>
+                <td class="col-right">{{ formatSignedNumber(row.xpGained) }}</td>
+                <td class="col-right">{{ formatSignedNumber(row.levelsGained) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

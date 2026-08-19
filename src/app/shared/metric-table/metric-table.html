@@ -1,0 +1,40 @@
+<section class="panel metric-table">
+  <header class="metric-table__header">
+    <h3>{{ title() }}</h3>
+    <span class="metric-table__count">{{ ranked().length }} ranked</span>
+  </header>
+
+  @if (visible().length === 0) {
+    <p class="metric-table__empty">{{ emptyMessage() }}</p>
+  } @else {
+    <div class="metric-table__scroll scrollbar">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-name">Name</th>
+            <th class="col-value">{{ valueHeader() }}</th>
+            <th class="col-rank">Rank</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of visible(); track row.name) {
+            <tr [class.is-unranked]="row.rank <= 0">
+              <td class="col-name">
+                <span class="metric-table__icon" aria-hidden="true">{{ row.icon }}</span>
+                {{ row.name }}
+              </td>
+              <td class="col-value">{{ formatNumber(row.value) }}</td>
+              <td class="col-rank">{{ formatRank(row.rank) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (unranked().length > 0) {
+    <button class="metric-table__toggle" type="button" (click)="toggleUnranked()">
+      {{ showUnranked() ? 'Hide unranked' : 'Show ' + unranked().length + ' unranked' }}
+    </button>
+  }
+</section>
