@@ -85,6 +85,155 @@ button {
   }
 }
 
+// Shared shell for top-level routed pages (player, clan): topbar, loading/error
+// states, and section layout. Page-specific extras stay in that page's own stylesheet.
+.page-shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.page-shell__topbar {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.page-shell__brand {
+  font-family: var(--font-heading);
+  color: var(--gold-bright);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+app-search-bar {
+  flex: 1;
+  min-width: 220px;
+  max-width: 420px;
+}
+
+.page-shell__status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--text-dim);
+
+  &--error {
+    color: var(--red);
+  }
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.retry-btn {
+  background: var(--panel-alt);
+  border: 1px solid var(--border-bright);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.4rem 1.1rem;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--gold);
+  }
+}
+
+.page-shell__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  h2 {
+    font-size: 1.1rem;
+  }
+}
+
+.badge {
+  font-size: 0.72rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-bright);
+  color: var(--text-dim);
+  background: var(--panel-alt);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge--type {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat__value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    text-align: left;
+    color: var(--text-faint);
+    font-weight: 500;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.3rem 0.4rem;
+  }
+
+  td {
+    padding: 0.35rem 0.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .col-right {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
 .scrollbar {
   &::-webkit-scrollbar {
     height: 8px;

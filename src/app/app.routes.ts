@@ -11,5 +11,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/player/player').then((m) => m.PlayerPage),
     title: 'OSRS Stat Lookup',
   },
+  {
+    path: 'clans/:clanId',
+    loadComponent: () => import('./pages/clan/clan').then((m) => m.ClanPage),
+    title: 'OSRS Stat Lookup',
+  },
   { path: '**', redirectTo: '' },
 ];

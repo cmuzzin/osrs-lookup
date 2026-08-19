@@ -157,11 +157,75 @@ export interface Group {
   memberCount: number;
 }
 
+/** A player's own membership row, as returned from /players/:username/groups. */
 export interface GroupMembership {
   playerId: number;
   groupId: number;
   role: string;
   group: Group;
+}
+
+// --- Group detail endpoint (/groups/:id) ---
+
+export interface SocialLinks {
+  website: string | null;
+  discord: string | null;
+  twitter: string | null;
+  youtube: string | null;
+  twitch: string | null;
+}
+
+export interface RoleOrder {
+  groupId: number;
+  role: string;
+  index: number;
+}
+
+/** A member row within a group's own roster, as returned from /groups/:id. */
+export interface GroupMember {
+  playerId: number;
+  groupId: number;
+  role: string;
+  player: Player;
+}
+
+export interface GroupDetail extends Group {
+  socialLinks: SocialLinks;
+  roleOrders: RoleOrder[];
+  memberships: GroupMember[];
+}
+
+// --- Group hiscores / gained / statistics endpoints ---
+
+export interface GroupHiscoreEntry {
+  player: Player;
+  data: {
+    type: string;
+    rank: number;
+    level?: number;
+    experience?: number;
+    kills?: number;
+    score?: number;
+    value?: number;
+  };
+}
+
+export interface GroupGainedEntry {
+  player: Player;
+  startDate: string;
+  endDate: string;
+  data: {
+    gained: number;
+    start: number;
+    end: number;
+  };
+}
+
+export interface GroupStatistics {
+  maxedCombatCount: number;
+  maxedTotalCount: number;
+  maxed200msCount: number;
+  averageStats: Snapshot;
 }
 
 export interface WomApiError {

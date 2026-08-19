@@ -1,0 +1,77 @@
+.clan-leaderboard {
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.clan-leaderboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  h3 {
+    font-size: 1rem;
+  }
+}
+
+.clan-leaderboard__metric {
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--border-bright);
+  }
+}
+
+.clan-leaderboard__status {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+
+  &--error {
+    color: var(--red);
+  }
+}
+
+.clan-leaderboard__scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.col-index {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table .col-right {
+  color: var(--text-dim);
+}
+
+.data-table .col-xp {
+  color: var(--gold-bright);
+}
+
+.clan-leaderboard a {
+  color: var(--gold);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+  }
+}
+
+.clan-leaderboard__note {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}

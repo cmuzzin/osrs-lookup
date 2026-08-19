@@ -64,9 +64,15 @@
 .group-card__name {
   font-weight: 600;
   color: var(--text);
+  text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+  }
 }
 
 .group-card__role {

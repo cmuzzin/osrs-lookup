@@ -33,25 +33,6 @@
   overflow-x: hidden;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-thead th {
-  position: sticky;
-  top: 0;
-  background: var(--panel);
-  text-align: left;
-  color: var(--text-faint);
-  font-weight: 500;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.3rem 0.4rem;
-}
-
 tbody tr {
   border-top: 1px solid rgba(255, 255, 255, 0.04);
 

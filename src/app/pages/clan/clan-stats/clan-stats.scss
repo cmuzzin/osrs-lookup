@@ -1,0 +1,26 @@
+.clan-stats {
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.clan-stats__header h3 {
+  font-size: 1rem;
+}
+
+.clan-stats__status {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+
+  &--error {
+    color: var(--red);
+  }
+}
+
+.clan-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+}

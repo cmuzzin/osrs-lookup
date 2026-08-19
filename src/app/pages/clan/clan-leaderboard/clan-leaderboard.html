@@ -1,0 +1,51 @@
+<section class="panel clan-leaderboard">
+  <header class="clan-leaderboard__header">
+    <h3>Top Members</h3>
+    <select
+      class="clan-leaderboard__metric"
+      aria-label="Skill"
+      [value]="metric()"
+      (change)="setMetric($any($event.target).value)"
+    >
+      @for (opt of skillOptions; track opt.key) {
+        <option [value]="opt.key">{{ opt.icon }} {{ opt.label }}</option>
+      }
+    </select>
+  </header>
+
+  @if (loading()) {
+    <p class="clan-leaderboard__status">Loading leaderboard…</p>
+  } @else if (error()) {
+    <p class="clan-leaderboard__status clan-leaderboard__status--error">{{ error() }}</p>
+  } @else if (rows().length === 0) {
+    <p class="clan-leaderboard__status">No ranked members for this skill yet.</p>
+  } @else {
+    <div class="clan-leaderboard__scroll scrollbar">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th class="col-right">Level</th>
+            <th class="col-right">XP</th>
+            <th class="col-right">Hiscores Rank</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.player.id; let i = $index) {
+            <tr>
+              <td class="col-index">{{ i + 1 }}</td>
+              <td>
+                <a [routerLink]="['/players', row.player.username]">{{ row.player.displayName }}</a>
+              </td>
+              <td class="col-right">{{ formatNumber(row.data.level) }}</td>
+              <td class="col-right col-xp">{{ formatNumber(row.data.experience) }}</td>
+              <td class="col-right">{{ formatRank(row.data.rank) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="clan-leaderboard__note">Showing top {{ rows().length }} of {{ entries().length }} ranked members.</p>
+  }
+</section>

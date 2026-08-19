@@ -1,0 +1,53 @@
+<header class="clan-header panel">
+  <div class="clan-header__identity">
+    <div class="clan-header__name-block">
+      <h1>{{ group().name }}</h1>
+      <div class="clan-header__badges">
+        @if (group().verified) {
+          <span class="badge badge--type">Verified</span>
+        }
+        @if (group().clanChat) {
+          <span class="badge">CC: {{ group().clanChat }}</span>
+        }
+        @if (group().homeworld) {
+          <span class="badge">World {{ group().homeworld }}</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (group().description) {
+    <p class="clan-header__description">{{ group().description }}</p>
+  }
+
+  <div class="clan-header__stats">
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(group().memberCount) }}</span>
+      <span class="stat__label">Members</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(group().score) }}</span>
+      <span class="stat__label">WOM Score</span>
+    </div>
+  </div>
+
+  @if (hasSocialLinks()) {
+    <div class="clan-header__socials">
+      @if (group().socialLinks.website) {
+        <a [href]="group().socialLinks.website" target="_blank" rel="noopener noreferrer" class="social-link">🌐 Website</a>
+      }
+      @if (group().socialLinks.discord) {
+        <a [href]="group().socialLinks.discord" target="_blank" rel="noopener noreferrer" class="social-link">💬 Discord</a>
+      }
+      @if (group().socialLinks.twitter) {
+        <a [href]="group().socialLinks.twitter" target="_blank" rel="noopener noreferrer" class="social-link">🐦 Twitter</a>
+      }
+      @if (group().socialLinks.youtube) {
+        <a [href]="group().socialLinks.youtube" target="_blank" rel="noopener noreferrer" class="social-link">▶️ YouTube</a>
+      }
+      @if (group().socialLinks.twitch) {
+        <a [href]="group().socialLinks.twitch" target="_blank" rel="noopener noreferrer" class="social-link">🎮 Twitch</a>
+      }
+    </div>
+  }
+</header>

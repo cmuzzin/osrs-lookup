@@ -1,0 +1,48 @@
+<section class="panel clan-gainers">
+  <header class="clan-gainers__header">
+    <h3>Top Gainers</h3>
+    <div class="clan-gainers__periods">
+      @for (p of periods; track p.value) {
+        <button
+          type="button"
+          class="period-btn"
+          [class.is-active]="period() === p.value"
+          (click)="setPeriod(p.value)"
+        >
+          {{ p.label }}
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="clan-gainers__status">Loading gainers…</p>
+  } @else if (error()) {
+    <p class="clan-gainers__status clan-gainers__status--error">{{ error() }}</p>
+  } @else if (rows().length === 0 || rows()[0].data.gained <= 0) {
+    <p class="clan-gainers__status">No XP gained by any member in this period.</p>
+  } @else {
+    <div class="clan-gainers__scroll scrollbar">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th class="col-right">XP Gained</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.player.id; let i = $index) {
+            <tr>
+              <td class="col-index">{{ i + 1 }}</td>
+              <td>
+                <a [routerLink]="['/players', row.player.username]">{{ row.player.displayName }}</a>
+              </td>
+              <td class="col-right">{{ formatSignedNumber(row.data.gained) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

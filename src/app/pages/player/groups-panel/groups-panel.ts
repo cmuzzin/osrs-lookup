@@ -1,11 +1,13 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { WomApi } from '../../../core/wom-api';
 import { GroupMembership } from '../../../core/wom.models';
 import { formatNumber, titleCase } from '../../../core/format.util';
 
-/** WOM-tracked clans/groups this player belongs to. */
+/** WOM-tracked clans/groups this player belongs to. Clan names link to their clan page. */
 @Component({
   selector: 'app-groups-panel',
+  imports: [RouterLink],
   templateUrl: './groups-panel.html',
   styleUrl: './groups-panel.scss',
 })

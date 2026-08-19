@@ -17,7 +17,7 @@
       @for (m of groups(); track m.groupId) {
         <div class="group-card">
           <div class="group-card__main">
-            <span class="group-card__name">{{ m.group.name }}</span>
+            <a class="group-card__name" [routerLink]="['/clans', m.groupId]">{{ m.group.name }}</a>
             <span class="group-card__role">{{ titleCase(m.role) }}</span>
           </div>
           <div class="group-card__meta">
