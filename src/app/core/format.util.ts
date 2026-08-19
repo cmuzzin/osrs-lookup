@@ -32,6 +32,7 @@ export const SKILL_ORDER: readonly string[] = [
   'runecrafting',
   'hunter',
   'construction',
+  'sailing',
 ];
 
 const SKILL_LABELS: Record<string, string> = {
@@ -59,6 +60,7 @@ const SKILL_LABELS: Record<string, string> = {
   runecrafting: 'Runecraft',
   hunter: 'Hunter',
   construction: 'Construction',
+  sailing: 'Sailing',
 };
 
 const SKILL_ICONS: Record<string, string> = {
@@ -86,6 +88,7 @@ const SKILL_ICONS: Record<string, string> = {
   runecrafting: '🌀',
   hunter: '🐾',
   construction: '🏠',
+  sailing: '⛵',
 };
 
 export function skillMeta(key: string): SkillMeta {
@@ -110,7 +113,8 @@ const METRIC_NAME_OVERRIDES: Record<string, string> = {
   kril_tsutsaroth: "K'ril Tsutsaroth",
   kreearra: "Kree'Arra",
   vetion: "Vet'ion",
-  phosani_nightmare: "Phosani's Nightmare",
+  phosanis_nightmare: "Phosani's Nightmare",
+  doom_of_mokhaiotl: 'Doom of Mokhaiotl',
   the_corrupted_gauntlet: 'Corrupted Gauntlet',
   the_gauntlet: 'The Gauntlet',
   the_hueycoatl: 'The Hueycoatl',
