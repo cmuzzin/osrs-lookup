@@ -17,6 +17,10 @@
   } @else if (player(); as p) {
     <app-player-header [player]="p" />
 
+    <section class="player-page__section">
+      <app-groups-panel [username]="p.username" />
+    </section>
+
     @if (p.latestSnapshot) {
       <section class="player-page__section">
         <h2>Skills</h2>
@@ -29,6 +33,14 @@
 
       <section class="player-page__section">
         <app-gains-panel [username]="p.username" />
+      </section>
+
+      <section class="player-page__section">
+        <app-records-panel [username]="p.username" [snapshot]="p.latestSnapshot.data" />
+      </section>
+
+      <section class="player-page__section">
+        <app-collection-log-panel [username]="p.username" [activities]="p.latestSnapshot.data.activities" />
       </section>
 
       <section class="player-page__section player-page__tables">

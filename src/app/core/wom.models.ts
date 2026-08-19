@@ -134,6 +134,36 @@ export interface TimelineDataPoint {
   date: string;
 }
 
+// --- Records endpoint (all-time best gain within a single period, per metric) ---
+
+export interface PlayerRecord {
+  period: GainsPeriod;
+  metric: string;
+  value: number;
+  updatedAt: string;
+}
+
+// --- Groups endpoint ---
+
+export interface Group {
+  id: number;
+  name: string;
+  clanChat: string | null;
+  description: string | null;
+  homeworld: number | null;
+  verified: boolean;
+  patron: boolean;
+  score: number;
+  memberCount: number;
+}
+
+export interface GroupMembership {
+  playerId: number;
+  groupId: number;
+  role: string;
+  group: Group;
+}
+
 export interface WomApiError {
   message: string;
 }

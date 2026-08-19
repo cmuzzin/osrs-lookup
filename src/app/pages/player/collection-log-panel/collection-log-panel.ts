@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { WomApi } from '../../../core/wom-api';
-import { GainsPeriod, SkillValue, TimelineDataPoint } from '../../../core/wom.models';
-import { SKILL_ORDER, skillMeta } from '../../../core/format.util';
+import { ActivityValue, GainsPeriod, TimelineDataPoint } from '../../../core/wom.models';
+import { formatNumber, formatRank } from '../../../core/format.util';
 import { TrendChart } from '../../../shared/trend-chart/trend-chart';
 
 const PERIODS: { value: GainsPeriod; label: string }[] = [
@@ -11,53 +11,56 @@ const PERIODS: { value: GainsPeriod; label: string }[] = [
   { value: 'year', label: '1y' },
 ];
 
-/** Skill picker + period toggle over WOM's snapshot timeline endpoint, rendered by TrendChart. */
+const METRIC = 'collections_logged';
+
+/**
+ * Collection Log progress: current unique-item count + hiscores rank, plus a trend
+ * chart over time via WOM's snapshot timeline. There's no published "total slots"
+ * figure in WOM's metric data (it only defines a hiscores ranking threshold, not a
+ * completion target), so this deliberately shows real progress-over-time rather than
+ * a fabricated percent-complete bar.
+ */
 @Component({
-  selector: 'app-xp-chart',
+  selector: 'app-collection-log-panel',
   imports: [TrendChart],
-  templateUrl: './xp-chart.html',
-  styleUrl: './xp-chart.scss',
+  templateUrl: './collection-log-panel.html',
+  styleUrl: './collection-log-panel.scss',
 })
-export class XpChart {
+export class CollectionLogPanel {
   private readonly wom = inject(WomApi);
 
   readonly username = input.required<string>();
-  readonly skills = input.required<Record<string, SkillValue>>();
+  readonly activities = input.required<Record<string, ActivityValue>>();
 
-  readonly skillOptions = computed(() =>
-    SKILL_ORDER.filter((key) => this.skills()[key]).map((key) => skillMeta(key)),
-  );
+  readonly current = computed<ActivityValue | null>(() => this.activities()[METRIC] ?? null);
 
   readonly periods = PERIODS;
-  readonly metric = signal('overall');
-  readonly period = signal<GainsPeriod>('week');
+  readonly period = signal<GainsPeriod>('month');
 
   readonly points = signal<TimelineDataPoint[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
+  readonly formatNumber = formatNumber;
+  readonly formatRank = formatRank;
+
   constructor() {
     effect(() => {
       const name = this.username();
-      const metric = this.metric();
       const period = this.period();
       if (!name) return;
-      this.fetch(name, metric, period);
+      this.fetch(name, period);
     });
-  }
-
-  setMetric(key: string): void {
-    this.metric.set(key);
   }
 
   setPeriod(period: GainsPeriod): void {
     this.period.set(period);
   }
 
-  private fetch(username: string, metric: string, period: GainsPeriod): void {
+  private fetch(username: string, period: GainsPeriod): void {
     this.loading.set(true);
     this.error.set(null);
-    this.wom.getTimeline(username, metric, period).subscribe({
+    this.wom.getTimeline(username, METRIC, period).subscribe({
       next: (pts) => {
         this.points.set(pts);
         this.loading.set(false);

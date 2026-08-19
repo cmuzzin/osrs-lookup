@@ -1,0 +1,60 @@
+@if (points().length < 2) {
+  <p class="trend-chart__status">Not enough history yet for this period.</p>
+} @else {
+  <div class="trend-chart__summary">
+    <span class="trend-chart__gained" [class.is-positive]="gained() > 0">
+      {{ gained() > 0 ? '+' : '' }}{{ formatNumber(gained()) }}{{ unit() ? ' ' + unit() : '' }}
+    </span>
+    <span class="trend-chart__range">
+      {{ formatNumber(minValue()) }} – {{ formatNumber(maxValue()) }}{{ unit() ? ' ' + unit() : '' }}
+    </span>
+  </div>
+
+  <div class="trend-chart__plot">
+    <svg
+      class="trend-chart__svg"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      (mousemove)="onHover($event)"
+      (mouseleave)="clearHover()"
+    >
+      <defs>
+        <linearGradient [attr.id]="gradientId" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.35" />
+          <stop offset="100%" stop-color="var(--gold)" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path [attr.d]="areaD()" [attr.fill]="'url(#' + gradientId + ')'" stroke="none" />
+      <path
+        [attr.d]="pathD()"
+        fill="none"
+        stroke="var(--gold-bright)"
+        stroke-width="1.5"
+        vector-effect="non-scaling-stroke"
+      />
+      @if (hoverPoint(); as hp) {
+        <line
+          [attr.x1]="hp.xPct"
+          [attr.x2]="hp.xPct"
+          y1="0"
+          y2="100"
+          class="trend-chart__guide"
+          vector-effect="non-scaling-stroke"
+        />
+        <circle [attr.cx]="hp.xPct" [attr.cy]="hp.yPct" r="1.8" class="trend-chart__dot" vector-effect="non-scaling-stroke" />
+      }
+    </svg>
+
+    @if (hoverPoint(); as hp) {
+      <div class="trend-chart__tooltip" [style.left.%]="hp.xPct" [style.top.%]="hp.yPct">
+        <strong>{{ formatNumber(hp.value) }}{{ unit() ? ' ' + unit() : '' }}</strong>
+        <span>{{ formatDateTime(hp.date) }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="trend-chart__axis">
+    <span>{{ formatDate(startDate()) }}</span>
+    <span>{{ formatDate(endDate()) }}</span>
+  </div>
+}

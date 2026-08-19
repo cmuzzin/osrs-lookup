@@ -1,0 +1,40 @@
+<section class="panel collection-log-panel">
+  <header class="collection-log-panel__header">
+    <h3>Collection Log</h3>
+    <div class="collection-log-panel__periods">
+      @for (p of periods; track p.value) {
+        <button
+          type="button"
+          class="period-btn"
+          [class.is-active]="period() === p.value"
+          (click)="setPeriod(p.value)"
+        >
+          {{ p.label }}
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (current(); as c) {
+    <div class="collection-log-panel__current">
+      <div class="collection-log-panel__stat">
+        <span class="collection-log-panel__value">{{ formatNumber(c.score) }}</span>
+        <span class="collection-log-panel__label">Items Logged</span>
+      </div>
+      <div class="collection-log-panel__stat">
+        <span class="collection-log-panel__value">{{ formatRank(c.rank) }}</span>
+        <span class="collection-log-panel__label">Hiscores Rank</span>
+      </div>
+    </div>
+  } @else {
+    <p class="collection-log-panel__status">No collection log data available for this player.</p>
+  }
+
+  @if (loading()) {
+    <p class="collection-log-panel__status">Loading trend…</p>
+  } @else if (error()) {
+    <p class="collection-log-panel__status collection-log-panel__status--error">{{ error() }}</p>
+  } @else {
+    <app-trend-chart [points]="points()" unit="items" />
+  }
+</section>

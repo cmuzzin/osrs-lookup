@@ -64,6 +64,27 @@ button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.period-btn {
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--border-bright);
+  }
+
+  &.is-active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #221a0c;
+    font-weight: 600;
+  }
+}
+
 .scrollbar {
   &::-webkit-scrollbar {
     height: 8px;

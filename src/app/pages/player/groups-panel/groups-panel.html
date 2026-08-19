@@ -1,0 +1,33 @@
+<section class="panel groups-panel">
+  <header class="groups-panel__header">
+    <h3>Clans</h3>
+    @if (groups().length > 0) {
+      <span class="groups-panel__count">{{ groups().length }}</span>
+    }
+  </header>
+
+  @if (loading()) {
+    <p class="groups-panel__status">Loading clans…</p>
+  } @else if (error()) {
+    <p class="groups-panel__status groups-panel__status--error">{{ error() }}</p>
+  } @else if (groups().length === 0) {
+    <p class="groups-panel__status">Not a member of any WOM-tracked clan.</p>
+  } @else {
+    <div class="groups-panel__list scrollbar">
+      @for (m of groups(); track m.groupId) {
+        <div class="group-card">
+          <div class="group-card__main">
+            <span class="group-card__name">{{ m.group.name }}</span>
+            <span class="group-card__role">{{ titleCase(m.role) }}</span>
+          </div>
+          <div class="group-card__meta">
+            @if (m.group.clanChat) {
+              <span>CC: {{ m.group.clanChat }}</span>
+            }
+            <span>{{ formatNumber(m.group.memberCount) }} members</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>

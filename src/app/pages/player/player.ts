@@ -6,6 +6,9 @@ import { PlayerHeader } from './player-header/player-header';
 import { SkillsGrid } from './skills-grid/skills-grid';
 import { GainsPanel } from './gains-panel/gains-panel';
 import { XpChart } from './xp-chart/xp-chart';
+import { CollectionLogPanel } from './collection-log-panel/collection-log-panel';
+import { GroupsPanel } from './groups-panel/groups-panel';
+import { RecordsPanel } from './records-panel/records-panel';
 import { WomApi } from '../../core/wom-api';
 import { Player } from '../../core/wom.models';
 import { metricLabel } from '../../core/format.util';
@@ -13,7 +16,18 @@ import { addRecentSearch } from '../../core/recent-searches.util';
 
 @Component({
   selector: 'app-player-page',
-  imports: [RouterLink, SearchBar, MetricTable, PlayerHeader, SkillsGrid, GainsPanel, XpChart],
+  imports: [
+    RouterLink,
+    SearchBar,
+    MetricTable,
+    PlayerHeader,
+    SkillsGrid,
+    GainsPanel,
+    XpChart,
+    CollectionLogPanel,
+    GroupsPanel,
+    RecordsPanel,
+  ],
   templateUrl: './player.html',
   styleUrl: './player.scss',
 })
@@ -41,12 +55,15 @@ export class PlayerPage {
   readonly activityRows = computed<MetricRow[]>(() => {
     const activities = this.player()?.latestSnapshot?.data.activities;
     if (!activities) return [];
-    return Object.values(activities).map((a) => ({
-      name: metricLabel(a.metric),
-      icon: '🏆',
-      value: a.score,
-      rank: a.rank,
-    }));
+    // collections_logged gets its own dedicated panel below, so skip it here.
+    return Object.values(activities)
+      .filter((a) => a.metric !== 'collections_logged')
+      .map((a) => ({
+        name: metricLabel(a.metric),
+        icon: '🏆',
+        value: a.score,
+        rank: a.rank,
+      }));
   });
 
   constructor() {

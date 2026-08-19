@@ -41,6 +41,14 @@
       <span class="stat__label">Time to Max (h)</span>
     </div>
     <div class="stat">
+      <span class="stat__value">{{ maxedSkillCount() }}/{{ totalSkillCount }}</span>
+      <span class="stat__label">99s Earned</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ formatNumber(totalBossKills()) }}</span>
+      <span class="stat__label">Total Boss KC</span>
+    </div>
+    <div class="stat">
       <span class="stat__value">{{ formatDate(player().registeredAt) }}</span>
       <span class="stat__label">Tracked Since</span>
     </div>

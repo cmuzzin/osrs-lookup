@@ -1,7 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
-import { GainsPeriod, Player, PlayerGains, TimelineDataPoint } from './wom.models';
+import {
+  GainsPeriod,
+  GroupMembership,
+  Player,
+  PlayerGains,
+  PlayerRecord,
+  TimelineDataPoint,
+} from './wom.models';
 
 const BASE_URL = 'https://api.wiseoldman.net/v2';
 
@@ -37,6 +44,18 @@ export class WomApi {
     return this.http
       .get<TimelineDataPoint[]>(url, { params: { metric, period } })
       .pipe(catchError(this.handleError));
+  }
+
+  /** All-time best single-period gain per metric, e.g. their highest XP ever gained in one day. */
+  getRecords(username: string, period: GainsPeriod): Observable<PlayerRecord[]> {
+    const url = `${BASE_URL}/players/${encodeURIComponent(username.trim())}/records`;
+    return this.http.get<PlayerRecord[]>(url, { params: { period } }).pipe(catchError(this.handleError));
+  }
+
+  /** WOM-tracked clans/groups this player belongs to. */
+  getGroups(username: string): Observable<GroupMembership[]> {
+    const url = `${BASE_URL}/players/${encodeURIComponent(username.trim())}/groups`;
+    return this.http.get<GroupMembership[]>(url).pipe(catchError(this.handleError));
   }
 
   private handleError = (err: HttpErrorResponse) => {

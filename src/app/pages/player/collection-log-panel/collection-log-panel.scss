@@ -1,0 +1,63 @@
+.collection-log-panel {
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.collection-log-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  h3 {
+    font-size: 1rem;
+  }
+}
+
+.collection-log-panel__periods {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.collection-log-panel__current {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+}
+
+.collection-log-panel__stat {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.65rem;
+}
+
+.collection-log-panel__value {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.collection-log-panel__label {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.collection-log-panel__status {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+
+  &--error {
+    color: var(--red);
+  }
+}
