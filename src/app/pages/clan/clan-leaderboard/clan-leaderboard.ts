@@ -4,9 +4,7 @@ import { WomApi } from '../../../core/wom-api';
 import { GroupHiscoreEntry } from '../../../core/wom.models';
 import { SKILL_ORDER, formatNumber, formatRank, skillMeta } from '../../../core/format.util';
 
-const TOP_N = 15;
-
-/** Top clan members ranked by a skill (level + xp), from WOM's per-group hiscores endpoint. */
+/** All clan members ranked by a skill (level + xp), from WOM's per-group hiscores endpoint. */
 @Component({
   selector: 'app-clan-leaderboard',
   imports: [RouterLink],
@@ -25,11 +23,9 @@ export class ClanLeaderboard {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  // The API doesn't guarantee sort order, so sort defensively by xp before capping the list.
+  // The API doesn't guarantee sort order, so sort defensively by xp.
   readonly rows = computed(() =>
-    [...this.entries()]
-      .sort((a, b) => (b.data.experience ?? 0) - (a.data.experience ?? 0))
-      .slice(0, TOP_N),
+    [...this.entries()].sort((a, b) => (b.data.experience ?? 0) - (a.data.experience ?? 0)),
   );
 
   readonly formatNumber = formatNumber;

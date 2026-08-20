@@ -1,6 +1,6 @@
 <section class="panel clan-gainers">
   <header class="clan-gainers__header">
-    <h3>Top Gainers</h3>
+    <h3>Gainers</h3>
     <div class="clan-gainers__periods">
       @for (p of periods; track p.value) {
         <button
@@ -44,5 +44,6 @@
         </tbody>
       </table>
     </div>
+    <p class="clan-gainers__note">{{ formatNumber(rows().length) }} members.</p>
   }
 </section>

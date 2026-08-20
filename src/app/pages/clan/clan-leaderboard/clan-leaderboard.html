@@ -1,6 +1,6 @@
 <section class="panel clan-leaderboard">
   <header class="clan-leaderboard__header">
-    <h3>Top Members</h3>
+    <h3>Members</h3>
     <select
       class="clan-leaderboard__metric"
       aria-label="Skill"
@@ -46,6 +46,6 @@
         </tbody>
       </table>
     </div>
-    <p class="clan-leaderboard__note">Showing top {{ rows().length }} of {{ entries().length }} ranked members.</p>
+    <p class="clan-leaderboard__note">{{ formatNumber(rows().length) }} ranked members.</p>
   }
 </section>

@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, shareReplay, tap, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
+import { ResponseCache } from './response-cache';
 import {
   GainsPeriod,
   GroupDetail,
@@ -25,7 +26,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 @Injectable({ providedIn: 'root' })
 export class WomApi {
   private readonly http = inject(HttpClient);
-  private readonly cache = new Map<string, { expiresAt: number; response$: Observable<unknown> }>();
+  private readonly cache = new ResponseCache(CACHE_TTL_MS);
 
   /**
    * Looks up a player. Uses the "update" endpoint (POST) rather than a plain GET
@@ -34,7 +35,7 @@ export class WomApi {
    */
   trackPlayer(username: string): Observable<Player> {
     const name = username.trim();
-    return this.cached(`player:${name.toLowerCase()}`, () => {
+    return this.cache.get(`player:${name.toLowerCase()}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}`;
       return this.http.post<Player>(url, {}).pipe(this.catchAs('player'));
     });
@@ -42,7 +43,7 @@ export class WomApi {
 
   getGains(username: string, period: GainsPeriod): Observable<PlayerGains> {
     const name = username.trim();
-    return this.cached(`gains:${name.toLowerCase()}:${period}`, () => {
+    return this.cache.get(`gains:${name.toLowerCase()}:${period}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}/gained`;
       return this.http.get<PlayerGains>(url, { params: { period } }).pipe(this.catchAs('player'));
     });
@@ -55,7 +56,7 @@ export class WomApi {
    */
   getTimeline(username: string, metric: string, period: GainsPeriod): Observable<TimelineDataPoint[]> {
     const name = username.trim();
-    return this.cached(`timeline:${name.toLowerCase()}:${metric}:${period}`, () => {
+    return this.cache.get(`timeline:${name.toLowerCase()}:${metric}:${period}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}/snapshots/timeline`;
       return this.http
         .get<TimelineDataPoint[]>(url, { params: { metric, period } })
@@ -66,7 +67,7 @@ export class WomApi {
   /** All-time best single-period gain per metric, e.g. their highest XP ever gained in one day. */
   getRecords(username: string, period: GainsPeriod): Observable<PlayerRecord[]> {
     const name = username.trim();
-    return this.cached(`records:${name.toLowerCase()}:${period}`, () => {
+    return this.cache.get(`records:${name.toLowerCase()}:${period}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}/records`;
       return this.http.get<PlayerRecord[]>(url, { params: { period } }).pipe(this.catchAs('player'));
     });
@@ -75,7 +76,7 @@ export class WomApi {
   /** WOM-tracked clans/groups this player belongs to. */
   getGroups(username: string): Observable<GroupMembership[]> {
     const name = username.trim();
-    return this.cached(`player-groups:${name.toLowerCase()}`, () => {
+    return this.cache.get(`player-groups:${name.toLowerCase()}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}/groups`;
       return this.http.get<GroupMembership[]>(url).pipe(this.catchAs('player'));
     });
@@ -83,7 +84,7 @@ export class WomApi {
 
   /** Full clan details: description, social links, role hierarchy, and full member roster. */
   getGroup(id: number): Observable<GroupDetail> {
-    return this.cached(`group:${id}`, () => {
+    return this.cache.get(`group:${id}`, () => {
       const url = `${BASE_URL}/groups/${id}`;
       return this.http.get<GroupDetail>(url).pipe(this.catchAs('clan'));
     });
@@ -91,7 +92,7 @@ export class WomApi {
 
   /** Every member ranked by a single metric (skill level/xp, boss KC, etc), best first. */
   getGroupHiscores(id: number, metric: string): Observable<GroupHiscoreEntry[]> {
-    return this.cached(`group-hiscores:${id}:${metric}`, () => {
+    return this.cache.get(`group-hiscores:${id}:${metric}`, () => {
       const url = `${BASE_URL}/groups/${id}/hiscores`;
       return this.http.get<GroupHiscoreEntry[]>(url, { params: { metric } }).pipe(this.catchAs('clan'));
     });
@@ -99,7 +100,7 @@ export class WomApi {
 
   /** Every member's gain for a metric within a period, e.g. "who gained the most XP this week". */
   getGroupGained(id: number, metric: string, period: GainsPeriod): Observable<GroupGainedEntry[]> {
-    return this.cached(`group-gained:${id}:${metric}:${period}`, () => {
+    return this.cache.get(`group-gained:${id}:${metric}:${period}`, () => {
       const url = `${BASE_URL}/groups/${id}/gained`;
       return this.http
         .get<GroupGainedEntry[]>(url, { params: { metric, period } })
@@ -109,30 +110,10 @@ export class WomApi {
 
   /** Aggregate clan stats: maxed-account counts and clan-wide average levels/xp. */
   getGroupStatistics(id: number): Observable<GroupStatistics> {
-    return this.cached(`group-stats:${id}`, () => {
+    return this.cache.get(`group-stats:${id}`, () => {
       const url = `${BASE_URL}/groups/${id}/statistics`;
       return this.http.get<GroupStatistics>(url).pipe(this.catchAs('clan'));
     });
-  }
-
-  /**
-   * Reuses an in-flight or recently-completed response for the same key instead of
-   * issuing a new request — e.g. clicking into a clan and back doesn't re-fetch the
-   * player. Failed responses are evicted immediately so a retry hits the network
-   * again rather than replaying the same error for the rest of the TTL window.
-   */
-  private cached<T>(key: string, request: () => Observable<T>): Observable<T> {
-    const hit = this.cache.get(key);
-    if (hit && hit.expiresAt > Date.now()) {
-      return hit.response$ as Observable<T>;
-    }
-
-    const response$ = request().pipe(
-      tap({ error: () => this.cache.delete(key) }),
-      shareReplay({ bufferSize: 1, refCount: false }),
-    );
-    this.cache.set(key, { expiresAt: Date.now() + CACHE_TTL_MS, response$ });
-    return response$;
   }
 
   /** Maps an HttpErrorResponse to a user-facing Error, worded for the kind of lookup that failed. */

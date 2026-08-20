@@ -2,9 +2,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { RouterLink } from '@angular/router';
 import { WomApi } from '../../../core/wom-api';
 import { GainsPeriod, GroupGainedEntry } from '../../../core/wom.models';
-import { formatSignedNumber } from '../../../core/format.util';
-
-const TOP_N = 10;
+import { formatNumber, formatSignedNumber } from '../../../core/format.util';
 
 const PERIODS: { value: GainsPeriod; label: string }[] = [
   { value: 'day', label: '24h' },
@@ -13,7 +11,7 @@ const PERIODS: { value: GainsPeriod; label: string }[] = [
   { value: 'year', label: '1y' },
 ];
 
-/** Top XP gainers in the clan for a period, from WOM's per-group gained endpoint. */
+/** All members' XP gained in the clan for a period, from WOM's per-group gained endpoint. */
 @Component({
   selector: 'app-clan-gainers',
   imports: [RouterLink],
@@ -32,11 +30,10 @@ export class ClanGainers {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  readonly rows = computed(() =>
-    [...this.entries()].sort((a, b) => b.data.gained - a.data.gained).slice(0, TOP_N),
-  );
+  readonly rows = computed(() => [...this.entries()].sort((a, b) => b.data.gained - a.data.gained));
 
   readonly formatSignedNumber = formatSignedNumber;
+  readonly formatNumber = formatNumber;
 
   constructor() {
     effect(() => {
