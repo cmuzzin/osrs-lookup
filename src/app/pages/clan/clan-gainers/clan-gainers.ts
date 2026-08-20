@@ -3,6 +3,10 @@ import { RouterLink } from '@angular/router';
 import { WomApi } from '../../../core/wom-api';
 import { GainsPeriod, GroupGainedEntry } from '../../../core/wom.models';
 import { formatNumber, formatSignedNumber } from '../../../core/format.util';
+import { SortIcon } from '../../../shared/sort-icon/sort-icon';
+import { compareValues, createSortable } from '../../../shared/sort-state';
+
+type SortKey = 'player' | 'gained';
 
 const PERIODS: { value: GainsPeriod; label: string }[] = [
   { value: 'day', label: '24h' },
@@ -14,7 +18,7 @@ const PERIODS: { value: GainsPeriod; label: string }[] = [
 /** All members' XP gained in the clan for a period, from WOM's per-group gained endpoint. */
 @Component({
   selector: 'app-clan-gainers',
-  imports: [RouterLink],
+  imports: [RouterLink, SortIcon],
   templateUrl: './clan-gainers.html',
   styleUrl: './clan-gainers.scss',
 })
@@ -30,7 +34,21 @@ export class ClanGainers {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  readonly rows = computed(() => [...this.entries()].sort((a, b) => b.data.gained - a.data.gained));
+  private readonly sortable = createSortable<SortKey>({ key: 'gained', direction: 'desc' });
+  readonly sort = this.sortable.sort;
+
+  readonly rows = computed(() => {
+    const { key, direction } = this.sort();
+    return [...this.entries()].sort((a, b) =>
+      key === 'player'
+        ? compareValues(direction, a.player.displayName, b.player.displayName)
+        : compareValues(direction, a.data.gained, b.data.gained),
+    );
+  });
+
+  // Independent of the current sort order, unlike checking rows()[0] — that only
+  // reflects "the biggest gainer" when sorted by gained descending.
+  readonly hasGains = computed(() => this.entries().some((e) => e.data.gained > 0));
 
   readonly formatSignedNumber = formatSignedNumber;
   readonly formatNumber = formatNumber;
@@ -46,6 +64,10 @@ export class ClanGainers {
 
   setPeriod(period: GainsPeriod): void {
     this.period.set(period);
+  }
+
+  toggleSort(key: SortKey): void {
+    this.sortable.toggleSort(key, key === 'player' ? 'asc' : 'desc');
   }
 
   private fetch(id: number, period: GainsPeriod): void {

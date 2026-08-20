@@ -19,7 +19,7 @@
     <p class="clan-gainers__status">Loading gainers…</p>
   } @else if (error()) {
     <p class="clan-gainers__status clan-gainers__status--error">{{ error() }}</p>
-  } @else if (rows().length === 0 || rows()[0].data.gained <= 0) {
+  } @else if (!hasGains()) {
     <p class="clan-gainers__status">No XP gained by any member in this period.</p>
   } @else {
     <div class="clan-gainers__scroll scrollbar">
@@ -27,8 +27,16 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Player</th>
-            <th class="col-right">XP Gained</th>
+            <th>
+              <button type="button" class="sort-btn" (click)="toggleSort('player')">
+                Player <app-sort-icon [active]="sort().key === 'player'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('gained')">
+                XP Gained <app-sort-icon [active]="sort().key === 'gained'" [direction]="sort().direction" />
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>

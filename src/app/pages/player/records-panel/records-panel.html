@@ -26,9 +26,21 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th>Stat</th>
-            <th class="col-right">Best Gain</th>
-            <th class="col-right">Achieved</th>
+            <th>
+              <button type="button" class="sort-btn" (click)="toggleSort('label')">
+                Stat <app-sort-icon [active]="sort().key === 'label'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('value')">
+                Best Gain <app-sort-icon [active]="sort().key === 'value'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('updatedAt')">
+                Achieved <app-sort-icon [active]="sort().key === 'updatedAt'" [direction]="sort().direction" />
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>

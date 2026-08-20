@@ -25,10 +25,26 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Player</th>
-            <th class="col-right">Level</th>
-            <th class="col-right">XP</th>
-            <th class="col-right">Hiscores Rank</th>
+            <th>
+              <button type="button" class="sort-btn" (click)="toggleSort('player')">
+                Player <app-sort-icon [active]="sort().key === 'player'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('level')">
+                Level <app-sort-icon [active]="sort().key === 'level'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('experience')">
+                XP <app-sort-icon [active]="sort().key === 'experience'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('rank')">
+                Hiscores Rank <app-sort-icon [active]="sort().key === 'rank'" [direction]="sort().direction" />
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>

@@ -46,9 +46,21 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Skill</th>
-              <th class="col-right">XP Gained</th>
-              <th class="col-right">Levels</th>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('label')">
+                  Skill <app-sort-icon [active]="sort().key === 'label'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th class="col-right">
+                <button type="button" class="sort-btn" (click)="toggleSort('xpGained')">
+                  XP Gained <app-sort-icon [active]="sort().key === 'xpGained'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th class="col-right">
+                <button type="button" class="sort-btn" (click)="toggleSort('levelsGained')">
+                  Levels <app-sort-icon [active]="sort().key === 'levelsGained'" [direction]="sort().direction" />
+                </button>
+              </th>
             </tr>
           </thead>
           <tbody>

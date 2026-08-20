@@ -2,6 +2,8 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { WomApi } from '../../../core/wom-api';
 import { GainsPeriod, PlayerRecord, SnapshotData } from '../../../core/wom.models';
 import { formatDate, formatNumber, metricLabel, skillMeta } from '../../../core/format.util';
+import { SortIcon } from '../../../shared/sort-icon/sort-icon';
+import { compareValues, createSortable } from '../../../shared/sort-state';
 
 interface RecordRow {
   metric: string;
@@ -10,6 +12,8 @@ interface RecordRow {
   value: number;
   updatedAt: string;
 }
+
+type SortKey = 'label' | 'value' | 'updatedAt';
 
 const PERIODS: { value: GainsPeriod; label: string }[] = [
   { value: 'day', label: 'Day' },
@@ -25,6 +29,7 @@ const PERIODS: { value: GainsPeriod; label: string }[] = [
  */
 @Component({
   selector: 'app-records-panel',
+  imports: [SortIcon],
   templateUrl: './records-panel.html',
   styleUrl: './records-panel.scss',
 })
@@ -41,14 +46,17 @@ export class RecordsPanel {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
+  private readonly sortable = createSortable<SortKey>({ key: 'updatedAt', direction: 'desc' });
+  readonly sort = this.sortable.sort;
+
   readonly rows = computed<RecordRow[]>(() => {
     const data = this.snapshot();
-    return [...this.records()]
-      .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
-      .map((r) => {
-        const { icon, label } = classify(r.metric, data);
-        return { metric: r.metric, icon, label, value: r.value, updatedAt: r.updatedAt };
-      });
+    const mapped = this.records().map((r) => {
+      const { icon, label } = classify(r.metric, data);
+      return { metric: r.metric, icon, label, value: r.value, updatedAt: r.updatedAt };
+    });
+    const { key, direction } = this.sort();
+    return mapped.sort((a, b) => compareValues(direction, a[key], b[key]));
   });
 
   readonly formatNumber = formatNumber;
@@ -65,6 +73,10 @@ export class RecordsPanel {
 
   setPeriod(period: GainsPeriod): void {
     this.period.set(period);
+  }
+
+  toggleSort(key: SortKey): void {
+    this.sortable.toggleSort(key, key === 'label' ? 'asc' : 'desc');
   }
 
   private fetch(username: string, period: GainsPeriod): void {

@@ -11,9 +11,21 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-name">Name</th>
-            <th class="col-value">{{ valueHeader() }}</th>
-            <th class="col-rank">Rank</th>
+            <th class="col-name">
+              <button type="button" class="sort-btn" (click)="toggleSort('name')">
+                Name <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-value">
+              <button type="button" class="sort-btn" (click)="toggleSort('value')">
+                {{ valueHeader() }} <app-sort-icon [active]="sort().key === 'value'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-rank">
+              <button type="button" class="sort-btn" (click)="toggleSort('rank')">
+                Rank <app-sort-icon [active]="sort().key === 'rank'" [direction]="sort().direction" />
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
