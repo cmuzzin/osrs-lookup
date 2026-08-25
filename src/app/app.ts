@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
+import { AnalyticsService } from './core/analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,17 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {}
+export class App {
+  private readonly router = inject(Router);
+  private readonly analytics = inject(AnalyticsService);
+
+  constructor() {
+    // withComponentInputBinding() means route data (username/clanId) is ready by
+    // the time NavigationEnd fires, so urlAfterRedirects reflects the real page.
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        this.analytics.trackPageView(event.urlAfterRedirects, document.title);
+      });
+  }
+}
