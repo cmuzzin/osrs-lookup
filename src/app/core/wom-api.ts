@@ -12,6 +12,7 @@ import {
   Player,
   PlayerAchievement,
   PlayerGains,
+  PlayerNameChange,
   PlayerRecord,
   TimelineDataPoint,
 } from './wom.models';
@@ -80,6 +81,15 @@ export class WomApi {
     return this.cache.get(`achievements:${name.toLowerCase()}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}/achievements`;
       return this.http.get<PlayerAchievement[]>(url).pipe(this.catchAs('player'));
+    });
+  }
+
+  /** Past username changes, newest first. Most players have none. */
+  getNameChanges(username: string): Observable<PlayerNameChange[]> {
+    const name = username.trim();
+    return this.cache.get(`names:${name.toLowerCase()}`, () => {
+      const url = `${BASE_URL}/players/${encodeURIComponent(name)}/names`;
+      return this.http.get<PlayerNameChange[]>(url).pipe(this.catchAs('player'));
     });
   }
 

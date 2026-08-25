@@ -242,6 +242,19 @@ export interface PlayerAchievement {
   legacy: boolean;
 }
 
+// --- Name change history endpoint ---
+
+export interface PlayerNameChange {
+  id: number;
+  playerId: number;
+  oldName: string;
+  newName: string;
+  status: 'pending' | 'approved' | 'denied';
+  resolvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface WomApiError {
   message: string;
 }

@@ -16,6 +16,24 @@
           <span class="badge">{{ player().country }}</span>
         }
       </div>
+
+      @if (approvedNameChanges().length > 0) {
+        <button type="button" class="name-history-toggle" (click)="toggleNameHistory()">
+          {{ showNameHistory() ? 'Hide' : 'Show' }} name history ({{ approvedNameChanges().length }})
+        </button>
+        @if (showNameHistory()) {
+          <ul class="name-history-list">
+            @for (change of approvedNameChanges(); track change.id) {
+              <li>
+                <span class="name-history-list__old">{{ change.oldName }}</span>
+                →
+                <span class="name-history-list__new">{{ change.newName }}</span>
+                <span class="name-history-list__date">{{ formatDate(change.createdAt) }}</span>
+              </li>
+            }
+          </ul>
+        }
+      }
     </div>
   </div>
 

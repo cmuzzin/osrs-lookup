@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
-import { Player } from '../../../core/wom.models';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { WomApi } from '../../../core/wom-api';
+import { Player, PlayerNameChange } from '../../../core/wom.models';
 import {
   SKILL_ORDER,
   formatDate,
@@ -15,7 +16,19 @@ import {
   styleUrl: './player-header.scss',
 })
 export class PlayerHeader {
+  private readonly wom = inject(WomApi);
+
   readonly player = input.required<Player>();
+
+  readonly nameChanges = signal<PlayerNameChange[]>([]);
+  readonly showNameHistory = signal(false);
+
+  // Only 'approved' changes are confirmed history — pending/denied requests aren't real.
+  readonly approvedNameChanges = computed(() =>
+    [...this.nameChanges()]
+      .filter((c) => c.status === 'approved')
+      .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)),
+  );
 
   readonly typeLabel = computed(() => playerTypeLabel(this.player().type));
   readonly buildLabel = computed(() => playerBuildLabel(this.player().build));
@@ -41,4 +54,21 @@ export class PlayerHeader {
   readonly formatNumber = formatNumber;
   readonly formatDate = formatDate;
   readonly formatRelativeTime = formatRelativeTime;
+
+  constructor() {
+    effect(() => {
+      const username = this.player().username;
+      if (!username) return;
+      this.wom.getNameChanges(username).subscribe({
+        next: (changes) => this.nameChanges.set(changes),
+        // Name history is a minor supplementary detail — fail silently rather
+        // than surface an error for something this non-essential.
+        error: () => this.nameChanges.set([]),
+      });
+    });
+  }
+
+  toggleNameHistory(): void {
+    this.showNameHistory.update((v) => !v);
+  }
 }
