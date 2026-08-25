@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { WomApi } from '../../../core/wom-api';
 import { GainsPeriod, PlayerRecord, SnapshotData } from '../../../core/wom.models';
-import { formatDate, formatNumber, metricLabel, skillMeta } from '../../../core/format.util';
+import { classifyMetric, formatDate, formatNumber } from '../../../core/format.util';
 import { SortIcon } from '../../../shared/sort-icon/sort-icon';
 import { compareValues, createSortable } from '../../../shared/sort-state';
 
@@ -52,7 +52,7 @@ export class RecordsPanel {
   readonly rows = computed<RecordRow[]>(() => {
     const data = this.snapshot();
     const mapped = this.records().map((r) => {
-      const { icon, label } = classify(r.metric, data);
+      const { icon, label } = classifyMetric(r.metric, data);
       return { metric: r.metric, icon, label, value: r.value, updatedAt: r.updatedAt };
     });
     const { key, direction } = this.sort();
@@ -93,15 +93,4 @@ export class RecordsPanel {
       },
     });
   }
-}
-
-function classify(metric: string, data: SnapshotData): { icon: string; label: string } {
-  if (metric in data.skills) {
-    const meta = skillMeta(metric);
-    return { icon: meta.icon, label: meta.label };
-  }
-  if (metric in data.bosses) return { icon: '👹', label: metricLabel(metric) };
-  if (metric in data.activities) return { icon: '🏆', label: metricLabel(metric) };
-  if (metric === 'ehp' || metric === 'ehb') return { icon: '⚡', label: metric.toUpperCase() };
-  return { icon: '📊', label: metricLabel(metric) };
 }

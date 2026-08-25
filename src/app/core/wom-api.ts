@@ -10,6 +10,7 @@ import {
   GroupMembership,
   GroupStatistics,
   Player,
+  PlayerAchievement,
   PlayerGains,
   PlayerRecord,
   TimelineDataPoint,
@@ -70,6 +71,15 @@ export class WomApi {
     return this.cache.get(`records:${name.toLowerCase()}:${period}`, () => {
       const url = `${BASE_URL}/players/${encodeURIComponent(name)}/records`;
       return this.http.get<PlayerRecord[]>(url, { params: { period } }).pipe(this.catchAs('player'));
+    });
+  }
+
+  /** Milestone achievements (99s, boss KC thresholds, etc), newest first, with the date each was reached. */
+  getAchievements(username: string): Observable<PlayerAchievement[]> {
+    const name = username.trim();
+    return this.cache.get(`achievements:${name.toLowerCase()}`, () => {
+      const url = `${BASE_URL}/players/${encodeURIComponent(name)}/achievements`;
+      return this.http.get<PlayerAchievement[]>(url).pipe(this.catchAs('player'));
     });
   }
 

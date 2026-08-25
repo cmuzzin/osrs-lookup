@@ -1,0 +1,43 @@
+<section class="panel achievements-panel">
+  <header class="achievements-panel__header">
+    <h3>Achievements</h3>
+    @if (!loading() && !error()) {
+      <span class="achievements-panel__count">{{ rows().length }}</span>
+    }
+  </header>
+
+  @if (loading()) {
+    <p class="achievements-panel__status">Loading achievements…</p>
+  } @else if (error()) {
+    <p class="achievements-panel__status achievements-panel__status--error">{{ error() }}</p>
+  } @else if (rows().length === 0) {
+    <p class="achievements-panel__status">No achievements tracked yet.</p>
+  } @else {
+    <div class="achievements-panel__scroll scrollbar">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>
+              <button type="button" class="sort-btn" (click)="toggleSort('name')">
+                Achievement <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
+              </button>
+            </th>
+            <th class="col-right">
+              <button type="button" class="sort-btn" (click)="toggleSort('createdAt')">
+                Achieved <app-sort-icon [active]="sort().key === 'createdAt'" [direction]="sort().direction" />
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.name + row.createdAt) {
+            <tr>
+              <td><span aria-hidden="true">{{ row.icon }}</span> {{ row.name }}</td>
+              <td class="col-right">{{ formatDate(row.createdAt) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

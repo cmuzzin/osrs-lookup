@@ -228,6 +228,20 @@ export interface GroupStatistics {
   averageStats: Snapshot;
 }
 
+// --- Achievements endpoint ---
+
+export interface PlayerAchievement {
+  playerId: number;
+  name: string;
+  metric: string;
+  threshold: number;
+  /** Milliseconds of uncertainty in `createdAt`, from the gap between tracked snapshots. */
+  accuracy: number;
+  createdAt: string;
+  measure: 'experience' | 'kills' | 'levels' | 'score' | 'value';
+  legacy: boolean;
+}
+
 export interface WomApiError {
   message: string;
 }

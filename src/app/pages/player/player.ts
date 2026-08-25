@@ -9,6 +9,7 @@ import { XpChart } from './xp-chart/xp-chart';
 import { CollectionLogPanel } from './collection-log-panel/collection-log-panel';
 import { GroupsPanel } from './groups-panel/groups-panel';
 import { RecordsPanel } from './records-panel/records-panel';
+import { AchievementsPanel } from './achievements-panel/achievements-panel';
 import { WomApi } from '../../core/wom-api';
 import { Player } from '../../core/wom.models';
 import { metricLabel } from '../../core/format.util';
@@ -27,6 +28,7 @@ import { addRecentSearch } from '../../core/recent-searches.util';
     CollectionLogPanel,
     GroupsPanel,
     RecordsPanel,
+    AchievementsPanel,
   ],
   templateUrl: './player.html',
   styleUrl: './player.scss',

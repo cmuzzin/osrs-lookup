@@ -1,5 +1,7 @@
 // Presentation helpers: canonical skill order/metadata, number & label formatting.
 
+import { SnapshotData } from './wom.models';
+
 export interface SkillMeta {
   key: string;
   label: string;
@@ -156,6 +158,22 @@ export function titleCase(snake: string): string {
 
 export function metricLabel(key: string): string {
   return METRIC_NAME_OVERRIDES[key] ?? titleCase(key);
+}
+
+/**
+ * Icon + label for an arbitrary metric key (skill, boss, activity, or computed),
+ * disambiguated using a player's own snapshot data since the key alone doesn't
+ * say which category it belongs to (e.g. records/achievements only give the key).
+ */
+export function classifyMetric(metric: string, data: SnapshotData): { icon: string; label: string } {
+  if (metric in data.skills) {
+    const meta = skillMeta(metric);
+    return { icon: meta.icon, label: meta.label };
+  }
+  if (metric in data.bosses) return { icon: '👹', label: metricLabel(metric) };
+  if (metric in data.activities) return { icon: '🏆', label: metricLabel(metric) };
+  if (metric === 'ehp' || metric === 'ehb') return { icon: '⚡', label: metric.toUpperCase() };
+  return { icon: '📊', label: metricLabel(metric) };
 }
 
 export function formatNumber(value: number | null | undefined): string {

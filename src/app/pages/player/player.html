@@ -40,6 +40,10 @@
       </section>
 
       <section class="page-shell__section">
+        <app-achievements-panel [username]="p.username" [snapshot]="p.latestSnapshot.data" />
+      </section>
+
+      <section class="page-shell__section">
         <app-collection-log-panel [username]="p.username" [activities]="p.latestSnapshot.data.activities" />
       </section>
 
