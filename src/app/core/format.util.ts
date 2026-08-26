@@ -176,6 +176,43 @@ export function classifyMetric(metric: string, data: SnapshotData): { icon: stri
   return { icon: '📊', label: metricLabel(metric) };
 }
 
+// The classic RuneScape XP curve: xp needed for `level` is the sum, over every level
+// below it, of floor(level + 300 * 2^(level/7)), divided by 4 and floored. Levels are
+// cheap enough (max 99) to just sum directly rather than keep a static lookup table.
+export const MAX_SKILL_LEVEL = 99;
+
+export function xpForLevel(level: number): number {
+  if (level <= 1) return 0;
+  let points = 0;
+  for (let lvl = 1; lvl < level; lvl++) {
+    points += Math.floor(lvl + 300 * Math.pow(2, lvl / 7));
+  }
+  return Math.floor(points / 4);
+}
+
+export interface LevelProgress {
+  /** 0-100, how far into the current level the player's xp is. */
+  progressPct: number;
+  /** XP still needed to reach the next level; 0 once maxed. */
+  xpToNextLevel: number;
+  isMaxed: boolean;
+}
+
+/** Progress toward the next level, for a skill's current level + xp (both as reported by WOM). */
+export function levelProgress(experience: number, level: number): LevelProgress {
+  const xp = Math.max(0, experience ?? 0);
+  const lvl = Math.max(1, Math.min(level ?? 1, MAX_SKILL_LEVEL));
+  if (lvl >= MAX_SKILL_LEVEL) {
+    return { progressPct: 100, xpToNextLevel: 0, isMaxed: true };
+  }
+  const currentLevelXp = xpForLevel(lvl);
+  const nextLevelXp = xpForLevel(lvl + 1);
+  const span = nextLevelXp - currentLevelXp;
+  const into = Math.max(0, xp - currentLevelXp);
+  const progressPct = span > 0 ? Math.min(100, (into / span) * 100) : 100;
+  return { progressPct, xpToNextLevel: Math.max(0, nextLevelXp - xp), isMaxed: false };
+}
+
 export function formatNumber(value: number | null | undefined): string {
   if (value === null || value === undefined || value < 0) return '—';
   return value.toLocaleString('en-US');

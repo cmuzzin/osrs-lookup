@@ -2,3 +2,13 @@
   min-width: 220px;
   max-width: 420px;
 }
+
+// Bulma's `is-col-min-*` grid helpers use a fixed rem minimum that can outgrow
+// the viewport on narrow phones (a 432px column can't fit in a 360px window,
+// forcing horizontal scroll on the whole page). min(300px, 100%) caps the
+// column at the container's own width so it can never overflow.
+.player-page__tables {
+  display: grid;
+  gap: var(--bulma-grid-gap, 0.75rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+}

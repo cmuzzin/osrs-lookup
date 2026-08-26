@@ -1,6 +1,13 @@
 import { Component, computed, input } from '@angular/core';
 import { SkillValue } from '../../../core/wom.models';
-import { SKILL_ORDER, formatNumber, formatRank, skillMeta } from '../../../core/format.util';
+import {
+  SKILL_ORDER,
+  LevelProgress,
+  formatNumber,
+  formatRank,
+  levelProgress,
+  skillMeta,
+} from '../../../core/format.util';
 
 interface SkillTile {
   key: string;
@@ -9,6 +16,8 @@ interface SkillTile {
   level: number;
   experience: number;
   rank: number;
+  /** Omitted for 'overall', which doesn't have a single 1-99 xp curve to progress along. */
+  progress: LevelProgress | null;
 }
 
 @Component({
@@ -24,13 +33,16 @@ export class SkillsGrid {
     return SKILL_ORDER.filter((key) => data[key]).map((key) => {
       const meta = skillMeta(key);
       const value = data[key];
+      const level = value.level ?? 1;
+      const experience = value.experience ?? 0;
       return {
         key,
         label: meta.label,
         icon: meta.icon,
-        level: value.level ?? 1,
-        experience: value.experience ?? 0,
+        level,
+        experience,
         rank: value.rank ?? -1,
+        progress: key === 'overall' ? null : levelProgress(experience, level),
       };
     });
   });

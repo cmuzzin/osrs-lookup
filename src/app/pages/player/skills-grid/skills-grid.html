@@ -1,15 +1,34 @@
-<section class="grid is-col-min-6 is-auto-fill">
+<section class="grid is-col-min-9 is-auto-fill">
   @for (tile of tiles(); track tile.key) {
     <article class="cell box skill-tile p-3" [class.skill-tile--overall]="tile.key === 'overall'">
-      <span class="skill-tile__icon" aria-hidden="true">{{ tile.icon }}</span>
-      <div class="skill-tile__body">
-        <span class="is-size-7 has-text-grey">{{ tile.label }}</span>
-        <span class="skill-tile__level has-text-weight-bold">{{ tile.level }}</span>
+      <div class="skill-tile__top">
+        <span class="skill-tile__icon" aria-hidden="true">{{ tile.icon }}</span>
+        <div class="skill-tile__title">
+          <span class="is-size-7 has-text-grey">{{ tile.label }}</span>
+          <span class="skill-tile__level has-text-weight-bold">{{ tile.level }}</span>
+        </div>
       </div>
+
       <div class="skill-tile__meta is-size-7 has-text-grey tabular-nums">
         <span>{{ formatNumber(tile.experience) }} xp</span>
         <span>{{ formatRank(tile.rank) }}</span>
       </div>
+
+      @if (tile.progress; as p) {
+        <div class="skill-tile__progress">
+          <progress
+            class="progress is-small"
+            [class.is-success]="p.isMaxed"
+            [class.is-link]="!p.isMaxed"
+            [value]="p.progressPct"
+            max="100"
+            [attr.title]="p.isMaxed ? 'Maxed' : formatNumber(p.xpToNextLevel) + ' xp to next level (' + p.progressPct.toFixed(0) + '% there)'"
+          ></progress>
+          <span class="is-size-7 has-text-grey tabular-nums">
+            {{ p.isMaxed ? 'Maxed' : formatNumber(p.xpToNextLevel) + ' to next lvl' }}
+          </span>
+        </div>
+      }
     </article>
   }
 </section>
