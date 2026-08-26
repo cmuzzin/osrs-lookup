@@ -1,34 +1,38 @@
-<div class="page-shell">
-  <div class="page-shell__topbar">
-    <a class="page-shell__brand" routerLink="/">⚔️ OSRS Stat Lookup</a>
-    <app-search-bar placeholder="Look up a player…" />
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="is-flex is-align-items-center is-flex-wrap-wrap is-gap-4 mb-5">
+      <a class="title is-5 mb-0" routerLink="/">⚔️ OSRS Stat Lookup</a>
+      <div class="is-flex-grow-1" style="min-width: 220px; max-width: 420px">
+        <app-search-bar placeholder="Look up a player…" />
+      </div>
+    </div>
+
+    @if (loading()) {
+      <div class="box has-text-centered py-6">
+        <button type="button" class="button is-loading is-outlined is-large mb-4" disabled aria-hidden="true"></button>
+        <p>Fetching clan stats…</p>
+      </div>
+    } @else if (error()) {
+      <div class="box has-text-centered has-text-danger py-6">
+        <p>{{ error() }}</p>
+        @if (numericId() !== null) {
+          <button type="button" class="button is-light mt-3" (click)="retry()">Try again</button>
+        }
+      </div>
+    } @else if (group(); as g) {
+      <app-clan-header [group]="g" />
+
+      <section class="mt-5">
+        <app-clan-stats [clanId]="g.id" />
+      </section>
+
+      <section class="mt-5">
+        <app-clan-leaderboard [clanId]="g.id" />
+      </section>
+
+      <section class="mt-5">
+        <app-clan-gainers [clanId]="g.id" />
+      </section>
+    }
   </div>
-
-  @if (loading()) {
-    <div class="page-shell__status panel">
-      <div class="spinner" aria-hidden="true"></div>
-      <p>Fetching clan stats…</p>
-    </div>
-  } @else if (error()) {
-    <div class="page-shell__status page-shell__status--error panel">
-      <p>{{ error() }}</p>
-      @if (numericId() !== null) {
-        <button type="button" class="retry-btn" (click)="retry()">Try again</button>
-      }
-    </div>
-  } @else if (group(); as g) {
-    <app-clan-header [group]="g" />
-
-    <section class="page-shell__section">
-      <app-clan-stats [clanId]="g.id" />
-    </section>
-
-    <section class="page-shell__section">
-      <app-clan-leaderboard [clanId]="g.id" />
-    </section>
-
-    <section class="page-shell__section">
-      <app-clan-gainers [clanId]="g.id" />
-    </section>
-  }
-</div>
+</section>

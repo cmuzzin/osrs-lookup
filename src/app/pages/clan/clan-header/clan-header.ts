@@ -5,7 +5,6 @@ import { formatNumber } from '../../../core/format.util';
 @Component({
   selector: 'app-clan-header',
   templateUrl: './clan-header.html',
-  styleUrl: './clan-header.scss',
 })
 export class ClanHeader {
   readonly group = input.required<GroupDetail>();

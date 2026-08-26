@@ -16,7 +16,6 @@ const PERIODS: { value: GainsPeriod; label: string }[] = [
   selector: 'app-xp-chart',
   imports: [TrendChart],
   templateUrl: './xp-chart.html',
-  styleUrl: './xp-chart.scss',
 })
 export class XpChart {
   private readonly wom = inject(WomApi);

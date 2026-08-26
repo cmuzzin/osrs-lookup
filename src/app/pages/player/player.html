@@ -1,56 +1,72 @@
-<div class="page-shell">
-  <div class="page-shell__topbar">
-    <a class="page-shell__brand" routerLink="/">⚔️ OSRS Stat Lookup</a>
-    <app-search-bar [initialValue]="username()" placeholder="Look up another player…" />
-  </div>
-
-  @if (loading()) {
-    <div class="page-shell__status panel">
-      <div class="spinner" aria-hidden="true"></div>
-      <p>Fetching stats for <strong>{{ username() }}</strong>…</p>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="is-flex is-align-items-center is-flex-wrap-wrap is-gap-4 mb-5">
+      <a class="title is-5 mb-0" routerLink="/">⚔️ OSRS Stat Lookup</a>
+      <div class="is-flex-grow-1 player-page__search">
+        <app-search-bar [initialValue]="username()" placeholder="Look up another player…" />
+      </div>
     </div>
-  } @else if (error()) {
-    <div class="page-shell__status page-shell__status--error panel">
-      <p>{{ error() }}</p>
-      <button type="button" class="retry-btn" (click)="retry()">Try again</button>
-    </div>
-  } @else if (player(); as p) {
-    <app-player-header [player]="p" />
 
-    <section class="page-shell__section">
-      <app-groups-panel [username]="p.username" />
-    </section>
+    @if (loading()) {
+      <div class="box has-text-centered py-6">
+        <button type="button" class="button is-loading is-outlined is-large mb-4" disabled aria-hidden="true"></button>
+        <p>Fetching stats for <strong>{{ username() }}</strong>…</p>
+      </div>
+    } @else if (error()) {
+      <div class="box has-text-centered has-text-danger py-6">
+        <p>{{ error() }}</p>
+        <button type="button" class="button is-light mt-3" (click)="retry()">Try again</button>
+      </div>
+    } @else if (player(); as p) {
+      <app-player-header [player]="p" />
 
-    @if (p.latestSnapshot) {
-      <section class="page-shell__section">
-        <h2>Skills</h2>
-        <app-skills-grid [skills]="p.latestSnapshot.data.skills" />
+      <section class="mt-5">
+        <app-groups-panel [username]="p.username" />
       </section>
 
-      <section class="page-shell__section">
-        <app-xp-chart [username]="p.username" [skills]="p.latestSnapshot.data.skills" />
-      </section>
+      @if (p.latestSnapshot) {
+        <section class="mt-5">
+          <h2 class="title is-5">Skills</h2>
+          <app-skills-grid [skills]="p.latestSnapshot.data.skills" />
+        </section>
 
-      <section class="page-shell__section">
-        <app-gains-panel [username]="p.username" />
-      </section>
+        <section class="mt-5">
+          <app-xp-chart [username]="p.username" [skills]="p.latestSnapshot.data.skills" />
+        </section>
 
-      <section class="page-shell__section">
-        <app-records-panel [username]="p.username" [snapshot]="p.latestSnapshot.data" />
-      </section>
+        <section class="mt-5">
+          <app-gains-panel [username]="p.username" />
+        </section>
 
-      <section class="page-shell__section">
-        <app-achievements-panel [username]="p.username" [snapshot]="p.latestSnapshot.data" />
-      </section>
+        <section class="mt-5">
+          <app-records-panel [username]="p.username" [snapshot]="p.latestSnapshot.data" />
+        </section>
 
-      <section class="page-shell__section">
-        <app-collection-log-panel [username]="p.username" [activities]="p.latestSnapshot.data.activities" />
-      </section>
+        <section class="mt-5">
+          <app-achievements-panel [username]="p.username" [snapshot]="p.latestSnapshot.data" />
+        </section>
 
-      <section class="page-shell__section player-page__tables">
-        <app-metric-table title="Boss Kill Counts" valueHeader="KC" [rows]="bossRows()" emptyMessage="No boss data." />
-        <app-metric-table title="Activities & Minigames" valueHeader="Score" [rows]="activityRows()" emptyMessage="No activity data." />
-      </section>
+        <section class="mt-5">
+          <app-collection-log-panel [username]="p.username" [activities]="p.latestSnapshot.data.activities" />
+        </section>
+
+        <section class="mt-5 grid is-col-min-18">
+          <app-metric-table
+            class="cell"
+            title="Boss Kill Counts"
+            valueHeader="KC"
+            [rows]="bossRows()"
+            emptyMessage="No boss data."
+          />
+          <app-metric-table
+            class="cell"
+            title="Activities & Minigames"
+            valueHeader="Score"
+            [rows]="activityRows()"
+            emptyMessage="No activity data."
+          />
+        </section>
+      }
     }
-  }
-</div>
+  </div>
+</section>

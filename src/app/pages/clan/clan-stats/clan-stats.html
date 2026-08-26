@@ -1,33 +1,33 @@
-<section class="panel clan-stats">
-  <header class="clan-stats__header">
-    <h3>Clan Stats</h3>
+<section class="box clan-stats">
+  <header class="mb-4">
+    <h3 class="title is-6 mb-0">Clan Stats</h3>
   </header>
 
   @if (loading()) {
-    <p class="clan-stats__status">Loading stats…</p>
+    <p class="has-text-grey">Loading stats…</p>
   } @else if (error()) {
-    <p class="clan-stats__status clan-stats__status--error">{{ error() }}</p>
+    <p class="has-text-danger">{{ error() }}</p>
   } @else if (stats(); as s) {
-    <div class="clan-stats__grid">
-      <div class="stat">
-        <span class="stat__value">{{ formatNumber(s.maxedCombatCount) }}</span>
-        <span class="stat__label">Maxed Combat</span>
+    <div class="grid is-col-min-5">
+      <div class="cell">
+        <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(s.maxedCombatCount) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Maxed Combat</p>
       </div>
-      <div class="stat">
-        <span class="stat__value">{{ formatNumber(s.maxedTotalCount) }}</span>
-        <span class="stat__label">Maxed Total Level</span>
+      <div class="cell">
+        <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(s.maxedTotalCount) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Maxed Total Level</p>
       </div>
-      <div class="stat">
-        <span class="stat__value">{{ formatNumber(s.maxed200msCount) }}</span>
-        <span class="stat__label">200m All Accounts</span>
+      <div class="cell">
+        <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(s.maxed200msCount) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">200m All Accounts</p>
       </div>
-      <div class="stat">
-        <span class="stat__value">{{ formatNumber(averageLevel()) }}</span>
-        <span class="stat__label">Average Total Level</span>
+      <div class="cell">
+        <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(averageLevel()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Average Total Level</p>
       </div>
-      <div class="stat">
-        <span class="stat__value">{{ formatNumber(averageXp()) }}</span>
-        <span class="stat__label">Average Total XP</span>
+      <div class="cell">
+        <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(averageXp()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Average Total XP</p>
       </div>
     </div>
   }

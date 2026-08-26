@@ -7,7 +7,6 @@ import { AnalyticsService } from '../../core/analytics.service';
   selector: 'app-search-bar',
   imports: [FormsModule],
   templateUrl: './search-bar.html',
-  styleUrl: './search-bar.scss',
 })
 export class SearchBar {
   private readonly router = inject(Router);

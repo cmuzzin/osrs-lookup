@@ -1,27 +1,31 @@
-<section class="panel metric-table">
-  <header class="metric-table__header">
-    <h3>{{ title() }}</h3>
-    <span class="metric-table__count">{{ ranked().length }} ranked</span>
+<section class="box metric-table">
+  <header class="level is-mobile">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">{{ title() }}</h3>
+    </div>
+    <div class="level-right">
+      <span class="has-text-grey is-size-7">{{ ranked().length }} ranked</span>
+    </div>
   </header>
 
   @if (visible().length === 0) {
-    <p class="metric-table__empty">{{ emptyMessage() }}</p>
+    <p class="has-text-grey">{{ emptyMessage() }}</p>
   } @else {
     <div class="metric-table__scroll scrollbar">
-      <table class="data-table">
+      <table class="table is-fullwidth is-hoverable">
         <thead>
           <tr>
-            <th class="col-name">
+            <th>
               <button type="button" class="sort-btn" (click)="toggleSort('name')">
                 Name <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
               </button>
             </th>
-            <th class="col-value">
+            <th class="has-text-right">
               <button type="button" class="sort-btn" (click)="toggleSort('value')">
                 {{ valueHeader() }} <app-sort-icon [active]="sort().key === 'value'" [direction]="sort().direction" />
               </button>
             </th>
-            <th class="col-rank">
+            <th class="has-text-right">
               <button type="button" class="sort-btn" (click)="toggleSort('rank')">
                 Rank <app-sort-icon [active]="sort().key === 'rank'" [direction]="sort().direction" />
               </button>
@@ -31,12 +35,12 @@
         <tbody>
           @for (row of visible(); track row.name) {
             <tr [class.is-unranked]="row.rank <= 0">
-              <td class="col-name">
-                <span class="metric-table__icon" aria-hidden="true">{{ row.icon }}</span>
+              <td>
+                <span class="mr-1" aria-hidden="true">{{ row.icon }}</span>
                 {{ row.name }}
               </td>
-              <td class="col-value">{{ formatNumber(row.value) }}</td>
-              <td class="col-rank">{{ formatRank(row.rank) }}</td>
+              <td class="has-text-right has-text-weight-semibold">{{ formatNumber(row.value) }}</td>
+              <td class="has-text-right has-text-grey">{{ formatRank(row.rank) }}</td>
             </tr>
           }
         </tbody>
@@ -45,7 +49,7 @@
   }
 
   @if (unranked().length > 0) {
-    <button class="metric-table__toggle" type="button" (click)="toggleUnranked()">
+    <button class="button is-text is-small p-0" type="button" (click)="toggleUnranked()">
       {{ showUnranked() ? 'Hide unranked' : 'Show ' + unranked().length + ' unranked' }}
     </button>
   }

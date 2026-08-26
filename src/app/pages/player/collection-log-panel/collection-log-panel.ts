@@ -24,7 +24,6 @@ const METRIC = 'collections_logged';
   selector: 'app-collection-log-panel',
   imports: [TrendChart],
   templateUrl: './collection-log-panel.html',
-  styleUrl: './collection-log-panel.scss',
 })
 export class CollectionLogPanel {
   private readonly wom = inject(WomApi);

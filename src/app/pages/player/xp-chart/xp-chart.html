@@ -1,36 +1,41 @@
-<section class="panel xp-chart">
-  <header class="xp-chart__header">
-    <h3>XP Progress</h3>
-    <div class="xp-chart__controls">
-      <select
-        class="xp-chart__metric"
-        aria-label="Skill"
-        [value]="metric()"
-        (change)="setMetric($any($event.target).value)"
-      >
-        @for (opt of skillOptions(); track opt.key) {
-          <option [value]="opt.key">{{ opt.icon }} {{ opt.label }}</option>
-        }
-      </select>
-      <div class="xp-chart__periods">
-        @for (p of periods; track p.value) {
-          <button
-            type="button"
-            class="period-btn"
-            [class.is-active]="period() === p.value"
-            (click)="setPeriod(p.value)"
+<section class="box xp-chart">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">XP Progress</h3>
+    </div>
+    <div class="level-right">
+      <div class="is-flex is-align-items-center is-gap-2">
+        <div class="select is-small">
+          <select
+            aria-label="Skill"
+            [value]="metric()"
+            (change)="setMetric($any($event.target).value)"
           >
-            {{ p.label }}
-          </button>
-        }
+            @for (opt of skillOptions(); track opt.key) {
+              <option [value]="opt.key">{{ opt.icon }} {{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="buttons has-addons mb-0">
+          @for (p of periods; track p.value) {
+            <button
+              type="button"
+              class="button is-small"
+              [class.is-link]="period() === p.value"
+              (click)="setPeriod(p.value)"
+            >
+              {{ p.label }}
+            </button>
+          }
+        </div>
       </div>
     </div>
   </header>
 
   @if (loading()) {
-    <p class="xp-chart__status">Loading chart…</p>
+    <p class="has-text-grey">Loading chart…</p>
   } @else if (error()) {
-    <p class="xp-chart__status xp-chart__status--error">{{ error() }}</p>
+    <p class="has-text-danger">{{ error() }}</p>
   } @else {
     <app-trend-chart [points]="points()" unit="xp" />
   }

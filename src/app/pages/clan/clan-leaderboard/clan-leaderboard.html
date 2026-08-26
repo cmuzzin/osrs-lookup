@@ -1,27 +1,32 @@
-<section class="panel clan-leaderboard">
-  <header class="clan-leaderboard__header">
-    <h3>Members</h3>
-    <select
-      class="clan-leaderboard__metric"
-      aria-label="Skill"
-      [value]="metric()"
-      (change)="setMetric($any($event.target).value)"
-    >
-      @for (opt of skillOptions; track opt.key) {
-        <option [value]="opt.key">{{ opt.icon }} {{ opt.label }}</option>
-      }
-    </select>
+<section class="box clan-leaderboard">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Members</h3>
+    </div>
+    <div class="level-right">
+      <div class="select is-small">
+        <select
+          aria-label="Skill"
+          [value]="metric()"
+          (change)="setMetric($any($event.target).value)"
+        >
+          @for (opt of skillOptions; track opt.key) {
+            <option [value]="opt.key">{{ opt.icon }} {{ opt.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
   </header>
 
   @if (loading()) {
-    <p class="clan-leaderboard__status">Loading leaderboard…</p>
+    <p class="has-text-grey">Loading leaderboard…</p>
   } @else if (error()) {
-    <p class="clan-leaderboard__status clan-leaderboard__status--error">{{ error() }}</p>
+    <p class="has-text-danger">{{ error() }}</p>
   } @else if (rows().length === 0) {
-    <p class="clan-leaderboard__status">No ranked members for this skill yet.</p>
+    <p class="has-text-grey">No ranked members for this skill yet.</p>
   } @else {
     <div class="clan-leaderboard__scroll scrollbar">
-      <table class="data-table">
+      <table class="table is-fullwidth is-hoverable">
         <thead>
           <tr>
             <th>#</th>
@@ -30,17 +35,17 @@
                 Player <app-sort-icon [active]="sort().key === 'player'" [direction]="sort().direction" />
               </button>
             </th>
-            <th class="col-right">
+            <th class="has-text-right">
               <button type="button" class="sort-btn" (click)="toggleSort('level')">
                 Level <app-sort-icon [active]="sort().key === 'level'" [direction]="sort().direction" />
               </button>
             </th>
-            <th class="col-right">
+            <th class="has-text-right">
               <button type="button" class="sort-btn" (click)="toggleSort('experience')">
                 XP <app-sort-icon [active]="sort().key === 'experience'" [direction]="sort().direction" />
               </button>
             </th>
-            <th class="col-right">
+            <th class="has-text-right">
               <button type="button" class="sort-btn" (click)="toggleSort('rank')">
                 Hiscores Rank <app-sort-icon [active]="sort().key === 'rank'" [direction]="sort().direction" />
               </button>
@@ -50,18 +55,18 @@
         <tbody>
           @for (row of rows(); track row.player.id; let i = $index) {
             <tr>
-              <td class="col-index">{{ i + 1 }}</td>
+              <td class="has-text-grey tabular-nums">{{ i + 1 }}</td>
               <td>
                 <a [routerLink]="['/players', row.player.username]">{{ row.player.displayName }}</a>
               </td>
-              <td class="col-right">{{ formatNumber(row.data.level) }}</td>
-              <td class="col-right col-xp">{{ formatNumber(row.data.experience) }}</td>
-              <td class="col-right">{{ formatRank(row.data.rank) }}</td>
+              <td class="has-text-right tabular-nums">{{ formatNumber(row.data.level) }}</td>
+              <td class="has-text-right has-text-link tabular-nums">{{ formatNumber(row.data.experience) }}</td>
+              <td class="has-text-right tabular-nums">{{ formatRank(row.data.rank) }}</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
-    <p class="clan-leaderboard__note">{{ formatNumber(rows().length) }} ranked members.</p>
+    <p class="is-size-7 has-text-grey mb-0">{{ formatNumber(rows().length) }} ranked members.</p>
   }
 </section>

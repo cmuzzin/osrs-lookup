@@ -7,7 +7,6 @@ import { formatNumber } from '../../../core/format.util';
 @Component({
   selector: 'app-clan-stats',
   templateUrl: './clan-stats.html',
-  styleUrl: './clan-stats.scss',
 })
 export class ClanStats {
   private readonly wom = inject(WomApi);

@@ -1,78 +1,80 @@
-<header class="player-header panel">
-  <div class="player-header__identity">
-    <div class="player-header__combat" title="Combat level">
-      <span class="player-header__combat-value">{{ player().combatLevel }}</span>
-      <span class="player-header__combat-label">Combat</span>
+<header class="box player-header">
+  <div class="is-flex is-align-items-flex-start is-gap-4">
+    <div class="player-header__combat has-text-centered" title="Combat level">
+      <span class="player-header__combat-value has-text-weight-bold">{{ player().combatLevel }}</span>
+      <span class="is-size-7 has-text-grey is-uppercase">Combat</span>
     </div>
 
-    <div class="player-header__name-block">
-      <h1>{{ player().displayName }}</h1>
-      <div class="player-header__badges">
-        <span class="badge badge--type">{{ typeLabel() }}</span>
+    <div class="is-flex-grow-1" style="min-width: 0">
+      <h1 class="title is-4 mb-2" style="overflow-wrap: anywhere">{{ player().displayName }}</h1>
+      <div class="tags mb-2">
+        <span class="tag is-link">{{ typeLabel() }}</span>
         @if (player().build && player().build !== 'main') {
-          <span class="badge">{{ buildLabel() }}</span>
+          <span class="tag">{{ buildLabel() }}</span>
         }
         @if (player().country) {
-          <span class="badge">{{ player().country }}</span>
+          <span class="tag">{{ player().country }}</span>
         }
       </div>
 
       @if (approvedNameChanges().length > 0) {
-        <button type="button" class="name-history-toggle" (click)="toggleNameHistory()">
+        <button type="button" class="button is-text is-small p-0" (click)="toggleNameHistory()">
           {{ showNameHistory() ? 'Hide' : 'Show' }} name history ({{ approvedNameChanges().length }})
         </button>
         @if (showNameHistory()) {
-          <ul class="name-history-list">
-            @for (change of approvedNameChanges(); track change.id) {
-              <li>
-                <span class="name-history-list__old">{{ change.oldName }}</span>
-                →
-                <span class="name-history-list__new">{{ change.newName }}</span>
-                <span class="name-history-list__date">{{ formatDate(change.createdAt) }}</span>
-              </li>
-            }
-          </ul>
+          <div class="box is-shadowless has-background-inset mt-2 py-2 px-3">
+            <ul>
+              @for (change of approvedNameChanges(); track change.id) {
+                <li class="is-flex is-align-items-baseline is-flex-wrap-wrap is-gap-2 is-size-7">
+                  <span class="has-text-grey" style="text-decoration: line-through">{{ change.oldName }}</span>
+                  →
+                  <span>{{ change.newName }}</span>
+                  <span class="has-text-grey ml-auto">{{ formatDate(change.createdAt) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
         }
       }
     </div>
   </div>
 
-  <div class="player-header__stats">
-    <div class="stat">
-      <span class="stat__value">{{ formatNumber(player().exp) }}</span>
-      <span class="stat__label">Total XP</span>
+  <div class="grid is-col-min-5 mt-4 pt-4" style="border-top: 1px solid var(--bulma-border)">
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(player().exp) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">Total XP</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">#{{ formatNumber(overallRank()) }}</span>
-      <span class="stat__label">Overall Rank</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">#{{ formatNumber(overallRank()) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">Overall Rank</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">{{ formatNumber(player().ehp) }}</span>
-      <span class="stat__label">EHP</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(player().ehp) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">EHP</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">{{ formatNumber(player().ehb) }}</span>
-      <span class="stat__label">EHB</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(player().ehb) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">EHB</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">{{ formatNumber(player().ttm) }}</span>
-      <span class="stat__label">Time to Max (h)</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(player().ttm) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">Time to Max (h)</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">{{ maxedSkillCount() }}/{{ totalSkillCount }}</span>
-      <span class="stat__label">99s Earned</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ maxedSkillCount() }}/{{ totalSkillCount }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">99s Earned</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">{{ formatNumber(totalBossKills()) }}</span>
-      <span class="stat__label">Total Boss KC</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ formatNumber(totalBossKills()) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">Total Boss KC</p>
     </div>
-    <div class="stat">
-      <span class="stat__value">{{ formatDate(player().registeredAt) }}</span>
-      <span class="stat__label">Tracked Since</span>
+    <div class="cell">
+      <p class="has-text-weight-semibold tabular-nums">{{ formatDate(player().registeredAt) }}</p>
+      <p class="is-size-7 has-text-grey is-uppercase">Tracked Since</p>
     </div>
   </div>
 
-  <p class="player-header__updated">
+  <p class="is-size-7 has-text-grey mt-3 mb-0">
     Updated {{ formatRelativeTime(player().updatedAt) }}
   </p>
 </header>

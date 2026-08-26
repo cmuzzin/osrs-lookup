@@ -2,10 +2,10 @@
   <p class="trend-chart__status">Not enough history yet for this period.</p>
 } @else {
   <div class="trend-chart__summary">
-    <span class="trend-chart__gained" [class.is-positive]="gained() > 0">
+    <span class="trend-chart__gained has-text-weight-semibold" [class.has-text-success]="gained() > 0">
       {{ gained() > 0 ? '+' : '' }}{{ formatNumber(gained()) }}{{ unit() ? ' ' + unit() : '' }}
     </span>
-    <span class="trend-chart__range">
+    <span class="has-text-grey is-size-7">
       {{ formatNumber(minValue()) }} – {{ formatNumber(maxValue()) }}{{ unit() ? ' ' + unit() : '' }}
     </span>
   </div>
@@ -20,15 +20,15 @@
     >
       <defs>
         <linearGradient [attr.id]="gradientId" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.35" />
-          <stop offset="100%" stop-color="var(--gold)" stop-opacity="0" />
+          <stop offset="0%" stop-color="var(--bulma-link)" stop-opacity="0.35" />
+          <stop offset="100%" stop-color="var(--bulma-link)" stop-opacity="0" />
         </linearGradient>
       </defs>
       <path [attr.d]="areaD()" [attr.fill]="'url(#' + gradientId + ')'" stroke="none" />
       <path
         [attr.d]="pathD()"
         fill="none"
-        stroke="var(--gold-bright)"
+        stroke="var(--bulma-link)"
         stroke-width="1.5"
         vector-effect="non-scaling-stroke"
       />
@@ -46,14 +46,14 @@
     </svg>
 
     @if (hoverPoint(); as hp) {
-      <div class="trend-chart__tooltip" [style.left.%]="hp.xPct" [style.top.%]="hp.yPct">
-        <strong>{{ formatNumber(hp.value) }}{{ unit() ? ' ' + unit() : '' }}</strong>
-        <span>{{ formatDateTime(hp.date) }}</span>
+      <div class="trend-chart__tooltip box" [style.left.%]="hp.xPct" [style.top.%]="hp.yPct">
+        <strong class="has-text-link">{{ formatNumber(hp.value) }}{{ unit() ? ' ' + unit() : '' }}</strong>
+        <span class="has-text-grey">{{ formatDateTime(hp.date) }}</span>
       </div>
     }
   </div>
 
-  <div class="trend-chart__axis">
+  <div class="trend-chart__axis has-text-grey is-size-7">
     <span>{{ formatDate(startDate()) }}</span>
     <span>{{ formatDate(endDate()) }}</span>
   </div>

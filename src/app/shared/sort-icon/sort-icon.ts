@@ -13,12 +13,12 @@ import { SortDirection } from '../sort-state';
     .sort-icon {
       margin-left: 0.3rem;
       font-size: 0.7em;
-      color: var(--text-faint);
+      color: var(--bulma-text-weak);
       opacity: 0.6;
     }
 
     .sort-icon.is-active {
-      color: var(--gold-bright);
+      color: var(--bulma-link);
       opacity: 1;
     }
   `,

@@ -1,49 +1,53 @@
-<section class="panel gains-panel">
-  <header class="gains-panel__header">
-    <h3>Recent Gains</h3>
-    <div class="gains-panel__periods">
-      @for (p of periods; track p.value) {
-        <button
-          type="button"
-          class="period-btn"
-          [class.is-active]="period() === p.value"
-          (click)="setPeriod(p.value)"
-        >
-          {{ p.label }}
-        </button>
-      }
+<section class="box gains-panel">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Recent Gains</h3>
+    </div>
+    <div class="level-right">
+      <div class="buttons has-addons mb-0">
+        @for (p of periods; track p.value) {
+          <button
+            type="button"
+            class="button is-small"
+            [class.is-link]="period() === p.value"
+            (click)="setPeriod(p.value)"
+          >
+            {{ p.label }}
+          </button>
+        }
+      </div>
     </div>
   </header>
 
   @if (loading()) {
-    <p class="gains-panel__status">Loading gains…</p>
+    <p class="has-text-grey">Loading gains…</p>
   } @else if (error()) {
-    <p class="gains-panel__status gains-panel__status--error">{{ error() }}</p>
+    <p class="has-text-danger">{{ error() }}</p>
   } @else {
-    <div class="gains-panel__summary">
-      <div class="gain-stat">
-        <span class="gain-stat__value">{{ formatSignedNumber(overallXpGained()) }}</span>
-        <span class="gain-stat__label">XP Gained</span>
+    <div class="grid is-col-min-5 mb-4">
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="has-text-weight-semibold has-text-success tabular-nums">{{ formatSignedNumber(overallXpGained()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">XP Gained</p>
       </div>
-      <div class="gain-stat">
-        <span class="gain-stat__value">{{ formatSignedNumber(ehpGained()) }}</span>
-        <span class="gain-stat__label">EHP Gained</span>
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="has-text-weight-semibold has-text-success tabular-nums">{{ formatSignedNumber(ehpGained()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">EHP Gained</p>
       </div>
-      <div class="gain-stat">
-        <span class="gain-stat__value">{{ formatSignedNumber(ehbGained()) }}</span>
-        <span class="gain-stat__label">EHB Gained</span>
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="has-text-weight-semibold has-text-success tabular-nums">{{ formatSignedNumber(ehbGained()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">EHB Gained</p>
       </div>
-      <div class="gain-stat">
-        <span class="gain-stat__value">{{ formatSignedNumber(bossKillsGained()) }}</span>
-        <span class="gain-stat__label">Boss KC Gained</span>
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="has-text-weight-semibold has-text-success tabular-nums">{{ formatSignedNumber(bossKillsGained()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Boss KC Gained</p>
       </div>
     </div>
 
     @if (skillRows().length === 0) {
-      <p class="gains-panel__status">No skill XP gained in this period.</p>
+      <p class="has-text-grey">No skill XP gained in this period.</p>
     } @else {
       <div class="gains-panel__scroll scrollbar">
-        <table class="data-table">
+        <table class="table is-fullwidth is-hoverable">
           <thead>
             <tr>
               <th>
@@ -51,12 +55,12 @@
                   Skill <app-sort-icon [active]="sort().key === 'label'" [direction]="sort().direction" />
                 </button>
               </th>
-              <th class="col-right">
+              <th class="has-text-right">
                 <button type="button" class="sort-btn" (click)="toggleSort('xpGained')">
                   XP Gained <app-sort-icon [active]="sort().key === 'xpGained'" [direction]="sort().direction" />
                 </button>
               </th>
-              <th class="col-right">
+              <th class="has-text-right">
                 <button type="button" class="sort-btn" (click)="toggleSort('levelsGained')">
                   Levels <app-sort-icon [active]="sort().key === 'levelsGained'" [direction]="sort().direction" />
                 </button>
@@ -66,9 +70,9 @@
           <tbody>
             @for (row of skillRows(); track row.key) {
               <tr>
-                <td><span aria-hidden="true">{{ row.icon }}</span> {{ row.label }}</td>
-                <td class="col-right">{{ formatSignedNumber(row.xpGained) }}</td>
-                <td class="col-right">{{ formatSignedNumber(row.levelsGained) }}</td>
+                <td><span class="mr-1" aria-hidden="true">{{ row.icon }}</span>{{ row.label }}</td>
+                <td class="has-text-right has-text-success tabular-nums">{{ formatSignedNumber(row.xpGained) }}</td>
+                <td class="has-text-right has-text-success tabular-nums">{{ formatSignedNumber(row.levelsGained) }}</td>
               </tr>
             }
           </tbody>

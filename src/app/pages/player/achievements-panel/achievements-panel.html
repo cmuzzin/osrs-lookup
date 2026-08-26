@@ -1,20 +1,24 @@
-<section class="panel achievements-panel">
-  <header class="achievements-panel__header">
-    <h3>Achievements</h3>
-    @if (!loading() && !error()) {
-      <span class="achievements-panel__count">{{ rows().length }}</span>
-    }
+<section class="box achievements-panel">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Achievements</h3>
+    </div>
+    <div class="level-right">
+      @if (!loading() && !error()) {
+        <span class="has-text-grey is-size-7 tabular-nums">{{ rows().length }}</span>
+      }
+    </div>
   </header>
 
   @if (loading()) {
-    <p class="achievements-panel__status">Loading achievements…</p>
+    <p class="has-text-grey">Loading achievements…</p>
   } @else if (error()) {
-    <p class="achievements-panel__status achievements-panel__status--error">{{ error() }}</p>
+    <p class="has-text-danger">{{ error() }}</p>
   } @else if (rows().length === 0) {
-    <p class="achievements-panel__status">No achievements tracked yet.</p>
+    <p class="has-text-grey">No achievements tracked yet.</p>
   } @else {
     <div class="achievements-panel__scroll scrollbar">
-      <table class="data-table">
+      <table class="table is-fullwidth is-hoverable">
         <thead>
           <tr>
             <th>
@@ -22,7 +26,7 @@
                 Achievement <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
               </button>
             </th>
-            <th class="col-right">
+            <th class="has-text-right">
               <button type="button" class="sort-btn" (click)="toggleSort('createdAt')">
                 Achieved <app-sort-icon [active]="sort().key === 'createdAt'" [direction]="sort().direction" />
               </button>
@@ -32,8 +36,8 @@
         <tbody>
           @for (row of rows(); track row.name + row.createdAt) {
             <tr>
-              <td><span aria-hidden="true">{{ row.icon }}</span> {{ row.name }}</td>
-              <td class="col-right">{{ formatDate(row.createdAt) }}</td>
+              <td><span class="mr-1" aria-hidden="true">{{ row.icon }}</span>{{ row.name }}</td>
+              <td class="has-text-right has-text-link tabular-nums">{{ formatDate(row.createdAt) }}</td>
             </tr>
           }
         </tbody>

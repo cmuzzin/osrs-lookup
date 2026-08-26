@@ -1,22 +1,26 @@
-<div class="home">
-  <div class="home__hero">
-    <span class="home__crest" aria-hidden="true">⚔️</span>
-    <h1>OSRS Stat Lookup</h1>
-    <p class="home__subtitle">
-      Search any Old School RuneScape username for hiscores levels, boss kill counts,
-      minigame scores, and recent XP gains — powered by Wise Old Man.
-    </p>
-    <app-search-bar placeholder="e.g. Zezima" />
-  </div>
-
-  @if (recent().length > 0) {
-    <div class="home__recent">
-      <h2>Recent lookups</h2>
-      <div class="home__recent-list">
-        @for (name of recent(); track name) {
-          <button type="button" class="recent-chip" (click)="goTo(name)">{{ name }}</button>
-        }
+<section class="hero">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="is-size-1 mb-2" aria-hidden="true">⚔️</p>
+      <h1 class="title">OSRS Stat Lookup</h1>
+      <p class="subtitle has-text-grey">
+        Search any Old School RuneScape username for hiscores levels, boss kill counts,
+        minigame scores, and recent XP gains — powered by Wise Old Man.
+      </p>
+      <div class="home__search mx-auto">
+        <app-search-bar placeholder="e.g. Zezima" />
       </div>
     </div>
-  }
-</div>
+  </div>
+</section>
+
+@if (recent().length > 0) {
+  <div class="container has-text-centered pb-6">
+    <h2 class="is-size-7 has-text-grey has-text-weight-semibold is-uppercase mb-3">Recent lookups</h2>
+    <div class="buttons is-centered">
+      @for (name of recent(); track name) {
+        <button type="button" class="button is-rounded is-small" (click)="goTo(name)">{{ name }}</button>
+      }
+    </div>
+  </div>
+}

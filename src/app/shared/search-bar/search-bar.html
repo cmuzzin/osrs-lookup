@@ -1,15 +1,19 @@
-<form class="search-bar" (ngSubmit)="submit()">
-  <span class="search-bar__icon" aria-hidden="true">🔍</span>
-  <input
-    class="search-bar__input"
-    type="text"
-    name="username"
-    maxlength="12"
-    autocomplete="off"
-    spellcheck="false"
-    [placeholder]="placeholder()"
-    [(ngModel)]="query"
-    aria-label="OSRS username"
-  />
-  <button class="search-bar__submit" type="submit" [disabled]="!query.trim()">Search</button>
+<form class="field has-addons" (ngSubmit)="submit()">
+  <div class="control has-icons-left is-expanded">
+    <input
+      class="input"
+      type="text"
+      name="username"
+      maxlength="12"
+      autocomplete="off"
+      spellcheck="false"
+      [placeholder]="placeholder()"
+      [(ngModel)]="query"
+      aria-label="OSRS username"
+    />
+    <span class="icon is-left" aria-hidden="true">🔍</span>
+  </div>
+  <div class="control">
+    <button class="button is-link" type="submit" [disabled]="!query.trim()">Search</button>
+  </div>
 </form>

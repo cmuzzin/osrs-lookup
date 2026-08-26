@@ -1,26 +1,32 @@
-<section class="panel groups-panel">
-  <header class="groups-panel__header">
-    <h3>Clans</h3>
-    @if (groups().length > 0) {
-      <span class="groups-panel__count">{{ groups().length }}</span>
-    }
+<section class="box groups-panel">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Clans</h3>
+    </div>
+    <div class="level-right">
+      @if (groups().length > 0) {
+        <span class="tag">{{ groups().length }}</span>
+      }
+    </div>
   </header>
 
   @if (loading()) {
-    <p class="groups-panel__status">Loading clans…</p>
+    <p class="has-text-grey">Loading clans…</p>
   } @else if (error()) {
-    <p class="groups-panel__status groups-panel__status--error">{{ error() }}</p>
+    <p class="has-text-danger">{{ error() }}</p>
   } @else if (groups().length === 0) {
-    <p class="groups-panel__status">Not a member of any WOM-tracked clan.</p>
+    <p class="has-text-grey">Not a member of any WOM-tracked clan.</p>
   } @else {
     <div class="groups-panel__list scrollbar">
       @for (m of groups(); track m.groupId) {
-        <div class="group-card">
-          <div class="group-card__main">
-            <a class="group-card__name" [routerLink]="['/clans', m.groupId]">{{ m.group.name }}</a>
-            <span class="group-card__role">{{ titleCase(m.role) }}</span>
+        <div
+          class="box is-shadowless has-background-inset is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap is-gap-3 py-2 px-3 mb-2"
+        >
+          <div class="is-flex is-align-items-baseline is-gap-2" style="min-width: 0">
+            <a class="has-text-weight-semibold" [routerLink]="['/clans', m.groupId]">{{ m.group.name }}</a>
+            <span class="tag is-warning is-uppercase">{{ titleCase(m.role) }}</span>
           </div>
-          <div class="group-card__meta">
+          <div class="is-flex is-gap-3 is-size-7 has-text-grey tabular-nums">
             @if (m.group.clanChat) {
               <span>CC: {{ m.group.clanChat }}</span>
             }

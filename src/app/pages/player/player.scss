@@ -1,5 +1,4 @@
-.player-page__tables {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 0.75rem;
+.player-page__search {
+  min-width: 220px;
+  max-width: 420px;
 }

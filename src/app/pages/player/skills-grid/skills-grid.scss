@@ -1,11 +1,4 @@
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0.6rem;
-}
-
 .skill-tile {
-  padding: 0.65rem 0.75rem;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -13,8 +6,7 @@
   row-gap: 0.15rem;
 
   &--overall {
-    border-color: var(--border-bright);
-    background: linear-gradient(180deg, var(--panel-raised), var(--panel-alt));
+    background: var(--bulma-scheme-main-bis);
   }
 }
 
@@ -32,16 +24,8 @@
   justify-content: space-between;
 }
 
-.skill-tile__label {
-  font-size: 0.82rem;
-  color: var(--text-dim);
-}
-
 .skill-tile__level {
-  font-family: var(--font-heading);
   font-size: 1.15rem;
-  color: var(--gold-bright);
-  font-weight: 700;
 }
 
 .skill-tile__meta {
@@ -49,9 +33,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.1rem 0.5rem;
-  font-size: 0.68rem;
-  color: var(--text-faint);
-  font-variant-numeric: tabular-nums;
 
   span {
     white-space: nowrap;
