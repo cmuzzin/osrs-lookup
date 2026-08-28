@@ -12,7 +12,7 @@ import { RecordsPanel } from './records-panel/records-panel';
 import { AchievementsPanel } from './achievements-panel/achievements-panel';
 import { WomApi } from '../../core/wom-api';
 import { Player } from '../../core/wom.models';
-import { metricLabel } from '../../core/format.util';
+import { bossIconPath, metricLabel } from '../../core/format.util';
 import { addRecentSearch } from '../../core/recent-searches.util';
 
 @Component({
@@ -48,7 +48,7 @@ export class PlayerPage {
     if (!bosses) return [];
     return Object.values(bosses).map((b) => ({
       name: metricLabel(b.metric),
-      icon: '👹',
+      icon: bossIconPath(b.metric),
       value: b.kills,
       rank: b.rank,
     }));

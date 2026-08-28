@@ -101,6 +101,13 @@ export function skillMeta(key: string): SkillMeta {
   };
 }
 
+// Real per-boss sprites (sourced from Wise Old Man's own icon set, so the filenames
+// already match WOM's boss metric keys exactly) rather than one generic emoji for
+// every boss. `app-metric-icon` renders any icon string starting with '/' as an <img>.
+export function bossIconPath(metric: string): string {
+  return `/img/bosses/${metric}.png`;
+}
+
 // A handful of boss/activity names don't title-case cleanly from their snake_case
 // metric keys. Everything else falls back to generic title-casing.
 const METRIC_NAME_OVERRIDES: Record<string, string> = {
@@ -170,7 +177,7 @@ export function classifyMetric(metric: string, data: SnapshotData): { icon: stri
     const meta = skillMeta(metric);
     return { icon: meta.icon, label: meta.label };
   }
-  if (metric in data.bosses) return { icon: '👹', label: metricLabel(metric) };
+  if (metric in data.bosses) return { icon: bossIconPath(metric), label: metricLabel(metric) };
   if (metric in data.activities) return { icon: '🏆', label: metricLabel(metric) };
   if (metric === 'ehp' || metric === 'ehb') return { icon: '⚡', label: metric.toUpperCase() };
   return { icon: '📊', label: metricLabel(metric) };

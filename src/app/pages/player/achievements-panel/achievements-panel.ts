@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { WomApi } from '../../../core/wom-api';
 import { PlayerAchievement, SnapshotData } from '../../../core/wom.models';
 import { classifyMetric, formatDate } from '../../../core/format.util';
+import { MetricIcon } from '../../../shared/metric-icon/metric-icon';
 import { SortIcon } from '../../../shared/sort-icon/sort-icon';
 import { compareValues, createSortable } from '../../../shared/sort-state';
 
@@ -19,7 +20,7 @@ type SortKey = 'name' | 'createdAt';
  */
 @Component({
   selector: 'app-achievements-panel',
-  imports: [SortIcon],
+  imports: [SortIcon, MetricIcon],
   templateUrl: './achievements-panel.html',
   styleUrl: './achievements-panel.scss',
 })

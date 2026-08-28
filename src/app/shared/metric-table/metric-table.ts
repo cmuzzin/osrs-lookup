@@ -1,5 +1,6 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { formatNumber, formatRank } from '../../core/format.util';
+import { MetricIcon } from '../metric-icon/metric-icon';
 import { SortIcon } from '../sort-icon/sort-icon';
 import { compareValues, createSortable } from '../sort-state';
 
@@ -14,7 +15,7 @@ type SortKey = 'name' | 'value' | 'rank';
 
 @Component({
   selector: 'app-metric-table',
-  imports: [SortIcon],
+  imports: [SortIcon, MetricIcon],
   templateUrl: './metric-table.html',
   styleUrl: './metric-table.scss',
 })

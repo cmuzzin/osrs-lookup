@@ -36,7 +36,7 @@
         <tbody>
           @for (row of rows(); track row.name + row.createdAt) {
             <tr>
-              <td><span class="mr-1" aria-hidden="true">{{ row.icon }}</span>{{ row.name }}</td>
+              <td><app-metric-icon class="mr-1" [icon]="row.icon" />{{ row.name }}</td>
               <td class="has-text-right has-text-link tabular-nums">{{ formatDate(row.createdAt) }}</td>
             </tr>
           }

@@ -36,7 +36,7 @@
           @for (row of visible(); track row.name) {
             <tr [class.is-unranked]="row.rank <= 0">
               <td>
-                <span class="mr-1" aria-hidden="true">{{ row.icon }}</span>
+                <app-metric-icon class="mr-1" [icon]="row.icon" />
                 {{ row.name }}
               </td>
               <td class="has-text-right has-text-weight-semibold">{{ formatNumber(row.value) }}</td>
