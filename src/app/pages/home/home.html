@@ -2,25 +2,20 @@
   <div class="hero-body">
     <div class="container has-text-centered">
       <p class="is-size-1 mb-2" aria-hidden="true">⚔️</p>
-      <h1 class="title">OSRS Stat Lookup</h1>
-      <p class="subtitle has-text-grey">
-        Search any Old School RuneScape username for hiscores levels, boss kill counts,
-        minigame scores, and recent XP gains.
-      </p>
-      <div class="home__search mx-auto">
-        <app-search-bar placeholder="e.g. Zezima" />
-      </div>
+      <h1 class="title">RuneTools</h1>
+      <p class="subtitle has-text-grey">A growing set of tools for Old School RuneScape players and clans.</p>
     </div>
   </div>
 </section>
 
-@if (recent().length > 0) {
-  <div class="container has-text-centered pb-6">
-    <h2 class="is-size-7 has-text-grey has-text-weight-semibold is-uppercase mb-3">Recent lookups</h2>
-    <div class="buttons is-centered">
-      @for (name of recent(); track name) {
-        <button type="button" class="button is-rounded is-small" (click)="goTo(name)">{{ name }}</button>
-      }
-    </div>
+<section class="container pb-6">
+  <div class="grid is-col-min-12 home__features">
+    @for (f of features; track f.route) {
+      <a class="cell box home__feature-card" [routerLink]="f.route">
+        <p class="is-size-2 mb-2" aria-hidden="true">{{ f.icon }}</p>
+        <h2 class="title is-5 mb-1">{{ f.title }}</h2>
+        <p class="has-text-grey">{{ f.description }}</p>
+      </a>
+    }
   </div>
-}
+</section>

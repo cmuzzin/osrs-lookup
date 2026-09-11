@@ -1,20 +1,28 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { SearchBar } from '../../shared/search-bar/search-bar';
-import { getRecentSearches } from '../../core/recent-searches.util';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
+interface FeatureCard {
+  route: string;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+/** Landing page: a hub of feature cards. Currently just Stat Lookup, with room to grow. */
 @Component({
   selector: 'app-home',
-  imports: [SearchBar],
+  imports: [RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
-  private readonly router = inject(Router);
-
-  readonly recent = signal<string[]>(getRecentSearches());
-
-  goTo(username: string): void {
-    this.router.navigate(['/players', username]);
-  }
+  readonly features: FeatureCard[] = [
+    {
+      route: '/lookup',
+      icon: '🔍',
+      title: 'Stat Lookup',
+      description:
+        "Search any player's hiscores levels, boss kill counts, quests, achievements, and clan stats.",
+    },
+  ];
 }
