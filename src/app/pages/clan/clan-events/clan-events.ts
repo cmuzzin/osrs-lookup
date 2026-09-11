@@ -3,7 +3,9 @@ import { WomApi } from '../../../core/wom-api';
 import { Competition } from '../../../core/wom.models';
 import {
   CompetitionStatus,
+  CompetitionWinner,
   competitionStatus,
+  competitionWinner,
   formatDate,
   formatNumber,
   metricIcon,
@@ -19,6 +21,11 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: 'upcoming', label: 'Upcoming' },
   { value: 'finished', label: 'Finished' },
 ];
+
+// Winners are fetched eagerly (one extra request per finished event, each cached
+// by WomApi) so they show up without a click. Capped so a clan with a long history
+// of events doesn't fire off an unbounded burst of requests on page load.
+const MAX_EAGER_WINNER_FETCHES = 40;
 
 interface EventRow {
   competition: Competition;
@@ -45,6 +52,10 @@ export class ClanEvents {
   readonly competitions = signal<Competition[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  /** Keyed by competition id. Undefined = not fetched (still loading or not eligible), null = fetched but no real winner. */
+  readonly winners = signal<Record<number, CompetitionWinner | null | undefined>>({});
+  private readonly requestedWinners = new Set<number>();
 
   readonly formatDate = formatDate;
   readonly formatNumber = formatNumber;
@@ -93,15 +104,40 @@ export class ClanEvents {
   private fetch(id: number): void {
     this.loading.set(true);
     this.error.set(null);
+    this.winners.set({});
+    this.requestedWinners.clear();
     this.wom.getGroupCompetitions(id).subscribe({
       next: (competitions) => {
         this.competitions.set(competitions);
         this.loading.set(false);
+        this.fetchWinners();
       },
       error: (err: Error) => {
         this.error.set(err.message);
         this.loading.set(false);
       },
     });
+  }
+
+  /** Only finished events have a real winner — ongoing/upcoming ones haven't concluded. */
+  private fetchWinners(): void {
+    const finished = this.allRows()
+      .filter((r) => r.status === 'finished')
+      .slice(0, MAX_EAGER_WINNER_FETCHES);
+
+    for (const row of finished) {
+      const id = row.competition.id;
+      if (this.requestedWinners.has(id)) continue;
+      this.requestedWinners.add(id);
+
+      this.wom.getCompetition(id).subscribe({
+        next: (detail) => {
+          this.winners.update((w) => ({ ...w, [id]: competitionWinner(detail) }));
+        },
+        error: () => {
+          this.winners.update((w) => ({ ...w, [id]: null }));
+        },
+      });
+    }
   }
 }

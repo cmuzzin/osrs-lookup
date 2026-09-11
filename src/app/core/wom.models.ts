@@ -250,6 +250,24 @@ export interface Competition {
   participantCount: number;
 }
 
+// --- Competition detail endpoint (/competitions/:id) ---
+
+export interface CompetitionParticipation {
+  playerId: number;
+  teamName: string | null;
+  player: Player;
+  /** How much of the competition's metric this player gained during the competition window. */
+  progress: {
+    start: number;
+    end: number;
+    gained: number;
+  };
+}
+
+export interface CompetitionDetail extends Competition {
+  participations: CompetitionParticipation[];
+}
+
 // --- Achievements endpoint ---
 
 export interface PlayerAchievement {

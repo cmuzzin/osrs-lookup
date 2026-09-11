@@ -39,6 +39,11 @@
                 {{ row.metricLabel }} · {{ formatDate(row.competition.startsAt) }} –
                 {{ formatDate(row.competition.endsAt) }}
               </p>
+              @if (row.status === 'finished' && winners()[row.competition.id]; as winner) {
+                <p class="is-size-7 has-text-warning tabular-nums">
+                  🏆 {{ winner.name }}{{ winner.isTeam ? ' (team)' : '' }} — +{{ formatNumber(winner.gained) }}
+                </p>
+              }
             </div>
           </div>
           <div class="is-flex is-align-items-center is-gap-3 is-size-7 has-text-grey tabular-nums">

@@ -1,6 +1,6 @@
 // Presentation helpers: canonical skill order/metadata, number & label formatting.
 
-import { RoleOrder, SnapshotData } from './wom.models';
+import { CompetitionDetail, RoleOrder, SnapshotData } from './wom.models';
 
 export type CompetitionStatus = 'upcoming' | 'ongoing' | 'finished';
 
@@ -12,6 +12,36 @@ export function competitionStatus(startsAt: string, endsAt: string): Competition
   if (now < start) return 'upcoming';
   if (now > end) return 'finished';
   return 'ongoing';
+}
+
+export interface CompetitionWinner {
+  name: string;
+  gained: number;
+  isTeam: boolean;
+}
+
+/**
+ * The leader of a finished competition, from its participants' own progress —
+ * not a stored "winner" field, since WOM doesn't keep one. Team competitions
+ * rank by each team's combined gain rather than a single participant's.
+ * Returns null when nobody actually gained anything (e.g. cancelled/empty
+ * events) — there's no honest "winner" to show in that case.
+ */
+export function competitionWinner(detail: CompetitionDetail): CompetitionWinner | null {
+  if (detail.participations.length === 0) return null;
+
+  if (detail.type === 'team') {
+    const totalsByTeam = new Map<string, number>();
+    for (const p of detail.participations) {
+      const team = p.teamName ?? 'Unknown team';
+      totalsByTeam.set(team, (totalsByTeam.get(team) ?? 0) + p.progress.gained);
+    }
+    const [name, gained] = [...totalsByTeam.entries()].sort((a, b) => b[1] - a[1])[0];
+    return gained > 0 ? { name, gained, isTeam: true } : null;
+  }
+
+  const top = [...detail.participations].sort((a, b) => b.progress.gained - a.progress.gained)[0];
+  return top.progress.gained > 0 ? { name: top.player.displayName, gained: top.progress.gained, isTeam: false } : null;
 }
 
 export interface SkillMeta {

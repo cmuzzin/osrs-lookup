@@ -4,6 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { ResponseCache } from './response-cache';
 import {
   Competition,
+  CompetitionDetail,
   GainsPeriod,
   GroupDetail,
   GroupGainedEntry,
@@ -142,6 +143,14 @@ export class WomApi {
     return this.cache.get(`group-competitions:${id}`, () => {
       const url = `${BASE_URL}/groups/${id}/competitions`;
       return this.http.get<Competition[]>(url).pipe(this.catchAs('clan'));
+    });
+  }
+
+  /** Full competition detail, including every participant's progress — used to work out a winner. */
+  getCompetition(id: number): Observable<CompetitionDetail> {
+    return this.cache.get(`competition:${id}`, () => {
+      const url = `${BASE_URL}/competitions/${id}`;
+      return this.http.get<CompetitionDetail>(url).pipe(this.catchAs('clan'));
     });
   }
 
