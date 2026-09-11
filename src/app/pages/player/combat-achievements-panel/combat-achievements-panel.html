@@ -106,7 +106,13 @@
             @for (task of rows(); track task.index) {
               <tr [attr.title]="task.description">
                 <td>{{ task.name }}</td>
-                <td class="has-text-grey">{{ task.monster }}</td>
+                <td class="has-text-grey">
+                  @if (monsterInfo(task.monster); as info) {
+                    <a [href]="info.url" target="_blank" rel="noopener" [attr.title]="info.description">{{ task.monster }}</a>
+                  } @else {
+                    {{ task.monster }}
+                  }
+                </td>
                 <td class="has-text-grey">{{ task.type }}</td>
                 <td class="has-text-grey">{{ task.tierName }}</td>
                 <td class="has-text-right">

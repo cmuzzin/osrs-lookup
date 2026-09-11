@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { RuneProfileApi, RUNEPROFILE_NOT_LINKED_MESSAGE } from '../../../core/runeprofile-api';
 import { CombatAchievementTask, CombatAchievementTierName } from '../../../core/runeprofile.models';
 import { formatNumber } from '../../../core/format.util';
+import { COMBAT_ACHIEVEMENT_MONSTER_INFO } from '../../../core/combat-achievement-monster-info';
 import { SortIcon } from '../../../shared/sort-icon/sort-icon';
 import { compareValues, createSortable } from '../../../shared/sort-state';
 
@@ -85,6 +86,11 @@ export class CombatAchievementsPanel {
   });
 
   readonly formatNumber = formatNumber;
+
+  /** Wiki link + hover description for a task's monster, if we have one ("Other"/"Unknown" don't). */
+  monsterInfo(monster: string) {
+    return COMBAT_ACHIEVEMENT_MONSTER_INFO[monster];
+  }
 
   constructor() {
     effect(() => {
