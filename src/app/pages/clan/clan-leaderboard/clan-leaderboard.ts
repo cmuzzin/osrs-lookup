@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { RouterLink } from '@angular/router';
 import { WomApi } from '../../../core/wom-api';
 import { GroupHiscoreEntry } from '../../../core/wom.models';
-import { SKILL_ORDER, formatNumber, formatRank, skillMeta } from '../../../core/format.util';
+import { SKILL_ORDER, formatNumber, formatRank, skillEmoji, skillMeta } from '../../../core/format.util';
 import { SortIcon } from '../../../shared/sort-icon/sort-icon';
 import { compareValues, createSortable } from '../../../shared/sort-state';
 
@@ -20,7 +20,9 @@ export class ClanLeaderboard {
 
   readonly clanId = input.required<number>();
 
-  readonly skillOptions = SKILL_ORDER.map((key) => skillMeta(key));
+  // The picker is a native <select>, which only ever renders text — so this uses
+  // skillEmoji() rather than skillMeta()'s real sprite path.
+  readonly skillOptions = SKILL_ORDER.map((key) => ({ ...skillMeta(key), icon: skillEmoji(key) }));
   readonly metric = signal('overall');
 
   readonly entries = signal<GroupHiscoreEntry[]>([]);

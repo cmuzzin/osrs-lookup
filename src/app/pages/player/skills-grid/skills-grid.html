@@ -2,7 +2,7 @@
   @for (tile of tiles(); track tile.key) {
     <article class="cell box skill-tile p-3" [class.skill-tile--overall]="tile.key === 'overall'">
       <div class="skill-tile__top">
-        <span class="skill-tile__icon" aria-hidden="true">{{ tile.icon }}</span>
+        <span class="skill-tile__icon" aria-hidden="true"><app-metric-icon [icon]="tile.icon" /></span>
         <div class="skill-tile__title">
           <span class="is-size-7 has-text-grey">{{ tile.label }}</span>
           <span class="skill-tile__level has-text-weight-bold">{{ tile.level }}</span>

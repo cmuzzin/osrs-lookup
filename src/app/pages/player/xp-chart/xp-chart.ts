@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { WomApi } from '../../../core/wom-api';
 import { GainsPeriod, SkillValue, TimelineDataPoint } from '../../../core/wom.models';
-import { SKILL_ORDER, skillMeta } from '../../../core/format.util';
+import { SKILL_ORDER, skillEmoji, skillMeta } from '../../../core/format.util';
 import { TrendChart } from '../../../shared/trend-chart/trend-chart';
 
 const PERIODS: { value: GainsPeriod; label: string }[] = [
@@ -23,8 +23,14 @@ export class XpChart {
   readonly username = input.required<string>();
   readonly skills = input.required<Record<string, SkillValue>>();
 
+  // The picker is a native <select>, which only ever renders text — so this uses
+  // skillEmoji() rather than skillMeta()'s real sprite path (skillMeta itself is
+  // still used for the label).
   readonly skillOptions = computed(() =>
-    SKILL_ORDER.filter((key) => this.skills()[key]).map((key) => skillMeta(key)),
+    SKILL_ORDER.filter((key) => this.skills()[key]).map((key) => ({
+      ...skillMeta(key),
+      icon: skillEmoji(key),
+    })),
   );
 
   readonly periods = PERIODS;

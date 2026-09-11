@@ -70,7 +70,7 @@
           <tbody>
             @for (row of skillRows(); track row.key) {
               <tr>
-                <td><span class="mr-1" aria-hidden="true">{{ row.icon }}</span>{{ row.label }}</td>
+                <td><app-metric-icon class="mr-1" [icon]="row.icon" />{{ row.label }}</td>
                 <td class="has-text-right has-text-success tabular-nums">{{ formatSignedNumber(row.xpGained) }}</td>
                 <td class="has-text-right has-text-success tabular-nums">{{ formatSignedNumber(row.levelsGained) }}</td>
               </tr>

@@ -107,6 +107,9 @@ const SKILL_LABELS: Record<string, string> = {
   sailing: 'Sailing',
 };
 
+// Emoji fallback for contexts that can't render an <img> at all — a native
+// <select><option> (xp-chart's and clan-leaderboard's skill pickers) only ever
+// shows text, so those two use skillEmoji() instead of skillMeta()'s real sprite.
 const SKILL_ICONS: Record<string, string> = {
   overall: '⭐',
   attack: '⚔️',
@@ -135,11 +138,20 @@ const SKILL_ICONS: Record<string, string> = {
   sailing: '⛵',
 };
 
+export function skillEmoji(key: string): string {
+  return SKILL_ICONS[key] ?? '📊';
+}
+
+// Real per-skill sprites (same WOM icon set as bossIconPath/activityIconPath).
+export function skillIconPath(key: string): string {
+  return `/img/skills/${key}.png`;
+}
+
 export function skillMeta(key: string): SkillMeta {
   return {
     key,
     label: SKILL_LABELS[key] ?? titleCase(key),
-    icon: SKILL_ICONS[key] ?? '📊',
+    icon: skillIconPath(key),
   };
 }
 

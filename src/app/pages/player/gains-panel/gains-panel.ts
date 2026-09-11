@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { WomApi } from '../../../core/wom-api';
 import { GainsPeriod, PlayerGains } from '../../../core/wom.models';
 import { SKILL_ORDER, formatSignedNumber, skillMeta } from '../../../core/format.util';
+import { MetricIcon } from '../../../shared/metric-icon/metric-icon';
 import { SortIcon } from '../../../shared/sort-icon/sort-icon';
 import { compareValues, createSortable } from '../../../shared/sort-state';
 
@@ -24,7 +25,7 @@ const PERIODS: { value: GainsPeriod; label: string }[] = [
 
 @Component({
   selector: 'app-gains-panel',
-  imports: [SortIcon],
+  imports: [SortIcon, MetricIcon],
   templateUrl: './gains-panel.html',
   styleUrl: './gains-panel.scss',
 })

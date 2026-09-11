@@ -8,6 +8,7 @@ import {
   levelProgress,
   skillMeta,
 } from '../../../core/format.util';
+import { MetricIcon } from '../../../shared/metric-icon/metric-icon';
 
 interface SkillTile {
   key: string;
@@ -22,6 +23,7 @@ interface SkillTile {
 
 @Component({
   selector: 'app-skills-grid',
+  imports: [MetricIcon],
   templateUrl: './skills-grid.html',
   styleUrl: './skills-grid.scss',
 })
