@@ -1,0 +1,130 @@
+<div class="modal" [class.is-active]="open()">
+  <div class="modal-background" (click)="close()"></div>
+  <div class="modal-card collection-log-modal">
+    <header class="modal-card-head">
+      <p class="modal-card-title">
+        Collection Log
+        @if (log(); as l) {
+          <span class="is-size-7 has-text-grey has-text-weight-normal ml-2 tabular-nums">
+            {{ formatNumber(l.obtained) }} / {{ formatNumber(l.total) }}
+          </span>
+        }
+      </p>
+      <button type="button" class="delete" aria-label="close" (click)="close()"></button>
+    </header>
+
+    <section class="modal-card-body">
+      @if (loading()) {
+        <p class="has-text-grey">Loading collection log…</p>
+      } @else if (error()) {
+        <p class="has-text-danger">{{ error() }}</p>
+        <button type="button" class="button is-light is-small mt-3" (click)="retry()">Try again</button>
+      } @else if (log(); as l) {
+        <div class="field mb-3">
+          <div class="control has-icons-left has-icons-right">
+            <input
+              type="text"
+              class="input is-small"
+              placeholder="Search items…"
+              [value]="search()"
+              (input)="setSearch($any($event.target).value)"
+            />
+            <span class="icon is-small is-left">🔍</span>
+            @if (isSearching()) {
+              <span class="icon is-small is-right">
+                <button type="button" class="delete is-small" aria-label="Clear search" (click)="clearSearch()"></button>
+              </span>
+            }
+          </div>
+        </div>
+
+        @if (isSearching()) {
+          <p class="is-size-7 has-text-grey mb-2">
+            {{ formatNumber(searchResultsTotal()) }} item{{ searchResultsTotal() === 1 ? '' : 's' }} match
+            @if (searchResultsTruncated()) {
+              — showing first {{ formatNumber(searchResults().length) }}, refine your search for more
+            }
+          </p>
+
+          <div class="collection-log-modal__items collection-log-modal__items--search scrollbar">
+            @if (searchResults().length > 0) {
+              <div class="collection-log-modal__grid">
+                @for (result of searchResults(); track result.tabIndex + ':' + result.pageIndex + ':' + result.item.id) {
+                  <button
+                    type="button"
+                    class="collection-log-modal__item"
+                    [class.is-obtained]="result.item.quantity > 0"
+                    [attr.title]="
+                      result.item.name +
+                      (result.item.quantity > 0 ? ' — obtained' + (result.item.quantity > 1 ? ' ×' + result.item.quantity : '') : ' — not obtained')
+                    "
+                    (click)="goToResult(result)"
+                  >
+                    <img [src]="itemIconUrl(result.item.id)" [alt]="result.item.name" loading="lazy" />
+                    <span class="collection-log-modal__item-name">{{ result.item.name }}</span>
+                    <span class="collection-log-modal__item-source">{{ result.tabName }} ▸ {{ result.pageName }}</span>
+                    @if (result.item.quantity > 1) {
+                      <span class="collection-log-modal__item-qty">{{ result.item.quantity }}</span>
+                    }
+                  </button>
+                }
+              </div>
+            } @else {
+              <p class="has-text-grey">No items match "{{ search() }}".</p>
+            }
+          </div>
+        } @else {
+          <div class="tabs is-toggle is-toggle-rounded is-small mb-3">
+            <ul>
+              @for (tab of l.tabs; track tab.name; let i = $index) {
+                <li [class.is-active]="activeTabIndex() === i">
+                  <a (click)="selectTab(i)">{{ tab.name }} ({{ tab.obtained }}/{{ tab.total }})</a>
+                </li>
+              }
+            </ul>
+          </div>
+
+          <div class="collection-log-modal__body">
+            <div class="collection-log-modal__pages scrollbar">
+              @if (activeTab(); as tab) {
+                @for (page of tab.pages; track page.name; let i = $index) {
+                  <button
+                    type="button"
+                    class="collection-log-modal__page-btn"
+                    [class.is-active]="activePageIndex() === i"
+                    (click)="selectPage(i)"
+                  >
+                    <span>{{ page.name }}</span>
+                    <span class="is-size-7 tabular-nums" [class.has-text-grey]="activePageIndex() !== i">
+                      {{ page.obtained }}/{{ page.total }}
+                    </span>
+                  </button>
+                }
+              }
+            </div>
+
+            <div class="collection-log-modal__items scrollbar">
+              @if (activePage(); as page) {
+                <div class="collection-log-modal__grid">
+                  @for (item of page.items; track item.id) {
+                    <div
+                      class="collection-log-modal__item"
+                      [class.is-obtained]="item.quantity > 0"
+                      [attr.title]="item.name + (item.quantity > 0 ? ' — obtained' + (item.quantity > 1 ? ' ×' + item.quantity : '') : ' — not obtained')"
+                    >
+                      <img [src]="itemIconUrl(item.id)" [alt]="item.name" loading="lazy" />
+                      <span class="collection-log-modal__item-name">{{ item.name }}</span>
+                      @if (item.quantity > 1) {
+                        <span class="collection-log-modal__item-qty">{{ item.quantity }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+    </section>
+  </div>
+</div>

@@ -151,6 +151,12 @@ const ACTIVITY_METRICS = new Set([
  * player's snapshot. Falls back to a boss sprite, since that's the largest remaining
  * category once skills and known activities are ruled out.
  */
+// RuneProfile's own public item-icon CDN (immutable-cached, CORS-open) — item ids
+// here are real OSRS item ids, same ones RuneProfile's collection-log API returns.
+export function itemIconUrl(itemId: number): string {
+  return `https://cdn.runeprofile.com/item/${itemId}.png`;
+}
+
 export function metricIcon(metric: string): string {
   if (metric === 'ehp' || metric === 'ehb') return '⚡';
   if (SKILL_ORDER.includes(metric)) return skillMeta(metric).icon;

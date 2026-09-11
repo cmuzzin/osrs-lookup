@@ -4,17 +4,20 @@
       <h3 class="title is-6 mb-0">Collection Log</h3>
     </div>
     <div class="level-right">
-      <div class="buttons has-addons mb-0">
-        @for (p of periods; track p.value) {
-          <button
-            type="button"
-            class="button is-small"
-            [class.is-link]="period() === p.value"
-            (click)="setPeriod(p.value)"
-          >
-            {{ p.label }}
-          </button>
-        }
+      <div class="is-flex is-align-items-center is-gap-2">
+        <button type="button" class="button is-small is-link is-light" (click)="openModal()">View items</button>
+        <div class="buttons has-addons mb-0">
+          @for (p of periods; track p.value) {
+            <button
+              type="button"
+              class="button is-small"
+              [class.is-link]="period() === p.value"
+              (click)="setPeriod(p.value)"
+            >
+              {{ p.label }}
+            </button>
+          }
+        </div>
       </div>
     </div>
   </header>
@@ -41,4 +44,6 @@
   } @else {
     <app-trend-chart [points]="points()" unit="items" />
   }
+
+  <app-collection-log-modal [rsn]="displayName()" [open]="showModal()" (closed)="closeModal()" />
 </section>

@@ -1,0 +1,129 @@
+.collection-log-modal {
+  width: min(920px, 94vw);
+}
+
+.collection-log-modal__body {
+  display: flex;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.collection-log-modal__pages {
+  flex: 0 0 220px;
+  max-height: 50vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.collection-log-modal__page-btn {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--bulma-radius);
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--bulma-scheme-main-bis);
+  }
+
+  &.is-active {
+    background: var(--bulma-link);
+    color: var(--bulma-link-invert);
+  }
+}
+
+.collection-log-modal__items {
+  flex: 1;
+  min-width: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.collection-log-modal__items--search {
+  max-height: 55vh;
+}
+
+.collection-log-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.5rem;
+}
+
+.collection-log-modal__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.35rem;
+  border: none;
+  border-radius: var(--bulma-radius);
+  background: var(--bulma-scheme-main-bis);
+  text-align: center;
+  font: inherit;
+  color: inherit;
+
+  .collection-log-modal__item-source {
+    font-size: 0.65rem;
+    color: var(--bulma-text-weak);
+    line-height: 1.15;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.35;
+  }
+
+  .collection-log-modal__item-name {
+    font-size: 0.7rem;
+    color: var(--bulma-text-weak);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  &.is-obtained {
+    img {
+      filter: none;
+      opacity: 1;
+    }
+
+    .collection-log-modal__item-name {
+      color: var(--bulma-text);
+    }
+  }
+}
+
+// Search results render .collection-log-modal__item as a <button> (clickable —
+// jumps to the item's own page); plain browsing renders it as a <div>. Only the
+// former needs a pointer/hover cue.
+button.collection-log-modal__item {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--bulma-border);
+  }
+}
+
+.collection-log-modal__item-qty {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.15rem;
+  font-size: 0.65rem;
+  line-height: 1;
+  background: var(--bulma-link);
+  color: var(--bulma-link-invert);
+  border-radius: 999px;
+  padding: 0.15rem 0.35rem;
+}

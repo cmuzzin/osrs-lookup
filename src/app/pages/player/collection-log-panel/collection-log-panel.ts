@@ -3,6 +3,7 @@ import { WomApi } from '../../../core/wom-api';
 import { ActivityValue, GainsPeriod, TimelineDataPoint } from '../../../core/wom.models';
 import { formatNumber, formatRank } from '../../../core/format.util';
 import { TrendChart } from '../../../shared/trend-chart/trend-chart';
+import { CollectionLogModal } from './collection-log-modal/collection-log-modal';
 
 const PERIODS: { value: GainsPeriod; label: string }[] = [
   { value: 'day', label: '24h' },
@@ -22,13 +23,15 @@ const METRIC = 'collections_logged';
  */
 @Component({
   selector: 'app-collection-log-panel',
-  imports: [TrendChart],
+  imports: [TrendChart, CollectionLogModal],
   templateUrl: './collection-log-panel.html',
 })
 export class CollectionLogPanel {
   private readonly wom = inject(WomApi);
 
   readonly username = input.required<string>();
+  /** Real in-game name (correct spacing/casing), needed for the RuneProfile lookup in the modal. */
+  readonly displayName = input.required<string>();
   readonly activities = input.required<Record<string, ActivityValue>>();
 
   readonly current = computed<ActivityValue | null>(() => this.activities()[METRIC] ?? null);
@@ -39,6 +42,8 @@ export class CollectionLogPanel {
   readonly points = signal<TimelineDataPoint[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  readonly showModal = signal(false);
 
   readonly formatNumber = formatNumber;
   readonly formatRank = formatRank;
@@ -54,6 +59,14 @@ export class CollectionLogPanel {
 
   setPeriod(period: GainsPeriod): void {
     this.period.set(period);
+  }
+
+  openModal(): void {
+    this.showModal.set(true);
+  }
+
+  closeModal(): void {
+    this.showModal.set(false);
   }
 
   private fetch(username: string, period: GainsPeriod): void {

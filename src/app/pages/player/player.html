@@ -47,7 +47,11 @@
         </section>
 
         <section class="mt-5">
-          <app-collection-log-panel [username]="p.username" [activities]="p.latestSnapshot.data.activities" />
+          <app-collection-log-panel
+            [username]="p.username"
+            [displayName]="p.displayName"
+            [activities]="p.latestSnapshot.data.activities"
+          />
         </section>
 
         <section class="mt-5 player-page__tables">
