@@ -54,6 +54,18 @@
           />
         </section>
 
+        <section class="mt-5">
+          <app-quests-panel [rsn]="p.displayName" />
+        </section>
+
+        <section class="mt-5">
+          <app-achievement-diary-panel [rsn]="p.displayName" />
+        </section>
+
+        <section class="mt-5">
+          <app-combat-achievements-panel [rsn]="p.displayName" />
+        </section>
+
         <section class="mt-5 player-page__tables">
           <app-metric-table
             class="cell"

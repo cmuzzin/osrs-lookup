@@ -10,6 +10,9 @@ import { CollectionLogPanel } from './collection-log-panel/collection-log-panel'
 import { GroupsPanel } from './groups-panel/groups-panel';
 import { RecordsPanel } from './records-panel/records-panel';
 import { AchievementsPanel } from './achievements-panel/achievements-panel';
+import { QuestsPanel } from './quests-panel/quests-panel';
+import { AchievementDiaryPanel } from './achievement-diary-panel/achievement-diary-panel';
+import { CombatAchievementsPanel } from './combat-achievements-panel/combat-achievements-panel';
 import { WomApi } from '../../core/wom-api';
 import { Player } from '../../core/wom.models';
 import { activityIconPath, bossIconPath, metricLabel } from '../../core/format.util';
@@ -29,6 +32,9 @@ import { addRecentSearch } from '../../core/recent-searches.util';
     GroupsPanel,
     RecordsPanel,
     AchievementsPanel,
+    QuestsPanel,
+    AchievementDiaryPanel,
+    CombatAchievementsPanel,
   ],
   templateUrl: './player.html',
   styleUrl: './player.scss',

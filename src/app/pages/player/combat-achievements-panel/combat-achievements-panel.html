@@ -1,0 +1,124 @@
+<section class="box combat-achievements-panel">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Combat Achievements</h3>
+    </div>
+    <div class="level-right">
+      @if (!loading() && !error() && tasks().length > 0) {
+        <span class="has-text-grey is-size-7 tabular-nums">
+          {{ formatNumber(overallCount().completed) }} / {{ formatNumber(overallCount().total) }} complete
+        </span>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="has-text-grey">Loading combat achievements…</p>
+  } @else if (notLinked()) {
+    <p class="has-text-grey">{{ error() }}</p>
+  } @else if (error()) {
+    <p class="has-text-danger">{{ error() }}</p>
+  } @else if (tasks().length === 0) {
+    <p class="has-text-grey">No combat achievement data available.</p>
+  } @else {
+    <div class="grid is-col-min-6 mb-4">
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="title is-5 mb-0 tabular-nums">{{ formatNumber(totalPoints()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Points Earned</p>
+      </div>
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="title is-5 mb-0">{{ tierReached() ?? '—' }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Tier Reached</p>
+      </div>
+    </div>
+
+    <div class="combat-achievements-panel__tiers is-size-7 has-text-grey mb-3">
+      @for (f of tierFilters; track f.value) {
+        @if (f.value !== 'all' && tierCounts()[f.value]; as c) {
+          <span>{{ f.label }} {{ c.completed }}/{{ c.total }}</span>
+        }
+      }
+    </div>
+
+    <div class="is-flex is-align-items-center is-flex-wrap-wrap is-gap-2 mb-3">
+      <div class="buttons has-addons mb-0">
+        @for (f of tierFilters; track f.value) {
+          <button
+            type="button"
+            class="button is-small"
+            [class.is-link]="tierFilter() === f.value"
+            (click)="setTierFilter(f.value)"
+          >
+            {{ f.label }}
+          </button>
+        }
+      </div>
+      <label class="checkbox is-size-7 has-text-grey is-flex is-align-items-center is-gap-1">
+        <input type="checkbox" [checked]="onlyIncomplete()" (change)="toggleOnlyIncomplete()" />
+        Only incomplete
+      </label>
+      <div class="control is-flex-grow-1" style="min-width: 180px">
+        <input
+          type="text"
+          class="input is-small"
+          placeholder="Search tasks or monsters…"
+          [value]="search()"
+          (input)="setSearch($any($event.target).value)"
+        />
+      </div>
+    </div>
+
+    @if (rows().length === 0) {
+      <p class="has-text-grey">No tasks match.</p>
+    } @else {
+      <div class="combat-achievements-panel__scroll scrollbar">
+        <table class="table is-fullwidth is-hoverable">
+          <thead>
+            <tr>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('name')">
+                  Task <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('monster')">
+                  Monster <app-sort-icon [active]="sort().key === 'monster'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('type')">
+                  Type <app-sort-icon [active]="sort().key === 'type'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('tierId')">
+                  Tier <app-sort-icon [active]="sort().key === 'tierId'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th class="has-text-right">
+                <button type="button" class="sort-btn" (click)="toggleSort('completed')">
+                  Status <app-sort-icon [active]="sort().key === 'completed'" [direction]="sort().direction" />
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (task of rows(); track task.index) {
+              <tr [attr.title]="task.description">
+                <td>{{ task.name }}</td>
+                <td class="has-text-grey">{{ task.monster }}</td>
+                <td class="has-text-grey">{{ task.type }}</td>
+                <td class="has-text-grey">{{ task.tierName }}</td>
+                <td class="has-text-right">
+                  <span class="tag is-uppercase" [class.is-success]="task.completed">
+                    {{ task.completed ? 'Complete' : 'Incomplete' }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

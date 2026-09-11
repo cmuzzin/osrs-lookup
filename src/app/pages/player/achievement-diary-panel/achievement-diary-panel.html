@@ -1,0 +1,71 @@
+<section class="box achievement-diary-panel">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Achievement Diaries</h3>
+    </div>
+    <div class="level-right">
+      @if (!loading() && !error() && areas().length > 0) {
+        <span class="has-text-grey is-size-7 tabular-nums">
+          {{ formatNumber(totals().completed) }} / {{ formatNumber(totals().total) }} tasks
+        </span>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="has-text-grey">Loading achievement diaries…</p>
+  } @else if (notLinked()) {
+    <p class="has-text-grey">{{ error() }}</p>
+  } @else if (error()) {
+    <p class="has-text-danger">{{ error() }}</p>
+  } @else if (areas().length === 0) {
+    <p class="has-text-grey">No achievement diary data available.</p>
+  } @else {
+    <div class="grid is-col-min-6 mb-4">
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="title is-5 mb-0 tabular-nums">{{ formatNumber(totals().completed) }} / {{ formatNumber(totals().total) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Tasks Completed</p>
+      </div>
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="title is-5 mb-0 tabular-nums">{{ eliteComplete().complete }} / {{ eliteComplete().total }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Elite Diaries Complete</p>
+      </div>
+    </div>
+
+    <label class="checkbox is-size-7 has-text-grey mb-3 is-flex is-align-items-center is-gap-2">
+      <input type="checkbox" [checked]="hideCompleted()" (change)="toggleHideCompleted()" />
+      Hide fully completed areas
+    </label>
+
+    @if (visibleAreas().length === 0) {
+      <p class="has-text-grey">All diary areas fully completed 🎉</p>
+    } @else {
+      <div class="achievement-diary-panel__scroll scrollbar">
+        <table class="table is-fullwidth is-hoverable">
+          <thead>
+            <tr>
+              <th>Area</th>
+              @for (t of tierOrder; track t) {
+                <th class="has-text-centered">{{ t }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (area of visibleAreas(); track area.areaId) {
+              <tr>
+                <td>{{ area.area }}</td>
+                @for (tier of area.tiers; track tier.tier) {
+                  <td class="has-text-centered tabular-nums">
+                    <span class="tag" [class.is-success]="tier.total > 0 && tier.completed === tier.total">
+                      {{ tier.completed }}/{{ tier.total }}
+                    </span>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

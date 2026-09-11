@@ -1,0 +1,111 @@
+<section class="box quests-panel">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Quests</h3>
+    </div>
+    <div class="level-right">
+      @if (!loading() && !error() && quests().length > 0) {
+        <span class="has-text-grey is-size-7 tabular-nums">
+          {{ formatNumber(counts().finished) }} / {{ formatNumber(counts().all) }} complete
+        </span>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="has-text-grey">Loading quests…</p>
+  } @else if (notLinked()) {
+    <p class="has-text-grey">{{ error() }}</p>
+  } @else if (error()) {
+    <p class="has-text-danger">{{ error() }}</p>
+  } @else if (quests().length === 0) {
+    <p class="has-text-grey">No quest data available.</p>
+  } @else {
+    <div class="grid is-col-min-6 mb-4">
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="title is-5 mb-0 tabular-nums">{{ formatNumber(earnedPoints()) }} / {{ formatNumber(totalPoints()) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Quest Points</p>
+        <progress class="progress is-small is-link mt-1" [value]="pointsPct()" max="100"></progress>
+      </div>
+      <div class="cell box is-shadowless has-background-inset py-2 px-3">
+        <p class="title is-5 mb-0 tabular-nums">{{ formatNumber(counts().finished) }} / {{ formatNumber(counts().all) }}</p>
+        <p class="is-size-7 has-text-grey is-uppercase">Quests Completed</p>
+      </div>
+    </div>
+
+    <div class="is-flex is-align-items-center is-flex-wrap-wrap is-gap-2 mb-3">
+      <div class="buttons has-addons mb-0">
+        @for (f of stateFilters; track f.value) {
+          <button
+            type="button"
+            class="button is-small"
+            [class.is-link]="stateFilter() === f.value"
+            (click)="setStateFilter(f.value)"
+          >
+            {{ f.label }} ({{ counts()[f.value] }})
+          </button>
+        }
+      </div>
+      <div class="control is-flex-grow-1" style="min-width: 180px">
+        <input
+          type="text"
+          class="input is-small"
+          placeholder="Search quests…"
+          [value]="search()"
+          (input)="setSearch($any($event.target).value)"
+        />
+      </div>
+    </div>
+
+    @if (rows().length === 0) {
+      <p class="has-text-grey">No quests match.</p>
+    } @else {
+      <div class="quests-panel__scroll scrollbar">
+        <table class="table is-fullwidth is-hoverable">
+          <thead>
+            <tr>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('name')">
+                  Quest <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th>
+                <button type="button" class="sort-btn" (click)="toggleSort('type')">
+                  Type <app-sort-icon [active]="sort().key === 'type'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th class="has-text-right">
+                <button type="button" class="sort-btn" (click)="toggleSort('points')">
+                  Points <app-sort-icon [active]="sort().key === 'points'" [direction]="sort().direction" />
+                </button>
+              </th>
+              <th class="has-text-right">
+                <button type="button" class="sort-btn" (click)="toggleSort('state')">
+                  Status <app-sort-icon [active]="sort().key === 'state'" [direction]="sort().direction" />
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (q of rows(); track q.id) {
+              <tr>
+                <td>{{ q.name }}</td>
+                <td class="has-text-grey">{{ typeLabels[q.type] }}</td>
+                <td class="has-text-right tabular-nums">{{ q.points }}</td>
+                <td class="has-text-right">
+                  <span
+                    class="tag is-uppercase"
+                    [class.is-success]="q.state === 'finished'"
+                    [class.is-warning]="q.state === 'in_progress'"
+                  >
+                    {{ stateLabels[q.state] }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>
