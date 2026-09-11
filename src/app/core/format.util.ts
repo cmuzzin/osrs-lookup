@@ -1,6 +1,18 @@
 // Presentation helpers: canonical skill order/metadata, number & label formatting.
 
-import { SnapshotData } from './wom.models';
+import { RoleOrder, SnapshotData } from './wom.models';
+
+export type CompetitionStatus = 'upcoming' | 'ongoing' | 'finished';
+
+/** Where a competition sits relative to now, from its start/end timestamps. */
+export function competitionStatus(startsAt: string, endsAt: string): CompetitionStatus {
+  const now = Date.now();
+  const start = new Date(startsAt).getTime();
+  const end = new Date(endsAt).getTime();
+  if (now < start) return 'upcoming';
+  if (now > end) return 'finished';
+  return 'ongoing';
+}
 
 export interface SkillMeta {
   key: string;
@@ -108,6 +120,44 @@ export function bossIconPath(metric: string): string {
   return `/img/bosses/${metric}.png`;
 }
 
+// Same idea as bossIconPath, for activities/minigames (clue scrolls, Bounty Hunter, etc).
+// collections_logged has no sprite here since it gets its own dedicated panel.
+export function activityIconPath(metric: string): string {
+  return `/img/activities/${metric}.png`;
+}
+
+// Mirrors the activity sprites actually present under public/img/activities.
+const ACTIVITY_METRICS = new Set([
+  'bounty_hunter_hunter',
+  'bounty_hunter_rogue',
+  'clue_scrolls_all',
+  'clue_scrolls_beginner',
+  'clue_scrolls_easy',
+  'clue_scrolls_medium',
+  'clue_scrolls_hard',
+  'clue_scrolls_elite',
+  'clue_scrolls_master',
+  'last_man_standing',
+  'pvp_arena',
+  'soul_wars_zeal',
+  'guardians_of_the_rift',
+  'colosseum_glory',
+  'league_points',
+]);
+
+/**
+ * Icon for an arbitrary metric key with no snapshot data to disambiguate it against
+ * (e.g. a clan competition's metric) — unlike `classifyMetric`, which uses a specific
+ * player's snapshot. Falls back to a boss sprite, since that's the largest remaining
+ * category once skills and known activities are ruled out.
+ */
+export function metricIcon(metric: string): string {
+  if (metric === 'ehp' || metric === 'ehb') return '⚡';
+  if (SKILL_ORDER.includes(metric)) return skillMeta(metric).icon;
+  if (ACTIVITY_METRICS.has(metric)) return activityIconPath(metric);
+  return bossIconPath(metric);
+}
+
 // A handful of boss/activity names don't title-case cleanly from their snake_case
 // metric keys. Everything else falls back to generic title-casing.
 const METRIC_NAME_OVERRIDES: Record<string, string> = {
@@ -165,6 +215,34 @@ export function titleCase(snake: string): string {
 
 export function metricLabel(key: string): string {
   return METRIC_NAME_OVERRIDES[key] ?? titleCase(key);
+}
+
+export interface ClanRankProgress {
+  /** 1-based position in the clan's role hierarchy, best rank first. */
+  position: number;
+  total: number;
+  /** Label of the next-better role above this one, or null if already at the top. */
+  nextRole: string | null;
+  /** 0-100, how close to the top of the hierarchy this rank sits. */
+  progressPct: number;
+}
+
+/**
+ * Where a member's role sits in their clan's role hierarchy, as configured by that
+ * clan on Wise Old Man (`roleOrders`, lower index = higher rank). This is purely a
+ * ladder position — WOM has no concept of points or requirements toward the next
+ * rank, so there's no "how close" metric beyond "how many roles are above you".
+ */
+export function clanRankProgress(roleOrders: RoleOrder[], role: string): ClanRankProgress | null {
+  const orders = [...roleOrders].sort((a, b) => a.index - b.index);
+  const currentIdx = orders.findIndex((o) => o.role === role);
+  if (currentIdx === -1) return null;
+
+  const total = orders.length;
+  const position = currentIdx + 1;
+  const nextRole = currentIdx > 0 ? titleCase(orders[currentIdx - 1].role) : null;
+  const progressPct = total > 1 ? ((total - position) / (total - 1)) * 100 : 100;
+  return { position, total, nextRole, progressPct };
 }
 
 /**

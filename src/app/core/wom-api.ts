@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { ResponseCache } from './response-cache';
 import {
+  Competition,
   GainsPeriod,
   GroupDetail,
   GroupGainedEntry,
@@ -133,6 +134,14 @@ export class WomApi {
     return this.cache.get(`group-stats:${id}`, () => {
       const url = `${BASE_URL}/groups/${id}/statistics`;
       return this.http.get<GroupStatistics>(url).pipe(this.catchAs('clan'));
+    });
+  }
+
+  /** This clan's events (Boss/Skill of the Month, etc), newest-first. */
+  getGroupCompetitions(id: number): Observable<Competition[]> {
+    return this.cache.get(`group-competitions:${id}`, () => {
+      const url = `${BASE_URL}/groups/${id}/competitions`;
+      return this.http.get<Competition[]>(url).pipe(this.catchAs('clan'));
     });
   }
 

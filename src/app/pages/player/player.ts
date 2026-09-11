@@ -12,7 +12,7 @@ import { RecordsPanel } from './records-panel/records-panel';
 import { AchievementsPanel } from './achievements-panel/achievements-panel';
 import { WomApi } from '../../core/wom-api';
 import { Player } from '../../core/wom.models';
-import { bossIconPath, metricLabel } from '../../core/format.util';
+import { activityIconPath, bossIconPath, metricLabel } from '../../core/format.util';
 import { addRecentSearch } from '../../core/recent-searches.util';
 
 @Component({
@@ -62,7 +62,7 @@ export class PlayerPage {
       .filter((a) => a.metric !== 'collections_logged')
       .map((a) => ({
         name: metricLabel(a.metric),
-        icon: '🏆',
+        icon: activityIconPath(a.metric),
         value: a.score,
         rank: a.rank,
       }));

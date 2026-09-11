@@ -1,4 +1,8 @@
 .groups-panel__list {
-  max-height: 260px;
+  max-height: 460px;
   overflow-y: auto;
+}
+
+.groups-panel__rank progress {
+  margin-bottom: 0.25rem;
 }

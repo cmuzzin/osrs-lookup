@@ -1,0 +1,57 @@
+<section class="box clan-events">
+  <header class="level is-mobile mb-4">
+    <div class="level-left">
+      <h3 class="title is-6 mb-0">Events</h3>
+    </div>
+    <div class="level-right">
+      <div class="buttons has-addons mb-0">
+        @for (f of filters; track f.value) {
+          <button
+            type="button"
+            class="button is-small"
+            [class.is-link]="filter() === f.value"
+            (click)="setFilter(f.value)"
+          >
+            {{ f.label }} ({{ counts()[f.value] }})
+          </button>
+        }
+      </div>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="has-text-grey">Loading events…</p>
+  } @else if (error()) {
+    <p class="has-text-danger">{{ error() }}</p>
+  } @else if (rows().length === 0) {
+    <p class="has-text-grey">No events to show.</p>
+  } @else {
+    <div class="clan-events__list scrollbar">
+      @for (row of rows(); track row.competition.id) {
+        <div
+          class="box is-shadowless has-background-inset is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap is-gap-3 py-2 px-3 mb-2"
+        >
+          <div class="is-flex is-align-items-center is-gap-2" style="min-width: 0">
+            <app-metric-icon [icon]="row.icon" />
+            <div style="min-width: 0">
+              <p class="has-text-weight-semibold" style="overflow-wrap: anywhere">{{ row.competition.title }}</p>
+              <p class="is-size-7 has-text-grey">
+                {{ row.metricLabel }} · {{ formatDate(row.competition.startsAt) }} –
+                {{ formatDate(row.competition.endsAt) }}
+              </p>
+            </div>
+          </div>
+          <div class="is-flex is-align-items-center is-gap-3 is-size-7 has-text-grey tabular-nums">
+            <span
+              class="tag is-uppercase"
+              [class.is-success]="row.status === 'ongoing'"
+              [class.is-info]="row.status === 'upcoming'"
+              >{{ row.status }}</span
+            >
+            <span>{{ formatNumber(row.competition.participantCount) }} joined</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>

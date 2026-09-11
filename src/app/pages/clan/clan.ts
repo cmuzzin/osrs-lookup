@@ -5,12 +5,13 @@ import { ClanHeader } from './clan-header/clan-header';
 import { ClanStats } from './clan-stats/clan-stats';
 import { ClanLeaderboard } from './clan-leaderboard/clan-leaderboard';
 import { ClanGainers } from './clan-gainers/clan-gainers';
+import { ClanEvents } from './clan-events/clan-events';
 import { WomApi } from '../../core/wom-api';
 import { GroupDetail } from '../../core/wom.models';
 
 @Component({
   selector: 'app-clan-page',
-  imports: [RouterLink, SearchBar, ClanHeader, ClanStats, ClanLeaderboard, ClanGainers],
+  imports: [RouterLink, SearchBar, ClanHeader, ClanStats, ClanLeaderboard, ClanGainers, ClanEvents],
   templateUrl: './clan.html',
 })
 export class ClanPage {

@@ -19,19 +19,38 @@
   } @else {
     <div class="groups-panel__list scrollbar">
       @for (m of groups(); track m.groupId) {
-        <div
-          class="box is-shadowless has-background-inset is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap is-gap-3 py-2 px-3 mb-2"
-        >
-          <div class="is-flex is-align-items-baseline is-gap-2" style="min-width: 0">
-            <a class="has-text-weight-semibold" [routerLink]="['/clans', m.groupId]">{{ m.group.name }}</a>
-            <span class="tag is-warning is-uppercase">{{ titleCase(m.role) }}</span>
+        <div class="box is-shadowless has-background-inset py-2 px-3 mb-2">
+          <div class="is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap is-gap-3">
+            <div class="is-flex is-align-items-baseline is-gap-2" style="min-width: 0">
+              <a class="has-text-weight-semibold" [routerLink]="['/clans', m.groupId]">{{ m.group.name }}</a>
+              <span class="tag is-warning is-uppercase">{{ titleCase(m.role) }}</span>
+            </div>
+            <div class="is-flex is-gap-3 is-size-7 has-text-grey tabular-nums">
+              @if (m.group.clanChat) {
+                <span>CC: {{ m.group.clanChat }}</span>
+              }
+              <span>{{ formatNumber(m.group.memberCount) }} members</span>
+            </div>
           </div>
-          <div class="is-flex is-gap-3 is-size-7 has-text-grey tabular-nums">
-            @if (m.group.clanChat) {
-              <span>CC: {{ m.group.clanChat }}</span>
-            }
-            <span>{{ formatNumber(m.group.memberCount) }} members</span>
-          </div>
+
+          @if (rankProgress()[m.groupId]; as progress) {
+            <div class="groups-panel__rank mt-2">
+              <progress
+                class="progress is-small is-warning"
+                [value]="progress.progressPct"
+                max="100"
+                [attr.title]="'Rank ' + progress.position + ' of ' + progress.total + ' in the clan hierarchy'"
+              ></progress>
+              <div class="is-flex is-justify-content-space-between is-size-7 has-text-grey tabular-nums">
+                <span>Rank {{ progress.position }} of {{ progress.total }}</span>
+                @if (progress.nextRole) {
+                  <span>Next: {{ progress.nextRole }}</span>
+                } @else {
+                  <span>Highest rank</span>
+                }
+              </div>
+            </div>
+          }
         </div>
       }
     </div>

@@ -228,6 +228,28 @@ export interface GroupStatistics {
   averageStats: Snapshot;
 }
 
+// --- Group competitions endpoint (/groups/:id/competitions) ---
+
+export interface CompetitionMetricWeight {
+  metric: string;
+  weight: number;
+}
+
+/** A clan "event" — WOM's term for these is competitions (e.g. Boss/Skill of the Month). */
+export interface Competition {
+  id: number;
+  title: string;
+  type: string; // 'classic' | 'team'
+  metric: string;
+  metrics: CompetitionMetricWeight[];
+  startsAt: string;
+  endsAt: string;
+  groupId: number | null;
+  score: number;
+  visible: boolean;
+  participantCount: number;
+}
+
 // --- Achievements endpoint ---
 
 export interface PlayerAchievement {
