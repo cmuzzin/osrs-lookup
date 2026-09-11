@@ -37,7 +37,11 @@
             <tr [class.is-unranked]="row.rank <= 0">
               <td>
                 <app-metric-icon class="mr-1" [icon]="row.icon" />
-                {{ row.name }}
+                @if (row.wikiUrl) {
+                  <a [href]="row.wikiUrl" target="_blank" rel="noopener" [attr.title]="row.description">{{ row.name }}</a>
+                } @else {
+                  <span [attr.title]="row.description">{{ row.name }}</span>
+                }
               </td>
               <td class="has-text-right has-text-weight-semibold">{{ formatNumber(row.value) }}</td>
               <td class="has-text-right has-text-grey">{{ formatRank(row.rank) }}</td>

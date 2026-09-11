@@ -9,6 +9,10 @@ export interface MetricRow {
   icon: string;
   value: number;
   rank: number;
+  /** Wiki page for this row's name to link to, e.g. bosses (see core/boss-info.ts). Omitted rows render plain text. */
+  wikiUrl?: string;
+  /** Hover tooltip shown on the name — a short blurb, e.g. from boss-info.ts. */
+  description?: string;
 }
 
 type SortKey = 'name' | 'value' | 'rank';

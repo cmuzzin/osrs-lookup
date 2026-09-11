@@ -1,0 +1,87 @@
+// Per-boss OSRS Wiki link + short description, keyed by WOM's boss metric name.
+// Sourced once from the wiki's own API (action=query&prop=extracts, first
+// sentence(s) of each page's intro) and baked in statically rather than fetched
+// at runtime — keeps the boss table fast and offline-capable, and avoids taking
+// a live third-party dependency for what's fundamentally static reference text.
+// A couple of metrics share a page where OSRS itself doesn't have a separate
+// wiki article (tombs_of_amascut_expert -> Tombs of Amascut; the_corrupted_gauntlet
+// -> The Gauntlet, which covers both variants).
+
+export interface BossInfo {
+  url: string;
+  description: string;
+}
+
+export const BOSS_INFO: Record<string, BossInfo> = {
+  abyssal_sire: { url: 'https://oldschool.runescape.wiki/w/Abyssal_Sire', description: 'The Abyssal Sire is an abyssal demon Slayer boss that requires level 85 Slayer to kill.' },
+  alchemical_hydra: { url: 'https://oldschool.runescape.wiki/w/Alchemical_Hydra', description: 'The Alchemical Hydra is a boss version of hydra, found in the lower level of the Karuulm Slayer Dungeon in Mount Karuulm, requiring level 95 Slayer to kill.' },
+  amoxliatl: { url: 'https://oldschool.runescape.wiki/w/Amoxliatl', description: 'Amoxliatl is a powerful Frost Nagua found within the Ruins of Tapoyauik, who serves as its guardian and is fought during The Heart of Darkness as the final fight of the quest.' },
+  araxxor: { url: 'https://oldschool.runescape.wiki/w/Araxxor', description: 'Araxxor is the boss version of araxytes found within the Morytania Spider Cave, requiring level 92 Slayer and access to Morytania to kill.' },
+  artio: { url: 'https://oldschool.runescape.wiki/w/Artio', description: "Artio is a weaker variant of Callisto who is fought in the Hunter's End, a singles-plus combat area in level 21 Wilderness." },
+  barrows_chests: { url: 'https://oldschool.runescape.wiki/w/Barrows', description: "The Barrows is a series of six burial mounds east of Mort'ton in which the Barrows brothers were entombed after their deaths during the Third Age." },
+  brutus: { url: 'https://oldschool.runescape.wiki/w/Brutus', description: 'Brutus is a low-level free-to-play boss located in the Lumbridge cow field, whom players defeat as part of the quest The Ides of Milk, and can be fought after completion of the quest as a boss encounter.' },
+  bryophyta: { url: 'https://oldschool.runescape.wiki/w/Bryophyta', description: 'Bryophyta (, BRY-oh-FY-tə), the Moss Giantess, is a moss giant boss who can be found in her lair in the Varrock Sewers.' },
+  callisto: { url: 'https://oldschool.runescape.wiki/w/Callisto', description: "Callisto is an enormous bear empowered by the corruption of the Wilderness that resides in Callisto's Den at level 40 Wilderness and is the one of two monsters to drop the tyrannical ring." },
+  calvarion: { url: "https://oldschool.runescape.wiki/w/Calvar'ion", description: "Calvar'ion is a weaker variant of Vet'ion who is fought in the Skeletal Tomb, a singles-plus combat area in level 21 Wilderness." },
+  cerberus: { url: 'https://oldschool.runescape.wiki/w/Cerberus', description: "Cerberus is a level 318 hellhound boss who resides in Cerberus' Lair, deep beneath the Taverley Dungeon in the cave entrance in the north-east part of the hellhound area, which is found beyond the poisonous spiders." },
+  chambers_of_xeric: { url: 'https://oldschool.runescape.wiki/w/Chambers_of_Xeric', description: 'The Chambers of Xeric is a raid located within a sprawling cave system beneath Mount Quidamortem in the Kebos Lowlands. It was the first raid introduced to Old School RuneScape.' },
+  chambers_of_xeric_challenge_mode: { url: 'https://oldschool.runescape.wiki/w/Chambers_of_Xeric/Challenge_Mode', description: "The Chambers of Xeric's Challenge Mode is a Chambers of Xeric raid with increased difficulty." },
+  chaos_elemental: { url: 'https://oldschool.runescape.wiki/w/Chaos_Elemental', description: "The Chaos Elemental is a dark cloud with six tentacles that dwells in the members-only section of the Wilderness, just west of the Rogues' Castle." },
+  chaos_fanatic: { url: 'https://oldschool.runescape.wiki/w/Chaos_Fanatic', description: 'The Chaos Fanatic is a relatively simple boss that resides west of the Lava Maze in level 42 Wilderness, surrounded by miniature chaotic clouds that serve as unattackable scenery.' },
+  commander_zilyana: { url: 'https://oldschool.runescape.wiki/w/Commander_Zilyana', description: "Commander Zilyana is the appointed leader of Saradomin's forces in the God Wars Dungeon and one of only three known still living representatives of the Icyene race, one being the half-human half-Icyen…" },
+  corporeal_beast: { url: 'https://oldschool.runescape.wiki/w/Corporeal_Beast', description: 'The Corporeal Beast, often referred to simply as Corp, is a large monster residing in its lair, accessed via the games necklace or an entrance in level 21 Wilderness.' },
+  crazy_archaeologist: { url: 'https://oldschool.runescape.wiki/w/Crazy_archaeologist', description: 'Bellock, the crazy archaeologist, is a relatively simple boss that resides in the ruins south of The Forgotten Cemetery within level 23 Wilderness.' },
+  dagannoth_prime: { url: 'https://oldschool.runescape.wiki/w/Dagannoth_Prime', description: 'Dagannoth Prime is the Magic-based Dagannoth King found in the depths of the Waterbirth Island Dungeon, along with fellow Dagannoth Kings, Dagannoth Rex and Dagannoth Supreme.' },
+  dagannoth_rex: { url: 'https://oldschool.runescape.wiki/w/Dagannoth_Rex', description: 'Dagannoth Rex is the Melee-based Dagannoth King found in the depths of the Waterbirth Island Dungeon, along with fellow Dagannoth Kings, Dagannoth Supreme and Dagannoth Prime.' },
+  dagannoth_supreme: { url: 'https://oldschool.runescape.wiki/w/Dagannoth_Supreme', description: 'Dagannoth Supreme is the Ranged-based Dagannoth King found in the depths of the Waterbirth Island Dungeon, along with fellow Dagannoth Kings, Dagannoth Rex and Dagannoth Prime.' },
+  deranged_archaeologist: { url: 'https://oldschool.runescape.wiki/w/Deranged_archaeologist', description: 'The Deranged archaeologist is a relatively simple boss that resides at the southern end of the Tar Swamp on Fossil Island.' },
+  doom_of_mokhaiotl: { url: 'https://oldschool.runescape.wiki/w/Doom_of_Mokhaiotl', description: 'The Doom of Mokhaiotl, also referred to as Osto-Ayak, is a giant insect-like, demonic boss found in the Ruins of Mokhaiotl, which is accessed during The Final Dawn quest, deep beneath the Tlati Rainforest.' },
+  duke_sucellus: { url: 'https://oldschool.runescape.wiki/w/Duke_Sucellus', description: 'Duke Sucellus (pronounced  soo-KELL-əs) is a chthonian demon sealed in Ghorrock Prison, who is encountered during Desert Treasure II - The Fallen Empire.' },
+  general_graardor: { url: 'https://oldschool.runescape.wiki/w/General_Graardor', description: "General Graardor is the leader of Bandos' forces within the God Wars Dungeon. He is the only known living member of the Ourg race." },
+  giant_mole: { url: 'https://oldschool.runescape.wiki/w/Giant_Mole', description: 'The Giant Mole (Talpidae wysonian) is a relatively simple boss found in the Mole Hole under Falador Park.' },
+  grotesque_guardians: { url: 'https://oldschool.runescape.wiki/w/Grotesque_Guardians', description: "The Grotesque Guardians are a pair of gargoyles, Dusk and Dawn, found on the Slayer Tower's rooftop, whose entrance is found on the 2nd floor." },
+  hespori: { url: 'https://oldschool.runescape.wiki/w/Hespori', description: 'The Hespori is a sporadic Farming boss fought in the cave within the west wing of the Farming Guild which requires  65 Farming [boostable] to access.' },
+  kalphite_queen: { url: 'https://oldschool.runescape.wiki/w/Kalphite_Queen', description: 'The Kalphite Queen (Kalphiscarabeinae pasha), also called the KQ, is the strongest of the Kalphites.' },
+  king_black_dragon: { url: 'https://oldschool.runescape.wiki/w/King_Black_Dragon', description: 'The King Black Dragon, commonly referred to as KBD, is a three-headed dragon located in his lair, accessible only through the deep Wilderness.' },
+  kraken: { url: 'https://oldschool.runescape.wiki/w/Kraken', description: 'The Kraken is a stronger and larger version of the cave kraken. It requires level 87 Slayer to kill and cannot be boosted.' },
+  kreearra: { url: "https://oldschool.runescape.wiki/w/Kree'arra", description: "Kree'arra is one of Armadyl's most trusted generals. He is the most powerful of the surviving aviansie, and leader to the forces of Armadyl's Eyrie in the God Wars Dungeon." },
+  kril_tsutsaroth: { url: "https://oldschool.runescape.wiki/w/K'ril_Tsutsaroth", description: "K'ril Tsutsaroth (pronounced  KRILL TUTT-zee-roth) is the leader of Zamorak's forces in the God Wars Dungeon." },
+  lunar_chests: { url: 'https://oldschool.runescape.wiki/w/Lunar_Chest', description: 'The Lunar Chest is a chest found in the Ancient Shrine within Neypotzli.' },
+  mad_angel: { url: 'https://oldschool.runescape.wiki/w/Mad_Angel', description: 'The Mad Angel is a golem boss found in Ardeaglais, a cathedral on the island of Wyrmscraig.' },
+  maggot_king: { url: 'https://oldschool.runescape.wiki/w/Maggot_King', description: 'The Maggot King is a boss in Vampyrium that requires completion of The Blood Moon Rises to kill. The entrance to its lair can be found in the forest east of Sangvesti, near the Ruined Village.' },
+  mimic: { url: 'https://oldschool.runescape.wiki/w/Mimic', description: 'The Mimic is an item that may be obtained when attempting to open an elite or master reward casket.' },
+  nex: { url: 'https://oldschool.runescape.wiki/w/Nex', description: "Nex is one of Zaros' most powerful followers. She is imprisoned in the Ancient Prison, sealed away beneath the God Wars Dungeon." },
+  nightmare: { url: 'https://oldschool.runescape.wiki/w/The_Nightmare', description: 'The Nightmare of Ashihama, often referred to as The Nightmare, is a boss monster located in Morytania. The Nightmare can be found in the Sisterhood Sanctuary under the town of Slepe.' },
+  obor: { url: 'https://oldschool.runescape.wiki/w/Obor', description: 'Obor, the Hill Titan, is the hill giant boss residing in his lair, located behind the locked gates found at the western wall of the hill giant area in the Edgeville Dungeon.' },
+  phantom_muspah: { url: 'https://oldschool.runescape.wiki/w/Phantom_Muspah', description: 'The Phantom Muspah is a solo boss that can be fought after completion of the quest Secrets of the North.' },
+  phosanis_nightmare: { url: "https://oldschool.runescape.wiki/w/Phosani's_Nightmare", description: "Phosani's Nightmare is a more difficult version of The Nightmare, encountered by selecting Drink-from on the Pool of Nightmares in the Sisterhood Sanctuary." },
+  sarachnis: { url: 'https://oldschool.runescape.wiki/w/Sarachnis', description: 'Sarachnis, the mother of the temple spiders, is a mid-level boss found in the Forthos Dungeon, in a former burial tomb south of the Spider Den.' },
+  scorpia: { url: 'https://oldschool.runescape.wiki/w/Scorpia', description: 'Scorpia is a large female scorpion boss that resides in a cave beneath the Scorpion Pit located in Wilderness level 53-55.' },
+  scurrius: { url: 'https://oldschool.runescape.wiki/w/Scurrius', description: 'Scurrius, the Rat King is a boss residing in the Varrock Sewers.' },
+  shellbane_gryphon: { url: 'https://oldschool.runescape.wiki/w/Shellbane_gryphon', description: 'The shellbane gryphon is the boss version of gryphons found in a cave in the centre of the Great Conch, requiring level 51 Slayer and completion of Troubled Tortugans to kill.' },
+  skotizo: { url: 'https://oldschool.runescape.wiki/w/Skotizo', description: 'Skotizo is a demonic boss located beneath the Catacombs of Kourend.' },
+  sol_heredit: { url: 'https://oldschool.runescape.wiki/w/Sol_Heredit', description: 'Sol Heredit is the final boss in the Fortis Colosseum, and is currently the strongest monster in Old School RuneScape with a combat level of 1,563.' },
+  spindel: { url: 'https://oldschool.runescape.wiki/w/Spindel', description: 'Spindel is a weaker variant of Venenatis who is fought in the Web Chasm, a singles-plus combat area in level 29 Wilderness.' },
+  tempoross: { url: 'https://oldschool.runescape.wiki/w/Tempoross', description: 'Tempoross is a cooperative minigame-style boss that is fought using skills rather than combat.' },
+  the_corrupted_gauntlet: { url: 'https://oldschool.runescape.wiki/w/The_Gauntlet', description: 'The Gauntlet is a solo minigame in Prifddinas in which the player is given a limited amount of time to explore a randomly generated dungeon layout, gather various resources and supplies by skilling an…' },
+  the_gauntlet: { url: 'https://oldschool.runescape.wiki/w/The_Gauntlet', description: 'The Gauntlet is a solo minigame in Prifddinas in which the player is given a limited amount of time to explore a randomly generated dungeon layout, gather various resources and supplies by skilling an…' },
+  the_hueycoatl: { url: 'https://oldschool.runescape.wiki/w/The_Hueycoatl', description: 'The Hueycoatl ( HWAY-koh-at-el) is a draconic boss whose large body is coiled around the Darkfrost.' },
+  the_leviathan: { url: 'https://oldschool.runescape.wiki/w/The_Leviathan', description: 'The Leviathan is a large sea creature found within the Scar, who is encountered during Desert Treasure II - The Fallen Empire.' },
+  the_royal_titans: { url: 'https://oldschool.runescape.wiki/w/Royal_Titans', description: 'The Royal Titans are a boss encounter consisting of the two giants Eldric the Ice King and Branda the Fire Queen.' },
+  the_whisperer: { url: 'https://oldschool.runescape.wiki/w/The_Whisperer', description: 'The Whisperer is a siren found in the sunken cathedral of the Lassar Undercity, who is encountered during Desert Treasure II - The Fallen Empire.' },
+  theatre_of_blood: { url: 'https://oldschool.runescape.wiki/w/Theatre_of_Blood', description: 'The Theatre of Blood is a raid located beneath the castle of Ver Sinhaza. It is a large arena used by the ruling vampyres to host blood sports.' },
+  theatre_of_blood_hard_mode: { url: 'https://oldschool.runescape.wiki/w/Theatre_of_Blood/Hard_Mode', description: "Theatre of Blood's Hard Mode is a Theatre of Blood raid with increased difficulty released on 3 June 2021." },
+  thermonuclear_smoke_devil: { url: 'https://oldschool.runescape.wiki/w/Thermonuclear_smoke_devil', description: 'The thermonuclear smoke devil, often referred to as thermy, is the boss version of the smoke devil. It requires a minimum of 93 Slayer to damage.' },
+  tombs_of_amascut: { url: 'https://oldschool.runescape.wiki/w/Tombs_of_Amascut', description: 'The Tombs of Amascut is a raid set in the Kharidian Desert, within the Jaltevas Pyramid at the necropolis. To participate in the raid, players will have to complete the Beneath Cursed Sands quest.' },
+  tombs_of_amascut_expert: { url: 'https://oldschool.runescape.wiki/w/Tombs_of_Amascut', description: 'The Tombs of Amascut is a raid set in the Kharidian Desert, within the Jaltevas Pyramid at the necropolis. To participate in the raid, players will have to complete the Beneath Cursed Sands quest.' },
+  tzkal_zuk: { url: 'https://oldschool.runescape.wiki/w/TzKal-Zuk', description: 'TzKal-Zuk, often referred to as Zuk, is the last monster encountered in the Inferno.' },
+  tztok_jad: { url: 'https://oldschool.runescape.wiki/w/TzTok-Jad', description: 'TzTok-Jad (translated as Hard/Rock/Obsidian Fire Elemental), commonly called Jad for short, is a volcanic creature and the boss of the TzHaar Fight Cave minigame.' },
+  vardorvis: { url: 'https://oldschool.runescape.wiki/w/Vardorvis', description: 'Carnifex Maximus Vardorvis was a Ghrazi vampyre whose corpse is found in the Stranglewood Ritual Site, animated by the Strangler parasite.' },
+  venenatis: { url: 'https://oldschool.runescape.wiki/w/Venenatis', description: 'Venenatis is a large spider that resides in the Silk Chasm, at level 35 Wilderness.' },
+  vetion: { url: "https://oldschool.runescape.wiki/w/Vet'ion", description: "Vet'ion (pronounced  VET-ee-ən) is a Zamorakian skeletal champion that resides in Vet'ion's Rest, at level 35 Wilderness. Like other bosses in the Wilderness, he can also drop the dragon pickaxe." },
+  vorkath: { url: 'https://oldschool.runescape.wiki/w/Vorkath', description: "Vorkath (roughly translated as pathetic failure/weakling/runt in the dragonkin's language) is a draconic boss-monster first encountered during the Dragon Slayer II quest as the penultimate boss." },
+  wintertodt: { url: 'https://oldschool.runescape.wiki/w/Wintertodt', description: 'The Wintertodt ( win-ter-tod) is a cooperative minigame-style boss that is fought using skills rather than combat.' },
+  yama: { url: 'https://oldschool.runescape.wiki/w/Yama', description: "Yama, the Master of Pacts is a powerful demonic duo-focused boss who dwells in Yama's Domain found in the depths of the Chasm of Fire." },
+  zalcano: { url: 'https://oldschool.runescape.wiki/w/Zalcano', description: 'Zalcano is a demon imprisoned beneath Prifddinas that is fought using skilling rather than conventional combat.' },
+  zulrah: { url: 'https://oldschool.runescape.wiki/w/Zulrah', description: 'Zulrah is a level 725 solo-only snake boss.' },
+};

@@ -16,6 +16,7 @@ import { CombatAchievementsPanel } from './combat-achievements-panel/combat-achi
 import { WomApi } from '../../core/wom-api';
 import { Player } from '../../core/wom.models';
 import { activityIconPath, bossIconPath, metricLabel } from '../../core/format.util';
+import { BOSS_INFO } from '../../core/boss-info';
 import { addRecentSearch } from '../../core/recent-searches.util';
 
 @Component({
@@ -52,12 +53,17 @@ export class PlayerPage {
   readonly bossRows = computed<MetricRow[]>(() => {
     const bosses = this.player()?.latestSnapshot?.data.bosses;
     if (!bosses) return [];
-    return Object.values(bosses).map((b) => ({
-      name: metricLabel(b.metric),
-      icon: bossIconPath(b.metric),
-      value: b.kills,
-      rank: b.rank,
-    }));
+    return Object.values(bosses).map((b) => {
+      const info = BOSS_INFO[b.metric];
+      return {
+        name: metricLabel(b.metric),
+        icon: bossIconPath(b.metric),
+        value: b.kills,
+        rank: b.rank,
+        wikiUrl: info?.url,
+        description: info?.description,
+      };
+    });
   });
 
   readonly activityRows = computed<MetricRow[]>(() => {
