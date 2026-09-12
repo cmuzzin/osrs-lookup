@@ -12,6 +12,11 @@ export const routes: Routes = [
     title: 'Stat Lookup — RuneTools',
   },
   {
+    path: 'calculator',
+    loadComponent: () => import('./pages/calculator/calculator').then((m) => m.Calculator),
+    title: 'XP Calculator — RuneTools',
+  },
+  {
     path: 'players/:username',
     loadComponent: () => import('./pages/player/player').then((m) => m.PlayerPage),
     title: 'RuneTools',

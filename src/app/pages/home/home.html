@@ -9,12 +9,15 @@
 </section>
 
 <section class="container pb-6">
-  <div class="grid is-col-min-12 home__features">
+  <div class="home__features">
     @for (f of features; track f.route) {
-      <a class="cell box home__feature-card" [routerLink]="f.route">
-        <p class="is-size-2 mb-2" aria-hidden="true">{{ f.icon }}</p>
-        <h2 class="title is-5 mb-1">{{ f.title }}</h2>
-        <p class="has-text-grey">{{ f.description }}</p>
+      <a class="box home__feature-card" [routerLink]="f.route">
+        <span class="home__feature-card__icon" aria-hidden="true">{{ f.icon }}</span>
+        <div class="home__feature-card__body">
+          <h2 class="title is-5 mb-1">{{ f.title }}</h2>
+          <p class="has-text-grey mb-0">{{ f.description }}</p>
+        </div>
+        <span class="home__feature-card__arrow" aria-hidden="true">→</span>
       </a>
     }
   </div>

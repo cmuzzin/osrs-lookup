@@ -1,0 +1,37 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item has-text-weight-bold" routerLink="/" (click)="close()">⚔️ RuneTools</a>
+
+      <a
+        role="button"
+        class="navbar-burger"
+        [class.is-active]="isOpen()"
+        aria-label="menu"
+        [attr.aria-expanded]="isOpen()"
+        (click)="toggle()"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" [class.is-active]="isOpen()">
+      <div class="navbar-start">
+        <a
+          class="navbar-item"
+          routerLink="/"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="close()"
+        >
+          Home
+        </a>
+        <a class="navbar-item" routerLink="/lookup" routerLinkActive="is-active" (click)="close()">Stat Lookup</a>
+        <a class="navbar-item" routerLink="/calculator" routerLinkActive="is-active" (click)="close()">XP Calculator</a>
+      </div>
+    </div>
+  </div>
+</nav>

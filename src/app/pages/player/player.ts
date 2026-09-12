@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { MetricRow, MetricTable } from '../../shared/metric-table/metric-table';
 import { PlayerHeader } from './player-header/player-header';
@@ -22,7 +21,6 @@ import { addRecentSearch } from '../../core/recent-searches.util';
 @Component({
   selector: 'app-player-page',
   imports: [
-    RouterLink,
     SearchBar,
     MetricTable,
     PlayerHeader,

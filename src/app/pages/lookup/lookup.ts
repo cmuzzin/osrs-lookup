@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { getRecentSearches } from '../../core/recent-searches.util';
 
 /** The player/clan stat lookup feature — search, recent lookups. Reached from Home via a feature card. */
 @Component({
   selector: 'app-lookup',
-  imports: [RouterLink, SearchBar],
+  imports: [SearchBar],
   templateUrl: './lookup.html',
   styleUrl: './lookup.scss',
 })

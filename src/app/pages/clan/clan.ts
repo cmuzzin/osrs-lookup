@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { ClanHeader } from './clan-header/clan-header';
 import { ClanStats } from './clan-stats/clan-stats';
@@ -11,7 +10,7 @@ import { GroupDetail } from '../../core/wom.models';
 
 @Component({
   selector: 'app-clan-page',
-  imports: [RouterLink, SearchBar, ClanHeader, ClanStats, ClanLeaderboard, ClanGainers, ClanEvents],
+  imports: [SearchBar, ClanHeader, ClanStats, ClanLeaderboard, ClanGainers, ClanEvents],
   templateUrl: './clan.html',
 })
 export class ClanPage {

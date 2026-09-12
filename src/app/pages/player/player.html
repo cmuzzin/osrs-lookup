@@ -1,10 +1,7 @@
 <section class="section">
   <div class="container">
-    <div class="is-flex is-align-items-center is-flex-wrap-wrap is-gap-4 mb-5">
-      <a class="title is-5 mb-0" routerLink="/">⚔️ RuneTools</a>
-      <div class="is-flex-grow-1 player-page__search">
-        <app-search-bar [initialValue]="username()" placeholder="Look up another player…" />
-      </div>
+    <div class="mb-5 player-page__search">
+      <app-search-bar [initialValue]="username()" placeholder="Look up another player…" />
     </div>
 
     @if (loading()) {

@@ -1,0 +1,14 @@
+.calculator__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.calculator__scroll {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.calculator__row--locked {
+  opacity: 0.5;
+}

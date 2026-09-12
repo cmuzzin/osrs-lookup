@@ -323,6 +323,16 @@ export function xpForLevel(level: number): number {
   return Math.floor(points / 4);
 }
 
+/** Inverse of xpForLevel: the level a given xp total has reached (99 is the cap, no virtual levels). */
+export function levelForXp(xp: number): number {
+  let level = 1;
+  for (let lvl = 2; lvl <= MAX_SKILL_LEVEL; lvl++) {
+    if (xp < xpForLevel(lvl)) break;
+    level = lvl;
+  }
+  return level;
+}
+
 export interface LevelProgress {
   /** 0-100, how far into the current level the player's xp is. */
   progressPct: number;
@@ -360,6 +370,21 @@ export function formatSignedNumber(value: number | null | undefined): string {
   if (value === null || value === undefined) return '—';
   const sign = value > 0 ? '+' : '';
   return `${sign}${value.toLocaleString('en-US')}`;
+}
+
+/** A span of hours as "3d 4h", "2h 15m", or "45m" — used for calculator-style time-to-goal estimates. */
+export function formatDuration(hours: number): string {
+  if (!Number.isFinite(hours) || hours <= 0) return '0m';
+  const totalMinutes = Math.round(hours * 60);
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hrs = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const mins = totalMinutes % 60;
+  const parts: string[] = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hrs > 0) parts.push(`${hrs}h`);
+  // Minutes stop being meaningful once the estimate spans multiple days.
+  if (mins > 0 && days === 0) parts.push(`${mins}m`);
+  return parts.length > 0 ? parts.join(' ') : '0m';
 }
 
 export function formatDate(iso: string | null | undefined): string {

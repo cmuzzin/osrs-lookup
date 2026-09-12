@@ -8,7 +8,7 @@ interface FeatureCard {
   description: string;
 }
 
-/** Landing page: a hub of feature cards. Currently just Stat Lookup, with room to grow. */
+/** Landing page: a hub of feature cards. Room to grow as more tools are added. */
 @Component({
   selector: 'app-home',
   imports: [RouterLink],
@@ -23,6 +23,12 @@ export class Home {
       title: 'Stat Lookup',
       description:
         "Search any player's hiscores levels, boss kill counts, quests, achievements, and clan stats.",
+    },
+    {
+      route: '/calculator',
+      icon: '🧮',
+      title: 'XP Calculator',
+      description: 'Compare training methods by XP/hour and see how long each takes to reach your goal level.',
     },
   ];
 }

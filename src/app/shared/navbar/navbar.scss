@@ -1,0 +1,12 @@
+.navbar {
+  border-bottom: 1px solid var(--bulma-border);
+}
+
+// Bulma's own .is-active background/text pairing here is inconsistent between
+// the desktop bar and the mobile dropdown (and in one case unreadable — same
+// color for both), so set both explicitly rather than patching just one.
+.navbar-item.is-active {
+  background-color: color-mix(in srgb, var(--bulma-link) 12%, transparent) !important;
+  color: var(--bulma-link) !important;
+  font-weight: 600;
+}
