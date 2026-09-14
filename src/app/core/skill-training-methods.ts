@@ -36,8 +36,31 @@
 // boosted rate for — it isn't reducible to a single log-in-hand method the
 // way group content generally isn't), and Vale Totems (Fletching's Varlamore
 // minigame — "full loop of 8 totems" rates per wood tier, each a midpoint of
-// the wiki's stated range). If another obvious one is still missing, that's
-// why — it's worth flagging so it can be added the same way.
+// the wiki's stated range).
+//
+// A second audit pass (prompted by "what else am I missing?") added more
+// per-skill training-page methods the EHP-config-first approach never
+// surfaces, since EHP only tracks the single fastest bracket and skips
+// anything merely "good": the Gilded Altar (Prayer's non-Wilderness
+// alternative to the chaos altar), jugs of wine and cooking-gauntlets fish
+// (Cooking), barbarian fishing/2t swordfish & tuna/monkfish/infernal
+// eel/leechfin fishing/Minnows (Fishing), spinning flax and glassblowing
+// (Crafting), iron ore and amethyst (Mining), the Ape Atoll/Werewolf/Colossal
+// Wyrm/Prifddinas agility courses, the Ourania Altar (Runecraft), Herbiboar
+// and black chinchompas (Hunter), and Aldarin villa chests/Rogues' Castle
+// chests/pickpocketing elves & TzHaar-Hur (Thieving). Broad arrows/bolts
+// (Fletching) were checked and deliberately left out — the only XP/hour
+// figure found for them didn't hold up against known per-arrow XP, so it
+// would've been a guess rather than a sourced fact.
+//
+// A third pass (prompted specifically about Smithing) added Blast Furnace
+// for every bar type, not just gold (iron/steel/mithril/adamantite/runite),
+// steel cannonballs (standard and double-ammo-mould), dart tips/nails made
+// at the Blast Furnace with the Foreman uniform's XP boost, and manual anvil
+// armour smithing (steel/mithril/adamant platebodies) — all real, named
+// methods the Giants' Foundry-and-gold-bars-only list was missing. If
+// another obvious one is still missing, that's why — it's worth flagging so
+// it can be added the same way.
 //
 // A few checked candidates are deliberately left out because no source gives
 // a real XP/hour figure for them, so a number here would be a guess rather
@@ -96,6 +119,21 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
       materials: '1 superior dragon bone',
       tags: ['clicky', 'buyable'],
     },
+    {
+      name: 'Dragon bones at the gilded altar (no Wilderness risk)',
+      levelReq: 1,
+      xpPerHour: 643_000,
+      materials: '1 dragon bone',
+      tags: ['clicky', 'buyable'],
+    },
+    {
+      name: 'Superior dragon bones at the gilded altar (no Wilderness risk)',
+      levelReq: 70,
+      xpPerHour: 1_340_000,
+      xpPerAction: 245,
+      materials: '1 superior dragon bone',
+      tags: ['clicky', 'buyable'],
+    },
   ],
   cooking: [
     {
@@ -121,6 +159,28 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: '1t karambwan', levelReq: 80, xpPerHour: 880_400, xpPerAction: 190, materials: '1 raw karambwan', tags: ['clicky', 'buyable', 'profit'] },
     { name: '1t karambwan', levelReq: 90, xpPerHour: 948_100, xpPerAction: 190, materials: '1 raw karambwan', tags: ['clicky', 'buyable', 'profit'] },
     { name: '1t karambwan', levelReq: 99, xpPerHour: 980_000, xpPerAction: 190, materials: '1 raw karambwan', tags: ['clicky', 'buyable', 'profit'] },
+    {
+      name: 'Jugs of wine',
+      levelReq: 35,
+      xpPerHour: 480_000,
+      xpPerAction: 200,
+      materials: '1 grapes + 1 jug of water',
+      tags: ['clicky', 'buyable'],
+    },
+    {
+      name: 'Cooking with gauntlets (tuna)',
+      levelReq: 30,
+      xpPerHour: 92_500,
+      materials: '1 raw tuna + cooking gauntlets',
+      tags: ['clicky', 'buyable'],
+    },
+    {
+      name: 'Cooking with gauntlets (anglerfish)',
+      levelReq: 84,
+      xpPerHour: 317_500,
+      materials: '1 raw anglerfish + cooking gauntlets',
+      tags: ['clicky', 'buyable', 'profit'],
+    },
   ],
   woodcutting: [
     { name: 'Regular trees', levelReq: 1, xpPerHour: 15_000, xpPerAction: 25, materials: '1 log', tags: ['afk'] },
@@ -197,7 +257,7 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
       materials: '1 headless arrow + 1 steel arrowtip',
       tags: ['clicky', 'buyable'],
     },
-    { name: 'Battlestaves', levelReq: 40, xpPerHour: 143_000, materials: '1 battlestaff (unpowered)', tags: ['buyable', 'profit'] },
+    { name: 'Battlestaves', levelReq: 40, xpPerHour: 143_000, xpPerAction: 80, materials: '1 celastrus bark', tags: ['buyable', 'profit'] },
     {
       name: 'Vale Totems (Oak)',
       levelReq: 20,
@@ -261,6 +321,18 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: 'Tempoross', levelReq: 80, xpPerHour: 75_000, tags: ['afk', 'profit'] },
     { name: 'Tempoross', levelReq: 90, xpPerHour: 80_000, tags: ['afk', 'profit'] },
     { name: 'Tempoross', levelReq: 99, xpPerHour: 85_000, tags: ['afk', 'profit'] },
+    { name: 'Barbarian fishing (3t, AFK)', levelReq: 58, xpPerHour: 37_000, tags: ['afk', 'buyable'] },
+    { name: 'Barbarian fishing (3t, cut-eat)', levelReq: 99, xpPerHour: 108_000, tags: ['clicky', 'buyable'] },
+    { name: '2t swordfish & tuna', levelReq: 71, xpPerHour: 101_800, materials: '1 swordfish or tuna', tags: ['clicky', 'buyable'] },
+    { name: '2t swordfish & tuna', levelReq: 99, xpPerHour: 132_800, materials: '1 swordfish or tuna', tags: ['clicky', 'buyable'] },
+    { name: 'Monkfish', levelReq: 62, xpPerHour: 35_800, materials: '1 monkfish', tags: ['afk', 'buyable'] },
+    { name: 'Monkfish', levelReq: 99, xpPerHour: 42_000, materials: '1 monkfish', tags: ['afk', 'buyable'] },
+    { name: 'Infernal eel', levelReq: 80, xpPerHour: 29_700, materials: '1 infernal eel', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Infernal eel', levelReq: 99, xpPerHour: 34_000, materials: '1 infernal eel', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Leechfin fishing', levelReq: 78, xpPerHour: 109_000, tags: ['clicky', 'buyable'] },
+    { name: 'Leechfin fishing', levelReq: 99, xpPerHour: 130_000, tags: ['clicky', 'buyable'] },
+    { name: 'Minnows (Molch Isle)', levelReq: 82, xpPerHour: 40_000, tags: ['clicky', 'profit'] },
+    { name: 'Minnows (Molch Isle)', levelReq: 99, xpPerHour: 56_000, tags: ['clicky', 'profit'] },
   ],
   firemaking: [
     { name: 'Colored logs', levelReq: 1, xpPerHour: 73_700, xpPerAction: 40, materials: '1 log', tags: ['clicky', 'buyable'] },
@@ -290,6 +362,38 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: "Blue d'hide bodies", levelReq: 71, xpPerHour: 378_490, xpPerAction: 210, materials: '1 blue dragonhide + needle & thread', tags: ['clicky', 'buyable'] },
     { name: "Red d'hide bodies", levelReq: 77, xpPerHour: 421_740, xpPerAction: 234, materials: '1 red dragonhide + needle & thread', tags: ['clicky', 'buyable'] },
     { name: "Black d'hide bodies", levelReq: 84, xpPerHour: 465_000, xpPerAction: 258, materials: '1 black dragonhide + needle & thread', tags: ['clicky', 'buyable'] },
+    {
+      name: 'Spinning flax into bow strings',
+      levelReq: 10,
+      xpPerHour: 22_000,
+      xpPerAction: 15,
+      materials: '1 flax',
+      tags: ['afk', 'buyable', 'profit'],
+    },
+    {
+      name: 'Glassblowing (beer glasses)',
+      levelReq: 1,
+      xpPerHour: 30_625,
+      xpPerAction: 17.5,
+      materials: '1 molten glass',
+      tags: ['clicky', 'buyable'],
+    },
+    {
+      name: 'Glassblowing (unpowered orbs)',
+      levelReq: 46,
+      xpPerHour: 91_875,
+      xpPerAction: 52.5,
+      materials: '1 molten glass',
+      tags: ['clicky', 'buyable', 'profit'],
+    },
+    {
+      name: 'Glassblowing (empty light orbs)',
+      levelReq: 87,
+      xpPerHour: 122_500,
+      xpPerAction: 70,
+      materials: '1 molten glass',
+      tags: ['clicky', 'buyable'],
+    },
   ],
   smithing: [
     { name: 'Quests', levelReq: 1, xpPerHour: 46_500, tags: ['afk'] },
@@ -300,6 +404,50 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: "Giants' Foundry (adamant-rune)", levelReq: 85, xpPerHour: 195_000, tags: ['clicky', 'profit'] },
     { name: "Giants' Foundry (rune)", levelReq: 85, xpPerHour: 276_000, tags: ['clicky', 'profit'] },
     { name: 'Dolo Blast Furnace gold', levelReq: 99, xpPerHour: 505_000, materials: '1 gold ore', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Blast Furnace (iron bars)', levelReq: 15, xpPerHour: 75_000, materials: '1 iron ore', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Blast Furnace (steel bars)', levelReq: 30, xpPerHour: 94_500, materials: '1 iron ore + coal', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Blast Furnace (mithril bars)', levelReq: 50, xpPerHour: 108_000, materials: '1 mithril ore + coal', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Blast Furnace (adamantite bars)', levelReq: 70, xpPerHour: 101_250, materials: '1 adamantite ore + coal', tags: ['clicky', 'buyable', 'profit'] },
+    { name: 'Blast Furnace (runite bars)', levelReq: 85, xpPerHour: 107_500, materials: '1 runite ore + coal', tags: ['clicky', 'buyable', 'profit'] },
+    {
+      name: 'Steel cannonballs',
+      levelReq: 35,
+      xpPerHour: 13_824,
+      xpPerAction: 2.5,
+      materials: '1 steel bar → 4 cannonballs',
+      tags: ['clicky', 'buyable', 'profit'],
+    },
+    {
+      name: 'Steel cannonballs (double ammo mould)',
+      levelReq: 35,
+      xpPerHour: 27_648,
+      materials: '2 steel bars → 8 cannonballs',
+      tags: ['clicky', 'buyable', 'profit'],
+    },
+    {
+      name: 'Bronze dart tips at the Blast Furnace (Foreman uniform)',
+      levelReq: 4,
+      xpPerHour: 16_250,
+      materials: '1 bronze bar → 10 dart tips',
+      tags: ['clicky', 'buyable'],
+    },
+    {
+      name: 'Steel dart tips at the Blast Furnace (Foreman uniform)',
+      levelReq: 34,
+      xpPerHour: 48_750,
+      materials: '1 steel bar → 10 dart tips',
+      tags: ['clicky', 'buyable'],
+    },
+    {
+      name: 'Rune nails at the Blast Furnace (Foreman uniform)',
+      levelReq: 89,
+      xpPerHour: 97_500,
+      materials: '1 runite bar → 15 nails',
+      tags: ['clicky', 'buyable'],
+    },
+    { name: 'Steel platebodies (anvil)', levelReq: 48, xpPerHour: 144_000, materials: '5 steel bars', tags: ['clicky', 'buyable'] },
+    { name: 'Mithril platebodies (anvil)', levelReq: 68, xpPerHour: 200_000, materials: '5 mithril bars', tags: ['clicky', 'buyable'] },
+    { name: 'Adamant platebodies (anvil)', levelReq: 88, xpPerHour: 275_000, materials: '5 adamantite bars', tags: ['clicky', 'buyable'] },
   ],
   mining: [
     { name: 'Quests', levelReq: 1, xpPerHour: 20_000, tags: ['afk'] },
@@ -316,6 +464,9 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: '3t granite', levelReq: 85, xpPerHour: 116_760, materials: '1 granite (500g)', tags: ['clicky'] },
     { name: '3t granite', levelReq: 95, xpPerHour: 119_438, materials: '1 granite (500g)', tags: ['clicky'] },
     { name: '3t granite', levelReq: 99, xpPerHour: 126_000, materials: '1 granite (500g)', tags: ['clicky'] },
+    { name: 'Iron ore', levelReq: 15, xpPerHour: 50_000, materials: '1 iron ore', tags: ['clicky', 'profit'] },
+    { name: 'Iron ore', levelReq: 60, xpPerHour: 75_000, materials: '1 iron ore', tags: ['clicky', 'profit'] },
+    { name: 'Amethyst', levelReq: 92, xpPerHour: 22_500, materials: '1 amethyst', tags: ['afk', 'profit'] },
   ],
   herblore: [
     { name: 'Quests', levelReq: 1, xpPerHour: 11_100, tags: ['afk'] },
@@ -343,6 +494,14 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: 'Hallowed Sepulchre', levelReq: 82, xpPerHour: 79_700, tags: ['clicky', 'profit'] },
     { name: 'Hallowed Sepulchre with ancient & forgotten brews', levelReq: 92, xpPerHour: 102_000, tags: ['clicky', 'profit'] },
     { name: 'Brimhaven Agility Arena (floor spikes)', levelReq: 99, xpPerHour: 68_000, tags: ['clicky', 'profit'] },
+    { name: 'Ape Atoll Agility Course', levelReq: 48, xpPerHour: 32_500, tags: ['clicky', 'profit'] },
+    { name: 'Ape Atoll Agility Course', levelReq: 75, xpPerHour: 55_000, tags: ['clicky', 'profit'] },
+    { name: 'Colossal Wyrm Agility Course (basic)', levelReq: 50, xpPerHour: 31_000, tags: ['clicky', 'profit'] },
+    { name: 'Colossal Wyrm Agility Course (advanced)', levelReq: 62, xpPerHour: 42_000, tags: ['clicky', 'profit'] },
+    { name: 'Werewolf Agility Course', levelReq: 60, xpPerHour: 52_500, tags: ['clicky', 'profit'] },
+    { name: 'Werewolf Agility Course', levelReq: 80, xpPerHour: 67_500, tags: ['clicky', 'profit'] },
+    { name: 'Prifddinas Agility Course', levelReq: 75, xpPerHour: 60_000, tags: ['clicky', 'profit'] },
+    { name: 'Prifddinas Agility Course', levelReq: 90, xpPerHour: 65_000, tags: ['clicky', 'profit'] },
   ],
   thieving: [
     { name: 'Quests, fruit stalls', levelReq: 1, xpPerHour: 15_000, tags: ['clicky', 'profit'] },
@@ -365,6 +524,11 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
       xpPerHour: 370_169,
       tags: ['clicky', 'profit'],
     },
+    { name: 'Aldarin villa chests', levelReq: 36, xpPerHour: 60_000, tags: ['clicky', 'profit'] },
+    { name: 'Aldarin villa chests', levelReq: 60, xpPerHour: 80_000, tags: ['clicky', 'profit'] },
+    { name: 'Pickpocketing elves (Prifddinas)', levelReq: 85, xpPerHour: 150_000, tags: ['clicky', 'profit'] },
+    { name: "Rogues' Castle chests", levelReq: 84, xpPerHour: 285_000, tags: ['clicky', 'profit'] },
+    { name: 'Pickpocketing TzHaar-Hur', levelReq: 99, xpPerHour: 255_000, tags: ['clicky', 'profit'] },
   ],
   magic: [
     { name: 'Lvl-1 Enchant', levelReq: 7, xpPerHour: 32_000, xpPerAction: 18, materials: '1 sapphire jewellery + 1 water rune + 1 air rune', tags: ['clicky', 'buyable'] },
@@ -396,6 +560,10 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
   runecrafting: [
     { name: 'Quests', levelReq: 1, xpPerHour: 13_600, tags: ['afk'] },
     { name: 'GotR rewards', levelReq: 38, xpPerHour: 45_000, tags: ['clicky', 'profit'] },
+    { name: 'Ourania Altar', levelReq: 1, xpPerHour: 20_423, materials: 'Pure essence', tags: ['afk', 'buyable'] },
+    { name: 'Ourania Altar', levelReq: 50, xpPerHour: 42_077, materials: 'Pure essence', tags: ['afk', 'buyable'] },
+    { name: 'Ourania Altar', levelReq: 90, xpPerHour: 74_716, materials: 'Pure essence', tags: ['afk', 'buyable'] },
+    { name: 'Ourania Altar', levelReq: 99, xpPerHour: 77_121, materials: 'Pure essence', tags: ['afk', 'buyable'] },
     { name: 'Solo mud runes', levelReq: 75, xpPerHour: 75_400, materials: 'Pure essence + binding necklace', tags: ['clicky', 'buyable', 'profit'] },
     { name: 'Solo mud runes', levelReq: 85, xpPerHour: 106_100, materials: 'Pure essence + binding necklace', tags: ['clicky', 'buyable', 'profit'] },
     { name: 'Duo lava runes', levelReq: 99, xpPerHour: 162_000, materials: 'Pure essence + binding necklace', tags: ['clicky', 'buyable', 'profit'] },
@@ -410,6 +578,10 @@ export const SKILL_TRAINING_METHODS: Partial<Record<string, TrainingMethod[]>> =
     { name: 'Drift net fishing (98.7k hunter & 74.9k fishing xp/h)', levelReq: 36, xpPerHour: 293_310, tags: ['afk', 'profit'] },
     { name: 'Drift net fishing (112.8k hunter & 83.3k fishing xp/h)', levelReq: 62, xpPerHour: 322_424, tags: ['afk', 'profit'] },
     { name: 'Drift net fishing (123.0k hunter & 90.5k fishing xp/h)', levelReq: 70, xpPerHour: 350_697, tags: ['afk', 'profit'] },
+    { name: 'Herbiboar', levelReq: 80, xpPerHour: 137_000, tags: ['profit'] },
+    { name: 'Herbiboar', levelReq: 99, xpPerHour: 171_000, tags: ['profit'] },
+    { name: 'Black chinchompas', levelReq: 73, xpPerHour: 145_000, tags: ['clicky', 'profit'] },
+    { name: 'Black chinchompas', levelReq: 99, xpPerHour: 225_000, tags: ['clicky', 'profit'] },
   ],
   construction: [
     { name: 'Low-level furniture', levelReq: 1, xpPerHour: 54_700, materials: 'Planks + nails', tags: ['clicky', 'buyable'] },
