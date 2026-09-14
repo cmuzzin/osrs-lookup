@@ -1,0 +1,83 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title is-4">Activity Feed</h1>
+    <p class="has-text-grey mb-5">
+      See a player's recent level ups, item drops, quest completions, and more.
+    </p>
+
+    <div class="field has-addons mb-5 activity-feed__search">
+      <div class="control is-expanded">
+        <input
+          type="text"
+          class="input"
+          placeholder="e.g. Zezima"
+          [value]="rsnInput()"
+          (input)="setRsnInput($any($event.target).value)"
+          (keydown.enter)="search()"
+        />
+      </div>
+      <div class="control">
+        <button type="button" class="button is-link" (click)="search()">View Feed</button>
+      </div>
+    </div>
+
+    @if (rsn()) {
+      @if (loading()) {
+        <p class="has-text-grey">Loading activity feed…</p>
+      } @else if (notLinked()) {
+        <p class="has-text-grey">{{ error() }}</p>
+      } @else if (error()) {
+        <div>
+          <p class="has-text-danger">{{ error() }}</p>
+          <button type="button" class="button is-light is-small mt-2" (click)="retry()">Try again</button>
+        </div>
+      } @else {
+        <div class="buttons has-addons mb-4 activity-feed__filters">
+          @for (f of filters; track f.value) {
+            <button
+              type="button"
+              class="button is-small"
+              [class.is-link]="filter() === f.value"
+              (click)="setFilter(f.value)"
+            >
+              {{ f.label }}
+            </button>
+          }
+        </div>
+
+        @if (rows().length === 0) {
+          <p class="has-text-grey">No activity found for this filter.</p>
+        } @else {
+          <div class="activity-feed__list">
+            @for (row of rows(); track row.activity.createdAt + row.text) {
+              <div
+                class="box is-shadowless has-background-inset is-flex is-align-items-center is-gap-3 py-2 px-3 mb-2"
+              >
+                <app-metric-icon [icon]="row.icon" class="activity-feed__icon" />
+                <div class="is-flex-grow-1" style="min-width: 0">
+                  <p class="mb-0" style="overflow-wrap: anywhere">{{ row.text }}</p>
+                </div>
+                <span class="is-size-7 has-text-grey" [attr.title]="row.activity.createdAt">
+                  {{ formatRelativeTime(row.activity.createdAt) }}
+                </span>
+              </div>
+            }
+          </div>
+
+          @if (hasMore()) {
+            <div class="has-text-centered mt-4">
+              <button
+                type="button"
+                class="button is-light"
+                [class.is-loading]="loadingMore()"
+                (click)="loadMore()"
+              >
+                Load more
+              </button>
+            </div>
+          }
+        }
+      }
+    }
+  </div>
+</section>

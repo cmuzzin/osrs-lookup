@@ -79,3 +79,26 @@ export interface CombatAchievementTasksResponse {
   tierReached: string | null;
   data: CombatAchievementTask[];
 }
+
+/**
+ * One entry in a player's activity feed. `data` and `enriched` are kept loose
+ * (not a strict discriminated union) because the API returns more `type`
+ * values in practice (e.g. combat_achievement_task_completed) than its own
+ * published schema enumerates — see describeActivity() in activity-feed.ts
+ * for the per-type rendering, with a generic fallback for anything unknown.
+ */
+export interface Activity {
+  type: string;
+  data: Record<string, unknown>;
+  /** Human-readable resolved names for ids in `data` (e.g. itemName, questName, tierName). */
+  enriched?: Record<string, string>;
+  createdAt: string;
+}
+
+export interface ActivitiesResponse {
+  activities: Activity[];
+  nextCursor: string | null;
+  prevCursor: string | null;
+  hasMore: boolean;
+  hasPrev: boolean;
+}

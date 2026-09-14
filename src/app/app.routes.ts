@@ -17,6 +17,11 @@ export const routes: Routes = [
     title: 'XP Calculator — RuneTools',
   },
   {
+    path: 'activity-feed',
+    loadComponent: () => import('./pages/activity-feed/activity-feed').then((m) => m.ActivityFeedPage),
+    title: 'Activity Feed — RuneTools',
+  },
+  {
     path: 'players/:username',
     loadComponent: () => import('./pages/player/player').then((m) => m.PlayerPage),
     title: 'RuneTools',

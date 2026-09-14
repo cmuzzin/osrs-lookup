@@ -30,5 +30,11 @@ export class Home {
       title: 'XP Calculator',
       description: 'Compare training methods by XP/hour and see how long each takes to reach your goal level.',
     },
+    {
+      route: '/activity-feed',
+      icon: '📰',
+      title: 'Activity Feed',
+      description: "See a player's recent level ups, item drops, quest completions, and more.",
+    },
   ];
 }

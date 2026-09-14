@@ -1,10 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { ResponseCache } from './response-cache';
 import {
   AchievementDiariesResponse,
   AchievementDiaryArea,
+  ActivitiesResponse,
   CollectionLogResponse,
   CombatAchievementTasksResponse,
   Quest,
@@ -70,6 +71,33 @@ export class RuneProfileApi {
     return this.cache.get(`rp-ca-tasks:${name.toLowerCase()}`, () => {
       const url = `${BASE_URL}/accounts/${encodeURIComponent(name)}/combat-achievements/tasks`;
       return this.http.get<CombatAchievementTasksResponse>(url).pipe(this.catchAs('combat achievements'));
+    });
+  }
+
+  /**
+   * Paginated recent-activity feed (level ups, new collection log items, quests,
+   * milestones, valuable drops, etc). `createdAt` on each activity is normalized
+   * to a real ISO string — the API returns "YYYY-MM-DD HH:mm:ss[.ffffff]"
+   * (a space instead of "T"), which every browser parses, but not per spec.
+   */
+  getActivities(
+    username: string,
+    options: { cursor?: string; limit?: number; activityTypes?: string[] } = {},
+  ): Observable<ActivitiesResponse> {
+    const name = username.trim();
+    const cacheKey = `rp-activities:${name.toLowerCase()}:${options.cursor ?? ''}:${options.limit ?? 20}:${(options.activityTypes ?? []).join(',')}`;
+    return this.cache.get(cacheKey, () => {
+      let params = new HttpParams().set('limit', String(options.limit ?? 20));
+      if (options.cursor) params = params.set('cursor', options.cursor);
+      if (options.activityTypes?.length) params = params.set('activityTypes', options.activityTypes.join(','));
+      const url = `${BASE_URL}/accounts/${encodeURIComponent(name)}/activities`;
+      return this.http.get<ActivitiesResponse>(url, { params }).pipe(
+        map((res) => ({
+          ...res,
+          activities: res.activities.map((a) => ({ ...a, createdAt: a.createdAt.replace(' ', 'T') })),
+        })),
+        this.catchAs('the activity feed'),
+      );
     });
   }
 
