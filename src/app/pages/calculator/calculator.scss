@@ -4,6 +4,16 @@
   gap: 0.4rem;
 }
 
+.calculator__filters {
+  .gap-2 {
+    gap: 0.4rem;
+  }
+}
+
+.tag-btn {
+  text-transform: none;
+}
+
 .calculator__scroll {
   max-height: 520px;
   overflow-y: auto;
@@ -11,4 +21,20 @@
 
 .calculator__row--locked {
   opacity: 0.5;
+}
+
+.calculator__row--selected {
+  background-color: color-mix(in srgb, var(--bulma-link) 10%, transparent);
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+.calculator__results {
+  border-left: 3px solid var(--bulma-link);
+}
+
+.calculator__milestones summary {
+  cursor: pointer;
 }
