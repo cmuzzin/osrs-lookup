@@ -16,6 +16,9 @@ import { MetricIcon } from '../../shared/metric-icon/metric-icon';
 import { SortIcon } from '../../shared/sort-icon/sort-icon';
 import { compareValues, createSortable } from '../../shared/sort-state';
 
+/** Method names repeat across level brackets (e.g. one method, several rates), so name alone is not a unique row id. */
+export const methodKey = (m: { name: string; levelReq: number }): string => `${m.name}|${m.levelReq}`;
+
 interface MethodRow extends TrainingMethod {
   reachable: boolean;
   hoursToTarget: number;
@@ -70,6 +73,7 @@ export class Calculator {
   readonly maxLevel = MAX_SKILL_LEVEL;
   readonly allTags = ALL_TAGS;
   readonly tagLabels = TAG_LABELS;
+  readonly methodKey = methodKey;
   readonly milestones = MILESTONE_LEVELS.map((level) => ({ level, xp: xpForLevel(level) }));
 
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -157,9 +161,9 @@ export class Calculator {
   });
 
   readonly selectedMethod = computed<MethodRow | null>(() => {
-    const name = this.selectedMethodName();
-    if (!name) return null;
-    return this.allRows().find((r) => r.name === name) ?? null;
+    const key = this.selectedMethodName();
+    if (!key) return null;
+    return this.allRows().find((r) => methodKey(r) === key) ?? null;
   });
 
   readonly actionsNeeded = computed<number | null>(() => {
@@ -221,8 +225,8 @@ export class Calculator {
     this.showLocked.update((v) => !v);
   }
 
-  selectMethod(name: string): void {
-    this.selectedMethodName.set(this.selectedMethodName() === name ? null : name);
+  selectMethod(key: string): void {
+    this.selectedMethodName.set(this.selectedMethodName() === key ? null : key);
   }
 
   setHiscoresUsername(value: string): void {

@@ -156,11 +156,11 @@
           </tr>
         </thead>
         <tbody>
-          @for (row of rows(); track row.name) {
+          @for (row of rows(); track methodKey(row)) {
             <tr
               [class.calculator__row--locked]="!row.reachable"
-              [class.calculator__row--selected]="selectedMethodName() === row.name"
-              (click)="selectMethod(row.name)"
+              [class.calculator__row--selected]="selectedMethodName() === methodKey(row)"
+              (click)="selectMethod(methodKey(row))"
             >
               <td>{{ row.name }}</td>
               <td class="has-text-right has-text-grey tabular-nums">{{ row.levelReq }}</td>
