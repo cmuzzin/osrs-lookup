@@ -1,4 +1,5 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   MAX_SKILL_LEVEL,
@@ -71,6 +72,8 @@ export class Calculator {
   readonly tagLabels = TAG_LABELS;
   readonly milestones = MILESTONE_LEVELS.map((level) => ({ level, xp: xpForLevel(level) }));
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
@@ -92,10 +95,12 @@ export class Calculator {
     }
 
     // Keep the URL in sync with the current selection so it can be shared as a link.
+    // Skipped while prerendering, where a navigation would bake a redirect page into the output.
     effect(() => {
       const skill = this.selectedSkill();
       const from = this.currentLevel();
       const to = this.targetLevel();
+      if (!this.isBrowser) return;
       this.router.navigate([], {
         relativeTo: this.activatedRoute,
         queryParams: { skill, from, to },

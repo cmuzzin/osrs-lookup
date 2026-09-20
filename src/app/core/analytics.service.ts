@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { initializeApp } from 'firebase/app';
 import { Analytics, getAnalytics, isSupported, logEvent } from 'firebase/analytics';
 import { firebaseConfig } from './firebase.config';
@@ -15,6 +16,11 @@ export class AnalyticsService {
   private readonly ready: Promise<void>;
 
   constructor() {
+    // Prerendering runs in Node, where there is nothing to initialise.
+    if (!isPlatformBrowser(inject(PLATFORM_ID))) {
+      this.ready = Promise.resolve();
+      return;
+    }
     const app = initializeApp(firebaseConfig);
     this.ready = isSupported()
       .then((supported) => {

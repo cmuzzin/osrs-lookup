@@ -2,11 +2,10 @@
   "hosting": {
     "public": "dist/osrs-lookup/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
     "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+      { "source": "/players/**", "destination": "/index.csr.html" },
+      { "source": "/clans/**", "destination": "/index.csr.html" }
     ]
   }
 }
