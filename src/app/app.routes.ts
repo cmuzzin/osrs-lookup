@@ -16,7 +16,7 @@ export const routes: Routes = [
     path: 'calculator',
     loadComponent: () => import('./pages/calculator/calculator').then((m) => m.Calculator),
     title: 'XP Calculator — RuneTools',
-    data: { description: 'OSRS XP calculator: compare training methods by XP/hour and see how long each takes to reach your goal level.' },
+    data: { description: 'OSRS XP calculator: see how many logs, laps, bones, potions, or spells it takes to reach your target level in every skilling skill.' },
   },
   {
     path: 'activity-feed',

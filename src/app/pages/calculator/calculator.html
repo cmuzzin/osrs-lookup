@@ -1,259 +1,391 @@
 <section class="section">
   <div class="container">
-    <div class="is-flex is-justify-content-space-between is-align-items-flex-start is-flex-wrap-wrap mb-2 gap-2">
-      <div>
-        <h1 class="title is-4 mb-1">XP Calculator</h1>
-        <p class="has-text-grey">
-          Pick a skill, enter where you're at, and compare training methods by time, tags, and materials.
-        </p>
-      </div>
-      <button type="button" class="button is-small is-light" (click)="share()">
-        @if (copied()) {
-          Link copied!
-        } @else {
-          Share
-        }
-      </button>
-    </div>
-
-    <div class="calculator__skills mb-5">
-      @for (s of skills; track s.key) {
-        <button
-          type="button"
-          class="button is-small"
-          [class.is-link]="selectedSkill() === s.key"
-          (click)="selectSkill(s.key)"
-        >
-          <app-metric-icon [icon]="s.icon" class="mr-1" />
-          {{ s.label }}
-        </button>
-      }
-    </div>
-
-    <div class="box mb-5">
-      <div class="grid is-col-min-6">
-        <div class="cell">
-          <label class="label is-small" for="calc-current-xp">Current XP</label>
-          <input
-            id="calc-current-xp"
-            type="number"
-            class="input"
-            min="0"
-            [value]="currentXp()"
-            (input)="setCurrentXp($any($event.target).value)"
-          />
-        </div>
-        <div class="cell">
-          <label class="label is-small" for="calc-current-level">Current Level</label>
-          <input
-            id="calc-current-level"
-            type="number"
-            class="input"
-            min="1"
-            [max]="maxLevel"
-            [value]="currentLevel()"
-            (change)="setCurrentLevel($any($event.target).value)"
-          />
-        </div>
-        <div class="cell">
-          <label class="label is-small" for="calc-target-level">Target Level</label>
-          <input
-            id="calc-target-level"
-            type="number"
-            class="input"
-            min="1"
-            [max]="maxLevel"
-            [value]="targetLevel()"
-            (change)="setTargetLevel($any($event.target).value)"
-          />
-        </div>
-        <div class="cell">
-          <p class="label is-small mb-1">XP Needed</p>
-          <p class="title is-5 mb-0 tabular-nums">{{ formatNumber(xpNeeded()) }}</p>
-        </div>
-        <div class="cell is-flex is-align-items-flex-end">
-          <button type="button" class="button is-light" (click)="reset()">Reset</button>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="field has-addons mb-0">
-        <div class="control is-expanded">
-          <input
-            type="text"
-            class="input is-small"
-            placeholder="Import from hiscores — RSN"
-            [value]="hiscoresUsername()"
-            (input)="setHiscoresUsername($any($event.target).value)"
-            (keydown.enter)="importFromHiscores()"
-          />
-        </div>
-        <div class="control">
-          <button
-            type="button"
-            class="button is-small is-link is-light"
-            [class.is-loading]="hiscoresLoading()"
-            (click)="importFromHiscores()"
-          >
-            Import
-          </button>
-        </div>
-      </div>
-      @if (hiscoresError()) {
-        <p class="help is-danger">{{ hiscoresError() }}</p>
-      }
-    </div>
-
-    <div class="calculator__filters mb-4 is-flex is-flex-wrap-wrap is-align-items-center gap-2">
-      <span class="is-size-7 has-text-grey mr-1">Tags:</span>
-      @for (tag of allTags; track tag) {
-        <button
-          type="button"
-          class="button is-small tag-btn"
-          [class.is-info]="activeTags().has(tag)"
-          (click)="toggleTag(tag)"
-        >
-          {{ tagLabels[tag] }}
-        </button>
-      }
-      <label class="checkbox is-size-7 ml-auto">
-        <input type="checkbox" [checked]="showLocked()" (change)="toggleShowLocked()" />
-        Show locked methods
-      </label>
-    </div>
-
-    <div class="calculator__scroll scrollbar">
-      <table class="table is-fullwidth is-hoverable">
-        <thead>
-          <tr>
-            <th>
-              <button type="button" class="sort-btn" (click)="toggleSort('name')">
-                Method <app-sort-icon [active]="sort().key === 'name'" [direction]="sort().direction" />
-              </button>
-            </th>
-            <th class="has-text-right">
-              <button type="button" class="sort-btn" (click)="toggleSort('levelReq')">
-                Level <app-sort-icon [active]="sort().key === 'levelReq'" [direction]="sort().direction" />
-              </button>
-            </th>
-            <th class="has-text-right">
-              <button type="button" class="sort-btn" (click)="toggleSort('xpPerAction')">
-                XP/action <app-sort-icon [active]="sort().key === 'xpPerAction'" [direction]="sort().direction" />
-              </button>
-            </th>
-            <th class="has-text-right">
-              <button type="button" class="sort-btn" (click)="toggleSort('xpPerHour')">
-                XP/hr <app-sort-icon [active]="sort().key === 'xpPerHour'" [direction]="sort().direction" />
-              </button>
-            </th>
-            <th>Tags</th>
-            <th class="has-text-right">
-              <button type="button" class="sort-btn" (click)="toggleSort('hoursToTarget')">
-                Time to goal <app-sort-icon [active]="sort().key === 'hoursToTarget'" [direction]="sort().direction" />
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of rows(); track methodKey(row)) {
-            <tr
-              [class.calculator__row--locked]="!row.reachable"
-              [class.calculator__row--selected]="selectedMethodName() === methodKey(row)"
-              (click)="selectMethod(methodKey(row))"
+    <div class="columns">
+      <aside class="column is-narrow">
+        <p class="menu-label mb-2">Skill Calculators</p>
+        <nav class="calculator__skills" aria-label="Skills">
+          @for (s of skills; track s.key) {
+            <button
+              type="button"
+              class="calculator__skill"
+              [class.is-active]="selectedSkill() === s.key"
+              [attr.aria-current]="selectedSkill() === s.key ? 'page' : null"
+              (click)="selectSkill(s.key)"
             >
-              <td>{{ row.name }}</td>
-              <td class="has-text-right has-text-grey tabular-nums">{{ row.levelReq }}</td>
-              <td class="has-text-right tabular-nums">
-                {{ row.xpPerAction !== undefined ? row.xpPerAction : '—' }}
-              </td>
-              <td class="has-text-right tabular-nums">{{ formatNumber(row.xpPerHour) }}</td>
-              <td>
-                @for (tag of row.tags; track tag) {
-                  <span class="tag mr-1 mb-1">{{ tagLabels[tag] }}</span>
-                }
-              </td>
-              <td class="has-text-right tabular-nums">
-                @if (!row.reachable) {
-                  <span class="has-text-grey">Requires lvl {{ row.levelReq }}</span>
-                } @else if (xpNeeded() === 0) {
-                  <span class="has-text-success">Goal reached</span>
-                } @else {
-                  {{ formatDuration(row.hoursToTarget) }}
-                }
-              </td>
-            </tr>
+              <app-metric-icon [icon]="s.icon" />
+              <span>{{ s.label }}</span>
+            </button>
           }
-        </tbody>
-      </table>
-    </div>
+        </nav>
+      </aside>
 
-    @if (selectedMethod(); as method) {
-      <div class="box calculator__results mt-4">
-        <h2 class="title is-6 mb-3">{{ method.name }}</h2>
-        <div class="grid is-col-min-6">
-          <div class="cell">
-            <p class="label is-small mb-1">XP required</p>
-            <p class="tabular-nums">{{ formatNumber(xpNeeded()) }}</p>
-          </div>
-          <div class="cell">
-            <p class="label is-small mb-1">XP/action</p>
-            <p class="tabular-nums">{{ method.xpPerAction !== undefined ? method.xpPerAction : 'Unknown' }}</p>
-          </div>
-          <div class="cell">
-            <p class="label is-small mb-1">Actions needed</p>
-            <p class="tabular-nums">{{ actionsNeeded() !== null ? formatNumber(actionsNeeded()) : '—' }}</p>
-          </div>
-          <div class="cell">
-            <p class="label is-small mb-1">Est. XP/hr</p>
-            <p class="tabular-nums">{{ formatNumber(method.xpPerHour) }}</p>
-          </div>
-          <div class="cell">
-            <p class="label is-small mb-1">Estimated time</p>
-            <p class="tabular-nums">
-              @if (!method.reachable) {
-                Requires lvl {{ method.levelReq }}
-              } @else if (xpNeeded() === 0) {
-                <span class="has-text-success">Goal reached</span>
-              } @else {
-                {{ formatDaysHours(method.hoursToTarget) }}
-              }
+      <div class="column">
+        <div class="is-flex is-justify-content-space-between is-align-items-flex-start is-flex-wrap-wrap gap-2 mb-4">
+          <div>
+            <h1 class="title is-4 mb-1">
+              <app-metric-icon [icon]="skill().icon" class="mr-1" />
+              {{ skill().label }} Calculator
+            </h1>
+            <p class="has-text-grey">
+              Calculate how many actions or hours it takes to reach a target level.
             </p>
           </div>
-          <div class="cell">
-            <p class="label is-small mb-1">Materials per action</p>
-            <p>{{ method.materials ?? 'Not tracked' }}</p>
+          <div class="calculator__lookup">
+            <label class="label is-small mb-1" for="calc-lookup">Lookup your account</label>
+            <div class="field has-addons mb-0">
+              <div class="control is-expanded">
+                <input
+                  id="calc-lookup"
+                  type="text"
+                  class="input is-small"
+                  placeholder="RSN"
+                  [value]="hiscoresUsername()"
+                  (input)="setHiscoresUsername($any($event.target).value)"
+                  (keydown.enter)="importFromHiscores()"
+                />
+              </div>
+              <div class="control">
+                <button
+                  type="button"
+                  class="button is-small is-link"
+                  [class.is-loading]="hiscoresLoading()"
+                  (click)="importFromHiscores()"
+                >
+                  Lookup
+                </button>
+              </div>
+            </div>
+            @if (hiscoresError()) {
+              <p class="help is-danger">{{ hiscoresError() }}</p>
+            } @else if (lookedUp(); as player) {
+              <p class="help has-text-grey">Using {{ player.name }}'s XP</p>
+            }
           </div>
         </div>
-      </div>
-    }
 
-    <p class="is-size-7 has-text-grey mt-3">
-      XP/hour figures are approximate rates for a skilled, well-equipped player — actual rates vary with gear,
-      level, and efficiency. XP/action and materials are only shown where the wiki gives a clean, unambiguous
-      figure; a dash means that method doesn't reduce to a single tracked action.
-    </p>
+        <div class="box mb-5">
+          <div class="columns is-mobile is-multiline mb-0">
+            <div class="column is-half-mobile">
+              <div class="is-flex is-justify-content-space-between is-align-items-center mb-1">
+                <label class="label is-small mb-0" for="calc-current">Current</label>
+                <div class="buttons has-addons are-small mb-0">
+                  <button type="button" class="button mb-0" [class.is-link]="currentMode() === 'level'" (click)="setCurrentMode('level')">Level</button>
+                  <button type="button" class="button mb-0" [class.is-link]="currentMode() === 'xp'" (click)="setCurrentMode('xp')">XP</button>
+                </div>
+              </div>
+              @if (currentMode() === 'level') {
+                <input
+                  id="calc-current"
+                  type="number"
+                  class="input"
+                  min="1"
+                  [max]="maxLevel"
+                  [value]="currentLevel()"
+                  (change)="setCurrentLevel($any($event.target).value)"
+                />
+                <p class="help has-text-grey tabular-nums">{{ formatNumber(currentXp()) }} XP</p>
+              } @else {
+                <input
+                  id="calc-current"
+                  type="number"
+                  class="input"
+                  min="0"
+                  [max]="maxXp"
+                  [value]="currentXp()"
+                  (change)="setCurrentXp($any($event.target).value)"
+                />
+                <p class="help has-text-grey">Level {{ currentLevel() }}</p>
+              }
+            </div>
 
-    <details class="calculator__milestones mt-5">
-      <summary class="is-size-7 has-text-grey">XP milestones</summary>
-      <div class="calculator__scroll scrollbar mt-2">
-        <table class="table is-fullwidth is-narrow">
-          <thead>
-            <tr>
-              @for (m of milestones; track m.level) {
-                <th class="has-text-right">{{ m.level }}</th>
+            <div class="column is-half-mobile">
+              <div class="is-flex is-justify-content-space-between is-align-items-center mb-1">
+                <label class="label is-small mb-0" for="calc-target">Target</label>
+                <div class="buttons has-addons are-small mb-0">
+                  <button type="button" class="button mb-0" [class.is-link]="targetMode() === 'level'" (click)="setTargetMode('level')">Level</button>
+                  <button type="button" class="button mb-0" [class.is-link]="targetMode() === 'xp'" (click)="setTargetMode('xp')">XP</button>
+                </div>
+              </div>
+              @if (targetMode() === 'level') {
+                <input
+                  id="calc-target"
+                  type="number"
+                  class="input"
+                  min="1"
+                  [max]="maxLevel"
+                  [value]="targetLevel()"
+                  (change)="setTargetLevel($any($event.target).value)"
+                />
+                <p class="help has-text-grey tabular-nums">{{ formatNumber(targetXp()) }} XP</p>
+              } @else {
+                <input
+                  id="calc-target"
+                  type="number"
+                  class="input"
+                  min="0"
+                  [max]="maxXp"
+                  [value]="targetXp()"
+                  (change)="setTargetXp($any($event.target).value)"
+                />
+                <p class="help has-text-grey">Level {{ targetLevel() }}</p>
               }
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              @for (m of milestones; track m.level) {
-                <td class="has-text-right tabular-nums">{{ formatNumber(m.xp) }}</td>
+            </div>
+          </div>
+
+          <div class="calculator__summary">
+            <span class="calculator__summary-level">Level {{ currentLevel() }}</span>
+            <div class="calculator__summary-middle">
+              <p class="has-text-weight-semibold tabular-nums">
+                @if (xpNeeded() === 0) {
+                  <span class="has-text-success">Goal reached</span>
+                } @else {
+                  {{ formatNumber(xpNeeded()) }} XP
+                }
+              </p>
+              <progress class="progress is-link is-small mb-0" [value]="progressPct()" max="100">
+                {{ progressPct() }}%
+              </progress>
+            </div>
+            <span class="calculator__summary-level">Level {{ targetLevel() }}</span>
+          </div>
+
+          <div class="is-flex is-justify-content-flex-end gap-2 mt-3">
+            <button type="button" class="button is-small is-light" (click)="reset()">Reset</button>
+            <button type="button" class="button is-small is-light" (click)="share()">
+              @if (copied()) {
+                Link copied!
+              } @else {
+                Share
               }
-            </tr>
-          </tbody>
-        </table>
+            </button>
+          </div>
+        </div>
+
+        <div class="is-flex is-flex-wrap-wrap is-align-items-center gap-2 mb-3">
+          <input
+            type="search"
+            class="input is-small calculator__filter"
+            placeholder="Filter actions..."
+            aria-label="Filter actions"
+            [value]="filterText()"
+            (input)="setFilterText($any($event.target).value)"
+          />
+          <div class="buttons has-addons are-small mb-0">
+            <button type="button" class="button mb-0" [class.is-info]="membership() === 'all'" (click)="setMembership('all')">All</button>
+            <button type="button" class="button mb-0" [class.is-info]="membership() === 'f2p'" (click)="setMembership('f2p')">F2P</button>
+            <button type="button" class="button mb-0" [class.is-info]="membership() === 'members'" (click)="setMembership('members')">Members</button>
+          </div>
+          <label class="checkbox is-size-7 ml-auto">
+            <input type="checkbox" [checked]="showLocked()" (change)="toggleShowLocked()" />
+            Show locked
+          </label>
+          <details class="calculator__columns">
+            <summary class="button is-small">Columns ▾</summary>
+            <div class="box calculator__columns-menu p-3">
+              @for (col of columns; track col.key) {
+                <label class="checkbox is-size-7">
+                  <input type="checkbox" [checked]="isColumnVisible(col.key)" (change)="toggleColumn(col.key)" />
+                  {{ col.label }}
+                </label>
+              }
+            </div>
+          </details>
+        </div>
+
+        <div class="calculator__scroll scrollbar">
+          <table class="table is-fullwidth is-hoverable">
+            <thead>
+              <tr>
+                <th class="calculator__check">
+                  <input
+                    type="checkbox"
+                    aria-label="Select all"
+                    [checked]="allVisibleChecked()"
+                    (change)="toggleAllChecked()"
+                  />
+                </th>
+                <th>
+                  <button type="button" class="sort-btn" (click)="toggleSort('level')">
+                    Action <app-sort-icon [active]="sort().key === 'level'" [direction]="sort().direction" />
+                  </button>
+                </th>
+                @if (isColumnVisible('xp')) {
+                  <th class="has-text-right">
+                    <button type="button" class="sort-btn" (click)="toggleSort('xp')">
+                      XP <app-sort-icon [active]="sort().key === 'xp'" [direction]="sort().direction" />
+                    </button>
+                  </th>
+                }
+                @if (isColumnVisible('xpPerHour')) {
+                  <th class="has-text-right">
+                    <button type="button" class="sort-btn" (click)="toggleSort('xpPerHour')">
+                      XP/hr <app-sort-icon [active]="sort().key === 'xpPerHour'" [direction]="sort().direction" />
+                    </button>
+                  </th>
+                }
+                @if (isColumnVisible('time')) {
+                  <th class="has-text-right">
+                    <button type="button" class="sort-btn" (click)="toggleSort('hoursToTarget')">
+                      Time <app-sort-icon [active]="sort().key === 'hoursToTarget'" [direction]="sort().direction" />
+                    </button>
+                  </th>
+                }
+                @if (isColumnVisible('members')) {
+                  <th>Members</th>
+                }
+                @if (isColumnVisible('inputs')) {
+                  <th>Materials</th>
+                }
+                @if (isColumnVisible('outputs')) {
+                  <th>Produces</th>
+                }
+                <th class="has-text-right">
+                  <button type="button" class="sort-btn" (click)="toggleSort('quantity')">
+                    Quantity <app-sort-icon [active]="sort().key === 'quantity'" [direction]="sort().direction" />
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of rows(); track row.key) {
+                <tr
+                  [class.calculator__row--locked]="!row.reachable"
+                  [class.calculator__row--selected]="checkedKeys().has(row.key)"
+                  (click)="toggleChecked(row.key)"
+                >
+                  <td class="calculator__check">
+                    <input
+                      type="checkbox"
+                      [attr.aria-label]="'Select ' + row.name"
+                      [checked]="checkedKeys().has(row.key)"
+                      (click)="$event.stopPropagation()"
+                      (change)="toggleChecked(row.key)"
+                    />
+                  </td>
+                  <td>
+                    <div class="calculator__action">
+                      <span class="calculator__action-icon">
+                        @if (row.iconUrl) {
+                          <img [src]="row.iconUrl" alt="" loading="lazy" />
+                        }
+                      </span>
+                      <div>
+                        <p class="has-text-weight-medium">{{ row.name }}</p>
+                        <p class="is-size-7 has-text-grey">
+                          Level {{ row.level }}
+                          @if (!row.reachable) {
+                            · <span class="has-text-warning-dark">locked</span>
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  @if (isColumnVisible('xp')) {
+                    <td class="has-text-right tabular-nums">{{ row.xp }}</td>
+                  }
+                  @if (isColumnVisible('xpPerHour')) {
+                    <td class="has-text-right tabular-nums">{{ row.xpPerHour ? formatNumber(row.xpPerHour) : '—' }}</td>
+                  }
+                  @if (isColumnVisible('time')) {
+                    <td class="has-text-right tabular-nums">
+                      {{ row.hoursToTarget !== null && xpNeeded() > 0 ? formatDuration(row.hoursToTarget) : '—' }}
+                    </td>
+                  }
+                  @if (isColumnVisible('members')) {
+                    <td class="is-size-7">{{ row.members ? 'Members' : 'F2P' }}</td>
+                  }
+                  @if (isColumnVisible('inputs')) {
+                    <td class="is-size-7">{{ formatItems(row.inputs) }}</td>
+                  }
+                  @if (isColumnVisible('outputs')) {
+                    <td class="is-size-7">{{ formatItems(row.outputs) }}</td>
+                  }
+                  <td class="has-text-right tabular-nums has-text-weight-semibold">
+                    {{ formatNumber(row.quantity) }}
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="9" class="has-text-centered has-text-grey">No actions match these filters.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (checkedRows().length > 0) {
+          <div class="box calculator__results mt-4">
+            <div class="is-flex is-justify-content-space-between is-align-items-center mb-3">
+              <h2 class="title is-6 mb-0">Selected actions ({{ checkedRows().length }})</h2>
+              <button type="button" class="button is-small is-light" (click)="clearChecked()">Clear</button>
+            </div>
+            <div class="grid is-col-min-10">
+              @for (action of checkedRows(); track action.key) {
+                <div class="cell calculator__result">
+                  <div class="calculator__action mb-2">
+                    <span class="calculator__action-icon">
+                      @if (action.iconUrl) {
+                        <img [src]="action.iconUrl" alt="" loading="lazy" />
+                      }
+                    </span>
+                    <p class="has-text-weight-semibold">{{ action.name }}</p>
+                  </div>
+                  <dl class="calculator__result-stats is-size-7">
+                    <dt>Actions needed</dt>
+                    <dd class="tabular-nums">
+                      @if (!action.reachable) {
+                        Requires lvl {{ action.level }}
+                      } @else if (xpNeeded() === 0) {
+                        <span class="has-text-success">Goal reached</span>
+                      } @else {
+                        {{ formatNumber(action.quantity) }}
+                      }
+                    </dd>
+                    @if (action.hoursToTarget !== null && xpNeeded() > 0) {
+                      <dt>Estimated time</dt>
+                      <dd class="tabular-nums">{{ formatDaysHours(action.hoursToTarget) }}</dd>
+                    }
+                    @if (action.inputs?.length) {
+                      <dt>Materials needed</dt>
+                      <dd>{{ formatItems(action.inputs, action.quantity) }}</dd>
+                    }
+                    @if (action.outputs?.length) {
+                      <dt>Produces</dt>
+                      <dd>{{ formatItems(action.outputs, action.quantity) }}</dd>
+                    }
+                  </dl>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <p class="is-size-7 has-text-grey mt-3">
+          Quantity is the number of actions needed to reach your target. XP/hr rates are approximate.
+        </p>
+
+        <details class="calculator__milestones mt-5">
+          <summary class="is-size-7 has-text-grey">XP milestones</summary>
+          <div class="calculator__scroll scrollbar mt-2">
+            <table class="table is-fullwidth is-narrow">
+              <thead>
+                <tr>
+                  @for (m of milestones; track m.level) {
+                    <th class="has-text-right">{{ m.level }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  @for (m of milestones; track m.level) {
+                    <td class="has-text-right tabular-nums">{{ formatNumber(m.xp) }}</td>
+                  }
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
-    </details>
+    </div>
   </div>
 </section>

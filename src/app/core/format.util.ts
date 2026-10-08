@@ -199,6 +199,12 @@ export function itemIconUrl(itemId: number): string {
   return `https://cdn.runeprofile.com/item/${itemId}.png`;
 }
 
+// Weird Gloop's (the OSRS Wiki's host) game-sprite CDN — for icons that aren't
+// items, e.g. spellbook spells, keyed by the game's own sprite id.
+export function spriteIconUrl(spriteId: number): string {
+  return `https://chisel.weirdgloop.org/static/img/osrs-sprite/${spriteId}.png`;
+}
+
 export function metricIcon(metric: string): string {
   if (metric === 'ehp' || metric === 'ehb') return '⚡';
   if (SKILL_ORDER.includes(metric)) return skillMeta(metric).icon;
