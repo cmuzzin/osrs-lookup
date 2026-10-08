@@ -10,6 +10,7 @@ import {
   levelForXp,
   skillMeta,
   spriteIconUrl,
+  wikiImageUrl,
   xpForLevel,
 } from '../../core/format.util';
 import { ActionItem, SKILL_ACTIONS, SkillAction } from '../../core/skill-actions';
@@ -31,7 +32,7 @@ interface ActionRow extends SkillAction {
   hoursToTarget: number | null;
 }
 
-type SortKey = 'name' | 'level' | 'xp' | 'xpPerHour' | 'hoursToTarget' | 'quantity';
+type SortKey = 'name' | 'level' | 'xp' | 'hoursToTarget' | 'quantity';
 
 /** Whether a Current/Target box is being edited as a level or as a raw XP total. */
 type InputMode = 'level' | 'xp';
@@ -39,11 +40,10 @@ type InputMode = 'level' | 'xp';
 type MembershipFilter = 'all' | 'f2p' | 'members';
 
 /** Optional table columns, toggled from the "Columns" menu. Action and Quantity are always shown. */
-type ColumnKey = 'xp' | 'xpPerHour' | 'time' | 'members' | 'inputs' | 'outputs';
+type ColumnKey = 'xp' | 'time' | 'members' | 'inputs' | 'outputs';
 
 const COLUMNS: { key: ColumnKey; label: string }[] = [
   { key: 'xp', label: 'XP' },
-  { key: 'xpPerHour', label: 'XP/hr' },
   { key: 'time', label: 'Time' },
   { key: 'members', label: 'Members' },
   { key: 'inputs', label: 'Materials' },
@@ -84,7 +84,7 @@ const SKILLS = SKILL_ORDER.filter((k) => SKILL_ACTIONS[k]?.length);
  * XP calculator, laid out like the 07.gg skill calculators: a skill list on the
  * side, Current/Target boxes that each take either a level or an XP total, and
  * one filterable table of every action for the skill with how many of it reach
- * the target. Optional columns (XP, XP/hr, time, members, materials) are
+ * the target. Optional columns (XP, time, members, materials) are
  * toggled from a "Columns" menu and remembered per browser; ticking rows opens
  * a breakdown of those actions, including total materials, below the table.
  *
@@ -195,7 +195,13 @@ export class Calculator {
     return actions.map((a) => ({
       ...a,
       key: actionKey(a),
-      iconUrl: a.icon ? itemIconUrl(a.icon) : a.sprite ? spriteIconUrl(a.sprite) : null,
+      iconUrl: a.icon
+        ? itemIconUrl(a.icon)
+        : a.sprite
+          ? spriteIconUrl(a.sprite)
+          : a.image
+            ? wikiImageUrl(a.image)
+            : null,
       reachable: level >= a.level,
       quantity: Math.ceil(needed / a.xp),
       hoursToTarget: a.xpPerHour ? needed / a.xpPerHour : null,

@@ -205,6 +205,12 @@ export function spriteIconUrl(spriteId: number): string {
   return `https://chisel.weirdgloop.org/static/img/osrs-sprite/${spriteId}.png`;
 }
 
+// An OSRS Wiki image by file name (e.g. "Moonlight_antelope.png") — for icons
+// that have no item or sprite id, like Hunter creatures and Sailing shipwrecks.
+export function wikiImageUrl(fileName: string): string {
+  return `https://oldschool.runescape.wiki/images/${encodeURIComponent(fileName)}`;
+}
+
 export function metricIcon(metric: string): string {
   if (metric === 'ehp' || metric === 'ehb') return '⚡';
   if (SKILL_ORDER.includes(metric)) return skillMeta(metric).icon;

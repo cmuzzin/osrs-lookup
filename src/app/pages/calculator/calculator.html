@@ -216,13 +216,6 @@
                     </button>
                   </th>
                 }
-                @if (isColumnVisible('xpPerHour')) {
-                  <th class="has-text-right">
-                    <button type="button" class="sort-btn" (click)="toggleSort('xpPerHour')">
-                      XP/hr <app-sort-icon [active]="sort().key === 'xpPerHour'" [direction]="sort().direction" />
-                    </button>
-                  </th>
-                }
                 @if (isColumnVisible('time')) {
                   <th class="has-text-right">
                     <button type="button" class="sort-btn" (click)="toggleSort('hoursToTarget')">
@@ -277,14 +270,14 @@
                             · <span class="has-text-warning-dark">locked</span>
                           }
                         </p>
+                        @if (row.note) {
+                          <p class="is-size-7 has-text-grey is-italic">{{ row.note }}</p>
+                        }
                       </div>
                     </div>
                   </td>
                   @if (isColumnVisible('xp')) {
                     <td class="has-text-right tabular-nums">{{ row.xp }}</td>
-                  }
-                  @if (isColumnVisible('xpPerHour')) {
-                    <td class="has-text-right tabular-nums">{{ row.xpPerHour ? formatNumber(row.xpPerHour) : '—' }}</td>
                   }
                   @if (isColumnVisible('time')) {
                     <td class="has-text-right tabular-nums">
@@ -361,7 +354,7 @@
         }
 
         <p class="is-size-7 has-text-grey mt-3">
-          Quantity is the number of actions needed to reach your target. XP/hr rates are approximate.
+          Quantity is the number of actions needed to reach your target. Time is approximate and only shown where a rate is known.
         </p>
 
         <details class="calculator__milestones mt-5">
